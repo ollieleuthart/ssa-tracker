@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SSA Commission Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0F1A2E;--surface:#172137;--surface2:#1E2B45;--surface3:#243350;
+  --border:#2A3A58;--text:#E2E8F0;--text2:#94A3B8;--text3:#64748B;
+  --teal:#3ECDC6;--teal-dim:rgba(62,205,198,0.15);
+  --green:#34D399;--green-dim:rgba(52,211,153,0.15);--green-border:rgba(52,211,153,0.3);
+  --blue:#60A5FA;--blue-dim:rgba(96,165,250,0.15);
+  --red:#F87171;--red-dim:rgba(248,113,113,0.12);--red-border:rgba(248,113,113,0.3);
+  --amber:#FBBF24;--amber-dim:rgba(251,191,36,0.12);--amber-border:rgba(251,191,36,0.3);
+  --orange:#FB923C;--orange-dim:rgba(251,146,60,0.15);--orange-border:rgba(251,146,60,0.3);
+  --purple:#A78BFA;
+  --radius:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh}
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:20px 32px;display:flex;justify-content:space-between;align-items:center}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-icon{width:32px;height:32px;background:var(--teal);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:18px;height:18px;fill:#0F1A2E}
+.logo h1{font-size:16px;font-weight:700;color:#fff;letter-spacing:-0.3px}
+.logo span{color:var(--teal);font-style:italic}
+.date-badge{font-size:11px;color:var(--text3);background:var(--surface2);padding:5px 12px;border-radius:20px}
+.container{max-width:1340px;margin:0 auto;padding:24px 32px 60px}
+
+/* View tabs */
+.view-tabs{display:flex;gap:4px;margin-bottom:24px;border-bottom:1px solid var(--border)}
+.view-tab{padding:10px 20px;font-size:13px;font-weight:600;color:var(--text3);cursor:pointer;border:none;background:none;font-family:inherit;border-bottom:2px solid transparent;transition:all .15s}
+.view-tab:hover{color:var(--text2)}
+.view-tab.active{color:var(--teal);border-bottom-color:var(--teal)}
+.view-content{display:none}
+.view-content.active{display:block}
+
+.selector-row{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.selector-label{font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px}
+select{background:var(--surface2);border:1px solid var(--border);color:#fff;font-family:inherit;font-size:15px;font-weight:600;padding:10px 40px 10px 16px;border-radius:8px;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%2394A3B8'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;min-width:240px}
+select:focus{outline:none;border-color:var(--teal)}
+select:hover{border-color:var(--teal)}
+
+.status-badge{padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.3px;display:inline-flex;align-items:center;gap:6px}
+.status-badge.covered{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border)}
+.status-badge.pipeline{background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber-border)}
+.status-badge.shortfall{background:var(--red-dim);color:var(--red);border:1px solid var(--red-border)}
+.status-badge .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kpi.navy::before{background:var(--text3)}.kpi.green::before{background:var(--green)}.kpi.amber::before{background:var(--amber)}.kpi.teal::before{background:var(--teal)}.kpi.red::before{background:var(--red)}.kpi.orange::before{background:var(--orange)}
+.kpi-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:6px}
+.kpi-value{font-size:24px;font-weight:800;letter-spacing:-0.5px;color:#fff}
+.kpi-value.green{color:var(--green)}.kpi-value.red{color:var(--red)}.kpi-value.amber{color:var(--amber)}.kpi-value.teal{color:var(--teal)}.kpi-value.orange{color:var(--orange)}
+.kpi-sub{font-size:10px;font-weight:600;margin-top:3px;letter-spacing:0.3px}
+.kpi-sub.pos{color:var(--green)}.kpi-sub.neg{color:var(--red)}
+
+.progress-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px}
+.progress-title{font-size:13px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.legend{display:flex;gap:20px;margin-bottom:16px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2)}
+.legend-dot{width:12px;height:12px;border-radius:3px}
+.legend-dot.cleared{background:var(--green)}.legend-dot.pending{background:var(--blue)}.legend-dot.shortfall{background:#374151}
+.bar-container{position:relative;margin:20px 0 12px}
+.bar-track{height:56px;background:#1a2640;border-radius:6px;overflow:visible;display:flex;position:relative}
+.bar-segment{height:100%;transition:width .5s ease;position:relative;display:flex;align-items:center;justify-content:center}
+.bar-segment:first-child{border-radius:6px 0 0 6px}
+.bar-segment:last-child{border-radius:0 6px 6px 0}
+.bar-segment.cleared{background:var(--green)}
+.bar-segment.pending{background:var(--blue)}
+.bar-segment.shortfall{background:#252f42}
+.bar-label{font-size:11px;font-weight:700;color:#fff;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,0.3)}
+.bar-label.dark{color:var(--text3)}
+.retainer-line{position:absolute;top:-8px;bottom:-8px;width:2px;background:var(--red);z-index:10;transition:left .5s ease}
+.retainer-line::before{content:'RETAINER GOAL';position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:700;color:var(--red);letter-spacing:0.5px;white-space:nowrap}
+.retainer-line::after{content:'';position:absolute;top:-8px;left:-4px;width:10px;height:10px;background:var(--red);border-radius:50%}
+.bar-axis{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:6px;font-variant-numeric:tabular-nums}
+.progress-meta{display:flex;gap:40px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+.meta-item .meta-label{font-size:11px;color:var(--text3);font-weight:500}
+.meta-item .meta-value{font-size:16px;font-weight:700;color:#fff;margin-top:2px}
+
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
+.chart-title{font-size:13px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:16px}
+
+.team-bar-row{display:flex;align-items:center;gap:12px;margin-bottom:8px;cursor:pointer;padding:6px 8px;border-radius:6px;transition:background .15s}
+.team-bar-row:hover{background:var(--surface2)}
+.team-bar-row.active{background:var(--surface3);border:1px solid var(--teal)}
+.team-name{width:100px;font-size:12px;font-weight:500;color:var(--text2);text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.team-track{flex:1;height:20px;background:#1a2640;border-radius:4px;overflow:hidden;display:flex}
+.team-cleared{background:var(--green);height:100%}
+.team-pending{background:var(--blue);height:100%}
+.team-value{width:80px;font-size:11px;font-weight:600;color:var(--text2);text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums}
+
+.donut-block{display:flex;align-items:center;justify-content:center;gap:32px;padding:12px 0}
+.donut-block + .donut-block{border-top:1px solid var(--border);margin-top:8px}
+.donut-container{position:relative;width:140px;height:140px;flex-shrink:0}
+.donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.donut-center .big{font-size:22px;font-weight:800;color:#fff}
+.donut-center .small{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px}
+.donut-legend{display:flex;flex-direction:column;gap:10px;min-width:150px}
+.donut-legend-item{display:flex;align-items:center;gap:8px}
+.donut-legend-item .dl-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.donut-legend-item .dl-label{font-size:12px;color:var(--text2)}
+.donut-legend-item .dl-value{font-size:13px;font-weight:700;color:#fff;margin-left:auto}
+.donut-sub-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;text-align:center;margin-bottom:4px}
+
+.deals-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.deals-header{padding:16px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.deals-header h3{font-size:13px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px}
+.tab-btns{display:flex;gap:4px}
+.tab-btn{padding:5px 14px;border-radius:16px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}
+.tab-btn.active{background:var(--teal);color:var(--bg);border-color:var(--teal)}
+.deal-table{width:100%;border-collapse:collapse}
+.deal-table th{text-align:left;padding:10px 16px;font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.deal-table th.num{text-align:right}
+.deal-table td{padding:9px 16px;font-size:12px;color:var(--text2);border-bottom:1px solid rgba(42,58,88,0.5)}
+.deal-table td.num{text-align:right;font-variant-numeric:tabular-nums}
+.deal-table tr:hover td{background:var(--surface2)}
+.deal-table td.dname{max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
+.deal-scroll{max-height:420px;overflow-y:auto}
+.type-tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px}
+.type-tag.away{background:var(--blue-dim);color:var(--blue)}
+.type-tag.home{background:rgba(167,139,250,0.15);color:var(--purple)}
+.status-dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:6px}
+.status-dot.inst{background:var(--green)}.status-dot.pend{background:var(--amber)}
+
+/* Standard list view table */
+.list-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--radius);overflow:hidden}
+.list-table th{padding:12px 14px;font-size:10px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.4px;background:var(--surface3);text-align:right;white-space:nowrap;cursor:pointer;user-select:none}
+.list-table th:first-child,.list-table th:nth-child(2){text-align:left}
+.list-table th.divider{border-left:2px solid var(--orange-border)}
+.list-table th.pend-h{color:var(--orange)}
+.list-table td{padding:10px 14px;font-size:12px;color:var(--text2);border-bottom:1px solid rgba(42,58,88,0.5);text-align:right;font-variant-numeric:tabular-nums}
+.list-table td:first-child{text-align:left;font-weight:600;color:var(--text)}
+.list-table td:nth-child(2){text-align:left;font-size:11px;color:var(--text3)}
+.list-table td.divider{border-left:2px solid rgba(251,146,60,0.2)}
+.list-table tr:hover td{background:var(--surface2)}
+.list-table tr.total td{background:var(--surface3);color:#fff;font-weight:700;border:none}
+.mini-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+.mini-badge.pos{background:var(--green-dim);color:var(--green)}
+.mini-badge.neg{background:var(--red-dim);color:var(--red)}
+.cell-sub{font-size:9px;font-weight:600;display:block;margin-top:1px}
+.cell-sub.pos{color:var(--green)}.cell-sub.neg{color:var(--red)}
+.val-pos{color:var(--green);font-weight:600}.val-neg{color:var(--red);font-weight:600}
+.val-orange{color:var(--orange);font-weight:600}
+
+#gate{position:fixed;top:0;left:0;right:0;bottom:0;background:#0F1A2E;z-index:9999;display:flex;align-items:center;justify-content:center}
+#gate.hidden{display:none}
+.gate-box{background:#172137;border:1px solid #2A3A58;border-radius:12px;padding:40px 36px;width:380px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.gate-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:24px}
+.gate-logo-icon{width:36px;height:36px;background:#3ECDC6;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.gate-logo-icon svg{width:20px;height:20px;fill:#0F1A2E}
+.gate-logo h2{font-size:15px;font-weight:700;color:#fff}
+.gate-logo span{color:#3ECDC6;font-style:italic}
+.gate-subtitle{font-size:12px;color:#64748B;margin-bottom:28px}
+#gate-input{width:100%;padding:12px 16px;background:#1E2B45;border:1px solid #2A3A58;border-radius:8px;color:#fff;font-family:'Inter',sans-serif;font-size:14px;text-align:center;letter-spacing:2px;transition:border-color .15s}
+#gate-input:focus{outline:none;border-color:#3ECDC6}
+#gate-input::placeholder{color:#4A5568;letter-spacing:0}
+#gate-btn{width:100%;padding:12px;margin-top:14px;background:#3ECDC6;color:#0F1A2E;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s}
+#gate-btn:hover{background:#34b8b1}
+#gate-error{color:#F87171;font-size:12px;margin-top:12px;min-height:18px}
+.gate-footer{font-size:10px;color:#4A5568;margin-top:20px}
+</style>
+</head>
+<body>
+<div id="gate">
+  <div class="gate-box">
+    <div class="gate-logo">
+      <div class="gate-logo-icon"><svg viewBox="0 0 24 24"><path d="M13 3L4 14h7l-2 7 9-11h-7l2-7z"/></svg></div>
+      <h2>Smart Switch <span>Tracker</span></h2>
+    </div>
+    <div class="gate-subtitle">Enter the team password to view the commission dashboard</div>
+    <input type="password" id="gate-input" placeholder="Password" autocomplete="off" autofocus>
+    <button id="gate-btn" onclick="checkPw()">Open Dashboard</button>
+    <div id="gate-error"></div>
+    <div class="gate-footer">Contact your manager for access</div>
+  </div>
+</div>
+<script>
+const PH="a41594e694e3b6814ea409311f61cf9cb2fca4708bb60bd67acb3f2bd00a8979";
+async function hashPw(s){const e=new TextEncoder().encode(s);const h=await crypto.subtle.digest("SHA-256",e);return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,"0")).join("")}
+async function checkPw(){const v=document.getElementById("gate-input").value;const h=await hashPw(v);if(h===PH){document.getElementById("gate").classList.add("hidden");sessionStorage.setItem("ssa_auth","1")}else{document.getElementById("gate-error").textContent="Incorrect password";document.getElementById("gate-input").value="";document.getElementById("gate-input").focus()}}
+document.getElementById("gate-input").addEventListener("keydown",e=>{if(e.key==="Enter")checkPw()});
+if(sessionStorage.getItem("ssa_auth")==="1")document.getElementById("gate").classList.add("hidden");
+</script>
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M13 3L4 14h7l-2 7 9-11h-7l2-7z"/></svg></div>
+    <h1>Smart Switch <span>Commission Tracker</span></h1>
+  </div>
+  <div class="date-badge">Data as at 13 June 2026</div>
+</div>
+<div class="container">
+  <div class="view-tabs">
+    <button class="view-tab active" onclick="switchView('rep',event)">Individual Rep Tracker</button>
+    <button class="view-tab" onclick="switchView('list',event)">Team List View</button>
+  </div>
+  <div id="view-rep" class="view-content active">
+    <div class="selector-row">
+      <span class="selector-label">Viewing</span>
+      <select id="repSelect"></select>
+      <div id="statusBadge"></div>
+    </div>
+    <div class="kpi-row" id="kpis"></div>
+    <div class="progress-section" id="progressSection">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="progress-title">Retainer Trajectory</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot cleared"></div>Cleared</div>
+          <div class="legend-item"><div class="legend-dot pending"></div>Pending</div>
+          <div class="legend-item"><div class="legend-dot shortfall"></div>Shortfall</div>
+        </div>
+      </div>
+      <div class="bar-container">
+        <div class="bar-track" id="barTrack"></div>
+        <div class="retainer-line" id="retainerLine"></div>
+      </div>
+      <div class="bar-axis" id="barAxis"></div>
+      <div class="progress-meta" id="progressMeta"></div>
+    </div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">Team Comparison — Earned + Pending</div>
+        <div id="teamBars"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Deal Breakdown</div>
+        <div id="donutAwayHome"></div>
+        <div id="donutInstPend"></div>
+      </div>
+    </div>
+    <div class="deals-section">
+      <div class="deals-header">
+        <h3 id="dealsTitle">Deals</h3>
+        <div class="tab-btns">
+          <button class="tab-btn active" onclick="setDealTab('all',event)">All</button>
+          <button class="tab-btn" onclick="setDealTab('inst',event)">Installed</button>
+          <button class="tab-btn" onclick="setDealTab('pend',event)">Pending</button>
+        </div>
+      </div>
+      <div class="deal-scroll"><table class="deal-table"><thead><tr>
+        <th>Deal Name</th><th>Role</th><th>Type</th><th class="num">Deal Value</th><th class="num">Comm/Person</th><th>Status</th>
+      </tr></thead><tbody id="dealBody"></tbody></table></div>
+    </div>
+  </div>
+  <div id="view-list" class="view-content">
+    <div style="overflow-x:auto">
+      <table class="list-table" id="listTable">
+        <thead><tr>
+          <th data-col="name">Name</th>
+          <th data-col="type">Type</th>
+          <th data-col="retainer" class="num">Retainer Paid</th>
+          <th data-col="earned" class="num">Comm. Earned</th>
+          <th data-col="net" class="num">Net Balance</th>
+          <th data-col="pending" class="num divider pend-h">Comm. Pending</th>
+          <th data-col="bp" class="num pend-h">Balance Pending</th>
+        </tr></thead>
+        <tbody id="listBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script>
+const D={"people": [{"name": "Denzel Winterbeard", "type": "FTE (Salaried)", "retainer": 12446.0, "earned": 19902.96, "net": 7456.96, "pending": 5898.62, "bp": 13355.58}, {"name": "Cian Jefferson", "type": "FTE (Salaried)", "retainer": 8578.0, "earned": 11974.81, "net": 3396.81, "pending": 3570.26, "bp": 6967.07}, {"name": "Max Bradfield", "type": "Independent Contractor", "retainer": 8500.0, "earned": 9877.71, "net": 1377.71, "pending": 1250.3, "bp": 2628.02}, {"name": "Mark Isaac", "type": "Independent Contractor", "retainer": 5750.0, "earned": 9286.3, "net": 3536.3, "pending": 1019.76, "bp": 4556.06}, {"name": "Fran", "type": "Independent Contractor", "retainer": 4250.0, "earned": 2348.81, "net": -1901.19, "pending": 689.0, "bp": -1212.19}, {"name": "Hugo", "type": "Independent Contractor", "retainer": 6750.0, "earned": 4382.93, "net": -2367.07, "pending": 2440.3, "bp": 73.23}, {"name": "Harley", "type": "Independent Contractor", "retainer": 2250.0, "earned": 3145.97, "net": 895.97, "pending": 613.64, "bp": 1509.61}, {"name": "Rosa", "type": "Independent Contractor", "retainer": 1750.0, "earned": 0.0, "net": -1750.0, "pending": 3704.14, "bp": 1954.14}, {"name": "Dermot", "type": "Independent Contractor", "retainer": 0.0, "earned": 932.35, "net": 932.35, "pending": 0.0, "bp": 932.35}, {"name": "Joe", "type": "Independent Contractor", "retainer": 0.0, "earned": 34228.19, "net": 34228.19, "pending": 30289.39, "bp": 64517.58}, {"name": "Beau Jolly", "type": "Independent Contractor", "retainer": 0.0, "earned": 14835.63, "net": 14835.63, "pending": 5733.78, "bp": 20569.41}, {"name": "Simon", "type": "Independent Contractor", "retainer": 1250.0, "earned": 2348.81, "net": 1098.81, "pending": 0.0, "bp": 1098.81}, {"name": "Holly", "type": "Independent Contractor (Marketing)", "retainer": 1620.56, "earned": 235.6, "net": -1384.96, "pending": 3290.4, "bp": 1905.44}], "totals": {"retainer": 53144.56, "earned": 113500.07, "net": 60355.51, "pending": 58499.59, "bp": 118855.1}, "deals": [{"name": "Damien Woodmansey - 126-128 Hoddle Street, Howlong NSW", "lg": "Beau Jolly", "spec": "Beau Jolly", "type": "Home", "cash": 14450.0, "total": 20594.6, "comm": 936.12, "status": "INSTALLED"}, {"name": "Summer Stewart - 3-5 Gleno Street, Delungra, NSW 2403", "lg": "Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Mark Isaac", "spec": "Cian Jefferson; Hugo; Max Bradfield; Mark Isaac; Denzel Winterbeard", "type": "Away", "cash": 31267.25, "total": 31267.25, "comm": 568.5, "status": "INSTALLED"}, {"name": "Vicki Davis - 36 Burnett Street, Delungra NSW 2403", "lg": "Cian Jefferson; Max Bradfield; Hugo; Denzel Winterbeard; Mark Isaac", "spec": "Hugo; Denzel Winterbeard; Cian Jefferson; Max Bradfield; Mark Isaac", "type": "Away", "cash": 17500.0, "total": 22668.0, "comm": 412.15, "status": "INSTALLED"}, {"name": "Summer Stewart - 1 Gleno Street, Delungra, NSW 2403", "lg": "Cian Jefferson; Max Bradfield; Hugo; Denzel Winterbeard; Mark Isaac", "spec": "Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Mark Isaac", "type": "Away", "cash": 31267.25, "total": 37882.25, "comm": 688.77, "status": "INSTALLED"}, {"name": "Amy Wong - 10 O\u2019Connor St Eastlakes NSW 2018", "lg": "Denzel Winterbeard", "spec": "Denzel Winterbeard", "type": "Home", "cash": 26000.0, "total": 33761.6, "comm": 1534.62, "status": "INSTALLED"}, {"name": "Felicity Menchin - 28 Inverell Street, Delungra, NSW 24", "lg": "Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Mark Isaac", "spec": "Denzel Winterbeard; Max Bradfield; Hugo; Cian Jefferson; Mark Isaac", "type": "Away", "cash": 29295.0, "total": 35548.0, "comm": 646.33, "status": "INSTALLED"}, {"name": "Richard Gray - 10 Cross Street, Warialda NSW ", "lg": "Hugo; Max Bradfield; Cian Jefferson; Mark Isaac; Denzel Winterbeard", "spec": "Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Mark Isaac", "type": "Away", "cash": 19554.0, "total": 24667.0, "comm": 448.49, "status": "INSTALLED"}, {"name": "Peter Hancock - 105 High Street, Warialda, NSW 2402", "lg": "Cian Jefferson; Denzel Winterbeard; Max Bradfield; Hugo; Mark Isaac", "spec": "Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Mark Isaac", "type": "Away", "cash": 18705.0, "total": 22630.0, "comm": 411.45, "status": "INSTALLED"}, {"name": "Serena Kash - 23 Crane Street, Warialda, NSW 2402", "lg": "Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Mark Isaac", "spec": "Denzel Winterbeard; Cian Jefferson; Max Bradfield; Mark Isaac; Hugo", "type": "Away", "cash": 29500.0, "total": 36086.0, "comm": 656.11, "status": "INSTALLED"}, {"name": "Rob Matta - 109 Brighton Street, Croydon Park, NSW, 213", "lg": "Beau Jolly", "spec": "Joe", "type": "Home", "cash": 17000.0, "total": 27025.4, "comm": 1228.43, "status": "INSTALLED"}, {"name": "Richard Campbell - 100 Dunwold-Cattle Creek Rd, Gargett", "lg": "Denzel Winterbeard", "spec": "Joe; Denzel Winterbeard", "type": "Home", "cash": 35894.0, "total": 53448.08, "comm": 2429.46, "status": "INSTALLED"}, {"name": "Dianne Burke - 91 Cunningham Street Bingara NSW 2404", "lg": "Denzel Winterbeard; Max Bradfield; Cian Jefferson; Hugo", "spec": "Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo", "type": "Away", "cash": 14225.0, "total": 24250.0, "comm": 551.14, "status": "INSTALLED"}, {"name": "Adrian Dick - 36 Keera Street, Bingara", "lg": "Denzel Winterbeard; Harley; Max Bradfield; Cian Jefferson", "spec": "Denzel Winterbeard; Max Bradfield; Harley; Cian Jefferson", "type": "Away", "cash": 11400.0, "total": 14851.2, "comm": 337.53, "status": "INSTALLED"}, {"name": "Rosemary Arnold - 38 Holden Street, Warialda NSW 2402", "lg": "Denzel Winterbeard; Harley; Max Bradfield; Cian Jefferson", "spec": "Denzel Winterbeard; Max Bradfield; Harley; Cian Jefferson", "type": "Away", "cash": 17250.0, "total": 23526.6, "comm": 534.7, "status": "INSTALLED"}, {"name": "Annette Towers - 2 Finch Street Bingara NSW 2404", "lg": "Denzel Winterbeard; Harley; Max Bradfield; Cian Jefferson", "spec": "Denzel Winterbeard; Max Bradfield; Harley; Cian Jefferson", "type": "Away", "cash": 23225.0, "total": 38748.2, "comm": 880.64, "status": "INSTALLED"}, {"name": "Ann Moore - 93 Stephen Street Warialda NSW 2402", "lg": "Denzel Winterbeard; Harley; Max Bradfield; Cian Jefferson", "spec": "Denzel Winterbeard; Max Bradfield; Harley; Cian Jefferson", "type": "Away", "cash": 20012.0, "total": 29199.2, "comm": 663.62, "status": "INSTALLED"}, {"name": "Andy Callaway - 69 Maitland Street, Bingara NSW 2404", "lg": "Denzel Winterbeard; Harley; Max Bradfield; Cian Jefferson", "spec": "Denzel Winterbeard; Max Bradfield; Harley; Cian Jefferson", "type": "Away", "cash": 22500.0, "total": 32097.6, "comm": 729.49, "status": "INSTALLED"}, {"name": "Scott Mooney - 17 Philip Street, South Golden Beach, NS", "lg": "Beau Jolly", "spec": "Beau Jolly", "type": "Home", "cash": 49950.0, "total": 71953.2, "comm": 3270.6, "status": "INSTALLED"}, {"name": "John Tooler - 8 Tranquil Place Alstonville", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 11299.2, "total": 31049.2, "comm": 1411.33, "status": "INSTALLED"}, {"name": "Gibb French -34 Alan St, Marian QLD 4753", "lg": "Joe; Denzel Winterbeard; Cian Jefferson; Fran; Max Bradfield", "spec": "Joe; Simon; Denzel Winterbeard; Cian Jefferson; Max Bradfield", "type": "Away", "cash": 35360.0, "total": 48152.8, "comm": 729.59, "status": "INSTALLED"}, {"name": "Allen Paskins - 11 Heathwood Court Marian QLD ", "lg": "Joe; Denzel Winterbeard; Cian Jefferson; Fran; Max Bradfield", "spec": "Joe; Simon; Denzel Winterbeard; Cian Jefferson; Max Bradfield", "type": "Away", "cash": 11500.0, "total": 19261.6, "comm": 291.84, "status": "INSTALLED"}, {"name": "Dean Boland - 16 Blackmur Street, Marian, QLD, 4753", "lg": "Joe; Denzel Winterbeard; Cian Jefferson; Fran; Max Bradfield", "spec": "Joe; Simon; Denzel Winterbeard; Cian Jefferson; Max Bradfield", "type": "Away", "cash": 18750.0, "total": 30114.0, "comm": 456.27, "status": "INSTALLED"}, {"name": "Bernie Shields - 9 Coral Drive, Blacks Beach, QLD, 4740", "lg": "Joe; Denzel Winterbeard; Cian Jefferson; Fran; Max Bradfield", "spec": "Joe; Simon; Denzel Winterbeard; Cian Jefferson; Max Bradfield", "type": "Away", "cash": 19700.0, "total": 30394.4, "comm": 460.52, "status": "INSTALLED"}, {"name": "Vincent Reeves - 5 Lucy Court, Mirani QLD ", "lg": "Joe; Denzel Winterbeard; Cian Jefferson; Fran; Max Bradfield", "spec": "Joe; Simon; Denzel Winterbeard; Cian Jefferson; Max Bradfield", "type": "Away", "cash": 16750.0, "total": 27098.8, "comm": 410.59, "status": "INSTALLED"}, {"name": "Peter Schaper - 22 Elizabeth Street Mirani QLD 4754", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 0, "total": 0.0, "comm": 0.0, "status": "INSTALLED"}, {"name": "Danielle Campbell - 11 Vesta Lane Ooralea QLD", "lg": "Dermot", "spec": "\u2014", "type": "Home", "cash": 8750.0, "total": 16511.6, "comm": 750.53, "status": "INSTALLED"}, {"name": "Marion Priestly - 31 Adams Street, Heddon Greta, 2321", "lg": "Beau Jolly", "spec": "Beau Jolly", "type": "Home", "cash": 11995.0, "total": 18139.6, "comm": 824.53, "status": "INSTALLED"}, {"name": "Murray Heath - Unit 5 - 11 Prospect Street, Mackay, QLD", "lg": "Holly; Joe", "spec": "Joe", "type": "Home", "cash": 6479.1, "total": 19415.1, "comm": 882.5, "status": "INSTALLED"}, {"name": "Henri Lago - 67 Amhurst Street Slade Point QLD 4740", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 13500.0, "total": 26209.62, "comm": 1191.35, "status": "INSTALLED"}, {"name": "1 Bob & Lawson Muir - 1516 Delungra Road, Bingara, NSW,", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 40758.0, "total": 57409.2, "comm": 2609.51, "status": "INSTALLED"}, {"name": "2 Bob & Lawson Muir - 1787 Delubngra Road, Bingara, NSW", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 28434.0, "total": 36436.2, "comm": 1656.19, "status": "INSTALLED"}, {"name": "Maria E Kelly - 2529 Pyramids Road, Wyberba, QLD, 4382", "lg": "Denzel Winterbeard; Cian Jefferson", "spec": "Joe", "type": "Away", "cash": 21000.0, "total": 29420.2, "comm": 891.52, "status": "INSTALLED"}, {"name": "Pete Rallings - 122 Eyles Drive, East Ballina NSW 2478", "lg": "Beau Jolly", "spec": "Joe", "type": "Home", "cash": 8350.0, "total": 12877.6, "comm": 585.35, "status": "INSTALLED"}, {"name": "Mark Cummins - 9 Waipori St, Saint Ives Chase, NSW, 207", "lg": "Beau Jolly", "spec": "Beau Jolly", "type": "Home", "cash": 14410.0, "total": 21878.0, "comm": 994.45, "status": "INSTALLED"}, {"name": "Edward Watt - 41 Milburn Place, St Ives Chase, 2075", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 8750.0, "total": 15218.0, "comm": 691.73, "status": "INSTALLED"}, {"name": "Tony Tedesco - 7 Wasley Road, Wasleys, SA 5400", "lg": "Beau Jolly", "spec": "Beau Jolly", "type": "Home", "cash": 4941.0, "total": 8175.0, "comm": 371.59, "status": "INSTALLED"}, {"name": "Ray Schriever - 32 Bungama Street, Maroochydore, QLD, 4", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 12275.0, "total": 15535.6, "comm": 706.16, "status": "INSTALLED"}, {"name": "Glenda Eyears - 4 Wood Street, Tenterfield, NSW, 2372", "lg": "Denzel Winterbeard; Cian Jefferson", "spec": "Joe", "type": "Away", "cash": 17000.0, "total": 22201.0, "comm": 672.76, "status": "INSTALLED"}, {"name": "Dale Baldock - 85 Finch Street, Bingara, NSW, 2404", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 9000.0, "total": 13527.6, "comm": 614.89, "status": "INSTALLED"}, {"name": "Sandra de Jong - 9 White Street, Bingara, NSW, 2404", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 7495.0, "total": 10729.0, "comm": 487.68, "status": "INSTALLED"}, {"name": "Eddie Scofield  & Liz Middleton - 7674 Bruxena Highway,", "lg": "Denzel Winterbeard; Cian Jefferson", "spec": "Joe", "type": "Away", "cash": 13999.0, "total": 17583.0, "comm": 532.82, "status": "INSTALLED"}, {"name": "Cecilia Curtis - 10 Sinclair Street, Kambah 2902", "lg": "Dermot", "spec": "Joe", "type": "Home", "cash": 4000.0, "total": 4000.0, "comm": 181.82, "status": "INSTALLED"}, {"name": "Judy Mannix - 68 Clanwilliam Street, Blackheath, 2785", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 5000.0, "total": 5000.0, "comm": 227.27, "status": "INSTALLED"}, {"name": "Trevor Haskins - 77 Lambeth Street Glen Innes 2370", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 4900.0, "total": 5250.0, "comm": 238.64, "status": "INSTALLED"}, {"name": "Mark Olley - 7 Dixon Place Jerrabomberra 2619", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 10000.0, "total": 10000.0, "comm": 454.55, "status": "INSTALLED"}, {"name": "James Satrapa -", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 150.0, "total": 150.0, "comm": 6.82, "status": "INSTALLED"}, {"name": "David Middleton - 35 Cooya Beach Road, Bonnie Doon, QLD", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 20000.0, "total": 20000.0, "comm": 909.09, "status": "INSTALLED"}, {"name": "Benjamin Hart - 46 Grimshaw Street Richardson 2905", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 5000.0, "total": 5000.0, "comm": 227.27, "status": "INSTALLED"}, {"name": "Robert Fitz - 46 Churchill Avenue, Orange 2800", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 5500.0, "total": 5500.0, "comm": 250.0, "status": "INSTALLED"}, {"name": "Larry Grant - 77 Cecil Road, Orange", "lg": "Beau Jolly", "spec": "Joe", "type": "Home", "cash": 5000.0, "total": 5000.0, "comm": 227.27, "status": "INSTALLED"}, {"name": "Dee & Steve - 6 Rosewood Place Kyogle NSW 2474", "lg": "\u2014", "spec": "\u2014", "type": "Home", "cash": 35000.0, "total": 35000.0, "comm": 1590.91, "status": "INSTALLED"}, {"name": "Georgina Kelly - 21 Puertollano Place Broome WA 6725", "lg": "Holly", "spec": "Cian Jefferson", "type": "Home", "cash": 19396.0, "total": 19396.0, "comm": 881.64, "status": "PENDING"}, {"name": "John Haig - 3 Oxley Street Tallimba NSW 2669", "lg": "\u2014", "spec": "\u2014", "type": "Home", "cash": 12974.0, "total": 12974.0, "comm": 589.73, "status": "PENDING"}, {"name": "Barry O'Farrell - 45 Frazer Street Ashford NSW 2361", "lg": "\u2014", "spec": "\u2014", "type": "Home", "cash": 21488.0, "total": 26747.0, "comm": 1215.77, "status": "PENDING"}, {"name": "2 Scott Mooney - 17 Phillip Street, South Golden Beach,", "lg": "\u2014", "spec": "\u2014", "type": "Home", "cash": 0, "total": 0.0, "comm": 0.0, "status": "PENDING"}, {"name": "Adrian Currell - 37 Cameron Street Maclean NSW 2463", "lg": "Hugo", "spec": "\u2014", "type": "Home", "cash": 12250.0, "total": 12250.0, "comm": 556.82, "status": "PENDING"}, {"name": "Christopher Hutton - 31 Boorabee Street Kyogle NSW 2474", "lg": "\u2014", "spec": "\u2014", "type": "Home", "cash": 15439.0, "total": 15439.0, "comm": 701.77, "status": "PENDING"}, {"name": "Ian & Leonie Taylor - 4 White street Guyra NSW 2365", "lg": "Hugo", "spec": "\u2014", "type": "Home", "cash": 13930.0, "total": 13930.0, "comm": 633.18, "status": "PENDING"}, {"name": "Mark Kemp - 68 Sole Street Guyra NSW 2365 ", "lg": "Cian Jefferson", "spec": "\u2014", "type": "Home", "cash": 13100.0, "total": 13100.0, "comm": 595.45, "status": "PENDING"}, {"name": "Beverly & Graeme Voss - 3 David Street Ashford NSW 2361", "lg": "Rosa", "spec": "\u2014", "type": "Home", "cash": 27325.0, "total": 27325.0, "comm": 1242.05, "status": "PENDING"}, {"name": "Connie Minos - 28 Dudley Street Ashford NSW 2361", "lg": "Rosa", "spec": "Joe", "type": "Home", "cash": 44434.0, "total": 54166.0, "comm": 2462.09, "status": "PENDING"}, {"name": "Dee & Steve - 206 Summerland Way Kyogle NSW  2474", "lg": "Joe; Dermot", "spec": "Joe", "type": "Home", "cash": 0, "total": 0.0, "comm": 0.0, "status": "PENDING"}, {"name": "Christine & Peter - 24 Frazer Street Ashford NSW 2361", "lg": "Fran", "spec": "\u2014", "type": "Home", "cash": 6006.0, "total": 6006.0, "comm": 273.0, "status": "PENDING"}, {"name": "Jenny Real - 37 Stratheden Street Kyogle NSW 2474", "lg": "Max Bradfield; Hugo", "spec": "\u2014", "type": "Home", "cash": 5072.0, "total": 5072.0, "comm": 230.55, "status": "PENDING"}, {"name": "Lee Achurch - 11 Myall Street Evans Head NSW 2473", "lg": "Fran", "spec": "\u2014", "type": "Home", "cash": 9152.0, "total": 9152.0, "comm": 416.0, "status": "PENDING"}, {"name": "Ro and Greg - 2 Bank Street Woodburn NSW 2471", "lg": "Cian Jefferson", "spec": "Denzel Winterbeard", "type": "Home", "cash": 23615.0, "total": 23615.0, "comm": 1073.41, "status": "PENDING"}, {"name": "Terry Moore - 6 Bank Street Woodburn NSW 2472", "lg": "Fran", "spec": "Denzel Winterbeard", "type": "Home", "cash": 0, "total": 0.0, "comm": 0.0, "status": "PENDING"}, {"name": "Craig Robinson- 14 Cedar Street Woodburn NSW 2474", "lg": "Harley", "spec": "Denzel Winterbeard", "type": "Home", "cash": 13500.0, "total": 13500.0, "comm": 613.64, "status": "PENDING"}, {"name": "Daryl Boyd - 48 Martyn Street, Ashford NSW 2361", "lg": "Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Mark Isaac", "spec": "Cian Jefferson; Denzel Winterbeard; Max Bradfield; Hugo; Mark Isaac; Joe", "type": "Away", "cash": 19500.0, "total": 24878.0, "comm": 376.94, "status": "PENDING"}, {"name": "Amanda Bernauer - 20 Inverell Road, Warialda, NSW 2402", "lg": "\u2014", "spec": "Denzel Winterbeard; Cian Jefferson; Mark Isaac; Max Bradfield; Hugo", "type": "Away", "cash": 28250.0, "total": 35355.0, "comm": 642.82, "status": "PENDING"}, {"name": "Allan Marks - 27 Hay Road, Cable Beach, WA 6726", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 18250.0, "total": 26011.6, "comm": 1182.35, "status": "PENDING"}, {"name": "Mick Prokopiwskyi - 9 McMillan Court, Newborough VIC 38", "lg": "Beau Jolly", "spec": "Beau Jolly", "type": "Home", "cash": 26361.0, "total": 34986.6, "comm": 1590.3, "status": "PENDING"}, {"name": "Dieter Steinman - 1 Yamashita street 6725 Roebuck WA", "lg": "Beau Jolly", "spec": "Beau Jolly", "type": "Home", "cash": 20000.0, "total": 28085.0, "comm": 1276.59, "status": "PENDING"}, {"name": "Stephen Yu - 14 Carnarvon Street, Broome", "lg": "Holly; Joe", "spec": "Joe; Denzel Winterbeard", "type": "Home", "cash": 49340.0, "total": 70220.0, "comm": 3191.82, "status": "PENDING"}, {"name": "Christopher Beveridge - 1 Slater Rd, Cable Beach, WA", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 18250.0, "total": 26335.0, "comm": 1197.05, "status": "PENDING"}, {"name": "Tom Jolly - 11 Ness Street Diamond Creek VIC 3089", "lg": "Joe", "spec": "\u2014", "type": "Home", "cash": 18750.0, "total": 35698.8, "comm": 1622.67, "status": "PENDING"}, {"name": "Ian Mcgrath - 6 Rivergum Ave Broome WA", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 32950.0, "total": 45416.8, "comm": 2064.4, "status": "PENDING"}, {"name": "Don Wood - 11 Pembroke Rd, Broome 6725", "lg": "Joe", "spec": "Joe", "type": "Home", "cash": 58400.0, "total": 78848.0, "comm": 3584.0, "status": "PENDING"}, {"name": "Cristopher Iquin - 5 Euro Way, Djugun WA 6725", "lg": "Holly; Joe", "spec": "Joe", "type": "Home", "cash": 21750.0, "total": 37273.2, "comm": 1694.24, "status": "PENDING"}], "counts": {"i": 51, "p": 28}, "pt": {"iv": 1202441.3, "ic": 39465.49, "pv": 695780.0, "pc": 29908.28}};
+const fmt=v=>{if(!v&&v!==0)return'—';const a=Math.abs(v);const s=a>=1000?'$'+a.toLocaleString('en-AU',{minimumFractionDigits:0,maximumFractionDigits:0}):'$'+a.toFixed(0);return v<0?'-'+s:s};
+const fmt2=v=>{if(!v&&v!==0)return'—';const a=Math.abs(v);const s='$'+a.toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});return v<0?'-'+s:s};
+let selected='__ALL__',dealTab='all';
+const sel=document.getElementById('repSelect');
+const allOpt=document.createElement('option');allOpt.value='__ALL__';allOpt.textContent='All Reps (Team View)';sel.appendChild(allOpt);
+D.people.forEach(p=>{const o=document.createElement('option');o.value=p.name;o.textContent=p.name;sel.appendChild(o)});
+sel.onchange=()=>{selected=sel.value;render()};
+function getRepDeals(name){
+  if(name==='__ALL__')return D.deals;
+  const first=name.split(' ')[0];
+  return D.deals.filter(d=>d.lg.includes(first)||d.spec.includes(first));
+}
+function render(){
+  if(selected==='__ALL__'){renderAll();return;}
+  document.getElementById('progressSection').style.display='block';
+  const p=D.people.find(x=>x.name===selected);if(!p)return;
+  const ret=p.retainer,earn=p.earned,pend=p.pending,net=p.net,bp=p.bp;
+  let statusClass,statusText;
+  if(earn>=ret){statusClass='covered';statusText='Retainer Covered'}
+  else if(earn+pend>=ret){statusClass='pipeline';statusText='Covered via Pipeline'}
+  else{statusClass='shortfall';statusText='Shortfall Risk'}
+  if(ret===0){statusClass='covered';statusText='No Retainer'}
+  document.getElementById('statusBadge').innerHTML=`<div class="status-badge ${statusClass}"><div class="dot"></div>${statusText}</div>`;
+  document.getElementById('kpis').innerHTML=[
+    {l:'Retainer Paid',v:fmt(ret),c:'navy',vc:''},
+    {l:'Commission Earned',v:fmt(earn),c:'green',vc:'green'},
+    {l:'Net Balance',v:fmt(net),c:net>=0?'green':'red',vc:net>=0?'green':'red',sub:net>=0?'SSA OWES':'OWES SSA',subCls:net>=0?'pos':'neg'},
+    {l:'Commission Pending',v:fmt(pend),c:'amber',vc:'amber'},
+    {l:'Projected Balance',v:fmt(bp),c:bp>=0?'green':'red',vc:bp>=0?'green':'red',sub:bp>=0?'SSA OWES':'OWES SSA',subCls:bp>=0?'pos':'neg'},
+  ].map(k=>`<div class="kpi ${k.c}"><div class="kpi-label">${k.l}</div><div class="kpi-value ${k.vc}">${k.v}</div>${k.sub?`<div class="kpi-sub ${k.subCls}">${k.sub}</div>`:''}</div>`).join('');
+  const maxVal=Math.max(ret,earn+pend,1);const scale=100/maxVal;
+  const clrW=Math.max(earn*scale,0);const pndW=Math.max(pend*scale,0);
+  const sfW=Math.max((ret-earn-pend)*scale,0);
+  const retPct=ret>0?Math.min(ret*scale,100):0;
+  let barHtml='';
+  if(earn>0)barHtml+=`<div class="bar-segment cleared" style="width:${clrW}%"><span class="bar-label">${fmt(earn)}</span></div>`;
+  if(pend>0)barHtml+=`<div class="bar-segment pending" style="width:${pndW}%"><span class="bar-label">${fmt(pend)}</span></div>`;
+  if(ret>earn+pend&&ret>0)barHtml+=`<div class="bar-segment shortfall" style="width:${sfW}%"><span class="bar-label dark">${fmt(ret-earn-pend)}</span></div>`;
+  document.getElementById('barTrack').innerHTML=barHtml;
+  const rl=document.getElementById('retainerLine');
+  if(ret>0){rl.style.left=retPct+'%';rl.style.display='block'}else{rl.style.display='none'}
+  const steps=5;const stepVal=maxVal/steps;
+  document.getElementById('barAxis').innerHTML=Array.from({length:steps+1},(_,i)=>`<span>${fmt(Math.round(stepVal*i))}</span>`).join('');
+  const totalProjected=earn+pend;
+  document.getElementById('progressMeta').innerHTML=`
+    <div class="meta-item"><div class="meta-label">Status</div><div class="meta-value">${statusText}</div></div>
+    <div class="meta-item"><div class="meta-label">Total Projected</div><div class="meta-value">${fmt2(totalProjected)}</div></div>
+    <div class="meta-item"><div class="meta-label">Retainer Coverage</div><div class="meta-value">${ret>0?Math.round(earn/ret*100):100}% cleared</div></div>
+    <div class="meta-item"><div class="meta-label">With Pipeline</div><div class="meta-value">${ret>0?Math.round(totalProjected/ret*100):100}%</div></div>`;
+  renderTeamBars();renderDonuts();renderDeals();
+}
+function renderAll(){
+  document.getElementById('statusBadge').innerHTML='';
+  document.getElementById('progressSection').style.display='none';
+  const t=D.totals;
+  document.getElementById('kpis').innerHTML=[
+    {l:'Total Retainer Paid',v:fmt(t.retainer),c:'navy',vc:''},
+    {l:'Total Earned',v:fmt(t.earned),c:'green',vc:'green'},
+    {l:'Net Position',v:fmt(t.net),c:t.net>=0?'green':'red',vc:t.net>=0?'green':'red',sub:t.net>=0?'SSA OWES':'OWES SSA',subCls:t.net>=0?'pos':'neg'},
+    {l:'Commission Pending',v:fmt(t.pending),c:'amber',vc:'amber'},
+    {l:'Projected Position',v:fmt(t.bp),c:t.bp>=0?'green':'red',vc:t.bp>=0?'green':'red',sub:t.bp>=0?'SSA OWES':'OWES SSA',subCls:t.bp>=0?'pos':'neg'},
+  ].map(k=>`<div class="kpi ${k.c}"><div class="kpi-label">${k.l}</div><div class="kpi-value ${k.vc}">${k.v}</div>${k.sub?`<div class="kpi-sub ${k.subCls}">${k.sub}</div>`:''}</div>`).join('');
+  renderTeamBars();renderDonuts();renderDeals();
+}
+function renderTeamBars(){
+  const teamMax=Math.max(...D.people.map(x=>x.earned+x.pending));
+  document.getElementById('teamBars').innerHTML=D.people.map(x=>{
+    const cW=(x.earned/teamMax*100);const pW=(x.pending/teamMax*100);
+    const isActive=x.name===selected;
+    return`<div class="team-bar-row${isActive?' active':''}" onclick="sel.value='${x.name}';selected='${x.name}';render()">
+      <div class="team-name">${x.name.split(' ')[0]}</div>
+      <div class="team-track"><div class="team-cleared" style="width:${cW}%"></div><div class="team-pending" style="width:${pW}%"></div></div>
+      <div class="team-value">${fmt(x.earned+x.pending)}</div></div>`;
+  }).join('');
+}
+function donutSVG(a,b,colorA,colorB){
+  const total=a+b||1;const r=60,cx=70,cy=70;
+  const arc=a/total*Math.PI*2;
+  const x1=cx+r*Math.sin(arc);const y1=cy-r*Math.cos(arc);
+  const lg=arc>Math.PI?1:0;
+  if(a===0)return`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${colorB}" stroke-width="18"/>`;
+  if(b===0)return`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${colorA}" stroke-width="18"/>`;
+  return`<path d="M${cx},${cy-r} A${r},${r} 0 ${lg},1 ${x1},${y1}" fill="none" stroke="${colorA}" stroke-width="18"/>
+     <path d="M${x1},${y1} A${r},${r} 0 ${1-lg},1 ${cx},${cy-r}" fill="none" stroke="${colorB}" stroke-width="18"/>`;
+}
+function renderDonuts(){
+  const deals=getRepDeals(selected);
+  const away=deals.filter(d=>d.type==='Away').length;
+  const home=deals.filter(d=>d.type==='Home').length;
+  const tot1=away+home||1;
+  document.getElementById('donutAwayHome').innerHTML=`
+    <div class="donut-sub-title">Away vs Home</div>
+    <div class="donut-block">
+      <div class="donut-container"><svg viewBox="0 0 140 140">${donutSVG(away,home,'#60A5FA','#A78BFA')}</svg>
+        <div class="donut-center"><div class="big">${away+home}</div><div class="small">Deals</div></div></div>
+      <div class="donut-legend">
+        <div class="donut-legend-item"><div class="dl-dot" style="background:var(--blue)"></div><div class="dl-label">Away Trips</div><div class="dl-value">${away} (${Math.round(away/tot1*100)}%)</div></div>
+        <div class="donut-legend-item"><div class="dl-dot" style="background:var(--purple)"></div><div class="dl-label">Home Deals</div><div class="dl-value">${home} (${Math.round(home/tot1*100)}%)</div></div>
+      </div>
+    </div>`;
+  const inst=deals.filter(d=>d.status==='INSTALLED').length;
+  const pn=deals.filter(d=>d.status==='PENDING').length;
+  const tot2=inst+pn||1;
+  document.getElementById('donutInstPend').innerHTML=`
+    <div class="donut-sub-title">Installed vs Pending</div>
+    <div class="donut-block">
+      <div class="donut-container"><svg viewBox="0 0 140 140">${donutSVG(inst,pn,'#34D399','#FBBF24')}</svg>
+        <div class="donut-center"><div class="big">${inst+pn}</div><div class="small">Deals</div></div></div>
+      <div class="donut-legend">
+        <div class="donut-legend-item"><div class="dl-dot" style="background:var(--green)"></div><div class="dl-label">Installed</div><div class="dl-value">${inst} (${Math.round(inst/tot2*100)}%)</div></div>
+        <div class="donut-legend-item"><div class="dl-dot" style="background:var(--amber)"></div><div class="dl-label">Pending</div><div class="dl-value">${pn} (${Math.round(pn/tot2*100)}%)</div></div>
+      </div>
+    </div>`;
+}
+function renderDeals(){
+  const deals=getRepDeals(selected);
+  const isAll=selected==='__ALL__';
+  const first=isAll?'':selected.split(' ')[0];
+  let filtered=deals;
+  if(dealTab==='inst')filtered=deals.filter(d=>d.status==='INSTALLED');
+  if(dealTab==='pend')filtered=deals.filter(d=>d.status==='PENDING');
+  document.getElementById('dealsTitle').textContent=`${isAll?'All Reps':selected} — ${filtered.length} Deals`;
+  document.getElementById('dealBody').innerHTML=filtered.map(d=>{
+    let role;
+    if(isAll){role=`${d.lg}${d.spec&&d.spec!=='—'&&d.spec!==d.lg?' / '+d.spec:''}`;}
+    else{role=d.lg.includes(first)&&d.spec.includes(first)?'LG + Spec':d.lg.includes(first)?'Lead Gen':'Specialist';}
+    const isInst=d.status==='INSTALLED';
+    return`<tr>
+      <td class="dname" title="${d.name}">${d.name}</td>
+      <td style="${isAll?'font-size:11px;color:var(--text3)':''}">${role}</td>
+      <td><span class="type-tag ${d.type.toLowerCase()}">${d.type}</span></td>
+      <td class="num">${d.total?fmt2(d.total):'—'}</td>
+      <td class="num" style="font-weight:600;color:${d.comm?'var(--green)':'var(--text3)'}">${d.comm?fmt2(d.comm):'—'}</td>
+      <td><span class="status-dot ${isInst?'inst':'pend'}"></span>${isInst?'Installed':'Pending'}</td>
+    </tr>`}).join('')||'<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text3)">No deals found</td></tr>';
+}
+function setDealTab(t,e){dealTab=t;document.querySelectorAll('#view-rep .tab-btn').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');renderDeals();}
+let listSort='net',listDir='asc';
+function renderList(){
+  let rows=[...D.people];
+  rows.sort((a,b)=>{let va=a[listSort],vb=b[listSort];if(typeof va==='string')return listDir==='asc'?va.localeCompare(vb):vb.localeCompare(va);return listDir==='asc'?va-vb:vb-va;});
+  let html=rows.map(p=>{
+    const netCls=p.net>=0?'val-pos':'val-neg';
+    const bpCls=p.bp>=0?'val-pos':'val-neg';
+    const netSub=p.net>=0?'<span class="cell-sub pos">SSA Owes</span>':'<span class="cell-sub neg">OWES SSA</span>';
+    const bpSub=p.bp>=0?'<span class="cell-sub pos">SSA Owes</span>':'<span class="cell-sub neg">OWES SSA</span>';
+    return`<tr><td>${p.name}</td><td>${p.type}</td><td>${fmt2(p.retainer)}</td><td>${fmt2(p.earned)}</td>
+      <td class="${netCls}">${fmt2(p.net)}${netSub}</td><td class="divider">${fmt2(p.pending)}</td>
+      <td class="${bpCls}">${fmt2(p.bp)}${bpSub}</td></tr>`;}).join('');
+  const t=D.totals;
+  html+=`<tr class="total"><td>TOTAL</td><td></td><td>${fmt2(t.retainer)}</td><td>${fmt2(t.earned)}</td><td>${fmt2(t.net)}</td><td class="divider">${fmt2(t.pending)}</td><td>${fmt2(t.bp)}</td></tr>`;
+  document.getElementById('listBody').innerHTML=html;
+}
+document.querySelectorAll('#listTable th').forEach(th=>{
+  th.addEventListener('click',()=>{const col=th.dataset.col;if(listSort===col)listDir=listDir==='asc'?'desc':'asc';else{listSort=col;listDir=col==='name'||col==='type'?'asc':'desc';}renderList();});
+});
+function switchView(v,e){
+  document.querySelectorAll('.view-tab').forEach(t=>t.classList.remove('active'));
+  e.target.classList.add('active');
+  document.querySelectorAll('.view-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  if(v==='list')renderList();
+}
+render();
+</script>
+</body>
+</html>

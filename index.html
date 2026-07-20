@@ -196,12 +196,12 @@ if(sessionStorage.getItem("ssa_auth")==="1")document.getElementById("gate").clas
 </div>
 <div class="container">
   <div class="view-tabs">
-    <button class="view-tab active" onclick="switchView('rep',event)">My Position</button>
+    <button class="view-tab active" onclick="switchView('forecast',event)">Pipeline Forecast</button>
+    <button class="view-tab" onclick="switchView('rep',event)">My Position</button>
     <button class="view-tab" onclick="switchView('list',event)">Team List</button>
-    <button class="view-tab" onclick="switchView('forecast',event)">Pipeline Forecast</button>
   </div>
 
-  <div id="view-rep" class="view-content active">
+  <div id="view-rep" class="view-content">
     <div class="selector-row">
       <span class="selector-label">Viewing</span>
       <select id="repSelect"></select>
@@ -231,7 +231,7 @@ if(sessionStorage.getItem("ssa_auth")==="1")document.getElementById("gate").clas
     </div>
   </div>
 
-  <div id="view-forecast" class="view-content">
+  <div id="view-forecast" class="view-content active">
     <div class="info-strip">
       <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-6h2zm0-8h-2V7h2z"/></svg>
       <div>Purely forward-looking. Only deals still to install (Upcoming + In&nbsp;Progress) and the commission they would generate on install. This is projected, not banked — nothing here is owed yet.</div>
@@ -480,6 +480,7 @@ function switchView(v,e){
   if(v==='forecast')renderForecast();
 }
 renderRep();
+renderForecast();
 </script>
 </body>
 </html>

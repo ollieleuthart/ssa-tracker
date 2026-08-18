@@ -104,9 +104,10 @@ tr:last-child td{border-bottom:none}
 .fc-bar-fill.pos{background:linear-gradient(90deg,var(--green),#26a97c)}
 .fc-bar-fill.neg{background:linear-gradient(90deg,var(--red),#d95555)}
 
-.flag-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text2);font-family:inherit;font-size:12px;font-weight:600;padding:7px 14px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:.15s}
-.flag-btn:hover{border-color:var(--amber);color:var(--amber)}
-.flag-btn svg{width:13px;height:13px;fill:currentColor}
+.flag-btn{background:var(--amber);border:none;color:#3B2708;font-family:inherit;font-size:13px;font-weight:700;padding:10px 18px;border-radius:22px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:.15s;box-shadow:0 0 0 0 rgba(251,191,36,.55);animation:flagPulse 2.8s ease-out infinite;white-space:nowrap}
+.flag-btn:hover{background:#fcd34d;transform:translateY(-1px);animation:none;box-shadow:0 4px 14px rgba(251,191,36,.35)}
+.flag-btn svg{width:15px;height:15px;fill:currentColor}
+@keyframes flagPulse{0%{box-shadow:0 0 0 0 rgba(251,191,36,.5)}70%{box-shadow:0 0 0 12px rgba(251,191,36,0)}100%{box-shadow:0 0 0 0 rgba(251,191,36,0)}}
 #flagModal{position:fixed;inset:0;background:rgba(15,26,46,.82);z-index:9998;display:none;align-items:center;justify-content:center;padding:20px}
 #flagModal.open{display:flex}
 .flag-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:26px 28px;width:100%;max-width:520px;max-height:90vh;overflow:auto}
@@ -138,19 +139,19 @@ tr:last-child td{border-bottom:none}
   <div class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h7v8l10-12h-7z"/></svg></div>Smart Switch <span>Commission Tracker</span></div>
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <div class="date-badge">RESET 20/07/26 &nbsp;·&nbsp; HubSpot pull 18/08/26 &nbsp;·&nbsp; Ad spend: Cesca report to 07/08/26 + receipts to 10/08/26</div>
-    <button class="flag-btn" onclick="openFlag()"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2zm0-4h-2V7h2z"/></svg>Flag a discrepancy</button>
+    <button class="flag-btn" onclick="openFlag()"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2zm0-4h-2V7h2z"/></svg>Something not right?</button>
   </div>
 </div>
 
 <div id="flagModal" onclick="if(event.target===this)closeFlag()">
   <div class="flag-box">
-    <h3>Flag a commission discrepancy</h3>
-    <div class="flag-sub">Goes to Ollie and Scott. Your current figures are attached automatically, so no need to retype them &mdash; just say what looks wrong.</div>
+    <h3>Something not right?</h3>
+    <div class="flag-sub">Tell Ollie and Scott. Your figures are attached automatically &mdash; no need to retype anything, just say what looks off.</div>
     <div class="flag-ctx" id="flagCtx"></div>
     <label class="flag-label">Your name</label>
     <input class="flag-input" id="flagName" placeholder="Who's raising this?">
-    <label class="flag-label">What looks wrong?</label>
-    <textarea class="flag-area" id="flagMsg" placeholder="e.g. The Katie Young deal installed on 22/07 but I can't see my share of it — I was specialist on that one."></textarea>
+    <label class="flag-label">What looks off?</label>
+    <textarea class="flag-area" id="flagMsg" placeholder="e.g. Katie Young installed on 22/07 but I can't see my share — I was specialist on that one."></textarea>
     <div class="flag-actions">
       <button class="flag-cancel" onclick="closeFlag()">Cancel</button>
       <button class="flag-send" onclick="sendFlag()">Send</button>
@@ -432,7 +433,7 @@ function buildFlagMailto(){
   L.push(`Viewing: ${p.name}`);
   L.push(`Dashboard as at: ${document.querySelector('.date-badge').textContent.replace(/\s+/g,' ').trim()}`);
   L.push('');
-  L.push('--- What looks wrong ---');
+  L.push('--- What looks off ---');
   L.push(msg);
   L.push('');
   L.push('--- Figures on screen ---');
@@ -450,7 +451,7 @@ function buildFlagMailto(){
       L.push(`${d.son||'—'}  ${d.name}  [${d.status}]  ${fmt2(share)}`);
     });
   }
-  const subj=`Commission discrepancy — ${p.name} — raised by ${who}`;
+  const subj=`Commission query — ${p.name} — raised by ${who}`;
   let href=`mailto:${FLAG_TO}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(L.join('\n'))}`;
   if(FLAG_CC)href+=`&cc=${encodeURIComponent(FLAG_CC)}`;
   return href;

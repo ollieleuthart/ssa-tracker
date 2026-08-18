@@ -104,10 +104,9 @@ tr:last-child td{border-bottom:none}
 .fc-bar-fill.pos{background:linear-gradient(90deg,var(--green),#26a97c)}
 .fc-bar-fill.neg{background:linear-gradient(90deg,var(--red),#d95555)}
 
-.flag-btn{background:var(--amber);border:none;color:#3B2708;font-family:inherit;font-size:13px;font-weight:700;padding:10px 18px;border-radius:22px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:.15s;box-shadow:0 0 0 0 rgba(251,191,36,.55);animation:flagPulse 2.8s ease-out infinite;white-space:nowrap}
-.flag-btn:hover{background:#fcd34d;transform:translateY(-1px);animation:none;box-shadow:0 4px 14px rgba(251,191,36,.35)}
-.flag-btn svg{width:15px;height:15px;fill:currentColor}
-@keyframes flagPulse{0%{box-shadow:0 0 0 0 rgba(251,191,36,.5)}70%{box-shadow:0 0 0 12px rgba(251,191,36,0)}100%{box-shadow:0 0 0 0 rgba(251,191,36,0)}}
+.flag-btn{background:rgba(96,165,250,.14);border:1.5px solid var(--amber);color:var(--blue);font-family:inherit;font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:.15s;white-space:nowrap}
+.flag-btn:hover{background:rgba(96,165,250,.24);color:#93c5fd;border-color:#fcd34d}
+.flag-btn svg{width:14px;height:14px;fill:var(--amber)}
 #flagModal{position:fixed;inset:0;background:rgba(15,26,46,.82);z-index:9998;display:none;align-items:center;justify-content:center;padding:20px}
 #flagModal.open{display:flex}
 .flag-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:26px 28px;width:100%;max-width:520px;max-height:90vh;overflow:auto}

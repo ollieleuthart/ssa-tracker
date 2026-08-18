@@ -103,6 +103,25 @@ tr:last-child td{border-bottom:none}
 .fc-bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:10px;font-size:11px;font-weight:600;color:#fff;transition:width .4s}
 .fc-bar-fill.pos{background:linear-gradient(90deg,var(--green),#26a97c)}
 .fc-bar-fill.neg{background:linear-gradient(90deg,var(--red),#d95555)}
+
+.flag-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text2);font-family:inherit;font-size:12px;font-weight:600;padding:7px 14px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:.15s}
+.flag-btn:hover{border-color:var(--amber);color:var(--amber)}
+.flag-btn svg{width:13px;height:13px;fill:currentColor}
+#flagModal{position:fixed;inset:0;background:rgba(15,26,46,.82);z-index:9998;display:none;align-items:center;justify-content:center;padding:20px}
+#flagModal.open{display:flex}
+.flag-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:26px 28px;width:100%;max-width:520px;max-height:90vh;overflow:auto}
+.flag-box h3{font-size:16px;margin-bottom:4px}
+.flag-sub{font-size:12px;color:var(--text3);margin-bottom:18px;line-height:1.5}
+.flag-ctx{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 14px;margin-bottom:16px;font-size:11.5px;color:var(--text2);line-height:1.7}
+.flag-ctx b{color:var(--text)}
+.flag-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block}
+.flag-input,.flag-area{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13.5px;padding:10px 12px;margin-bottom:14px}
+.flag-area{min-height:110px;resize:vertical;line-height:1.5}
+.flag-input:focus,.flag-area:focus{outline:none;border-color:var(--teal)}
+.flag-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:4px}
+.flag-send{background:var(--teal);color:var(--bg);border:none;border-radius:8px;padding:10px 20px;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer}
+.flag-send:hover{background:#34b8b1}
+.flag-cancel{background:transparent;border:1px solid var(--border);color:var(--text2);border-radius:8px;padding:10px 18px;font-family:inherit;font-size:13.5px;cursor:pointer}
 @media(max-width:760px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
 </style></head>
 <body>
@@ -117,7 +136,26 @@ tr:last-child td{border-bottom:none}
 
 <div class="header">
   <div class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h7v8l10-12h-7z"/></svg></div>Smart Switch <span>Commission Tracker</span></div>
-  <div class="date-badge">RESET · 20/07/26 baseline · HubSpot pull 18/08/26 · ad spend to 10/08/26 (Cesca report)</div>
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <div class="date-badge">RESET 20/07/26 &nbsp;·&nbsp; HubSpot pull 18/08/26 &nbsp;·&nbsp; Ad spend: Cesca report to 07/08/26 + receipts to 10/08/26</div>
+    <button class="flag-btn" onclick="openFlag()"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2zm0-4h-2V7h2z"/></svg>Flag a discrepancy</button>
+  </div>
+</div>
+
+<div id="flagModal" onclick="if(event.target===this)closeFlag()">
+  <div class="flag-box">
+    <h3>Flag a commission discrepancy</h3>
+    <div class="flag-sub">Goes to Ollie and Scott. Your current figures are attached automatically, so no need to retype them &mdash; just say what looks wrong.</div>
+    <div class="flag-ctx" id="flagCtx"></div>
+    <label class="flag-label">Your name</label>
+    <input class="flag-input" id="flagName" placeholder="Who's raising this?">
+    <label class="flag-label">What looks wrong?</label>
+    <textarea class="flag-area" id="flagMsg" placeholder="e.g. The Katie Young deal installed on 22/07 but I can't see my share of it — I was specialist on that one."></textarea>
+    <div class="flag-actions">
+      <button class="flag-cancel" onclick="closeFlag()">Cancel</button>
+      <button class="flag-send" onclick="sendFlag()">Send</button>
+    </div>
+  </div>
 </div>
 
 <div class="container">
@@ -365,6 +403,65 @@ function renderHistoric(){
     </tr>`).join('');
 }
 renderHistoric();
+
+
+const FLAG_TO="ollie@smart-switchappliances.com";
+const FLAG_CC="";   // <-- add Scott's address here
+function openFlag(){
+  const p=D.people.find(x=>x.name===selected)||D.people[0];
+  const rows=[
+    ['Viewing',p.name],
+    ['Earned since 20/07/26',fmt2(p.earned)],
+    ['Pending pipeline',fmt2(p.pending)],
+  ];
+  if(p.to_cover>0)rows.push(['Total to cover',fmt2(p.to_cover)]);
+  rows.push(['Current position',fmt2(p.current)]);
+  rows.push(['Projected position',fmt2(p.projected)]);
+  document.getElementById('flagCtx').innerHTML=rows.map(r=>`${r[0]}: <b>${r[1]}</b>`).join('<br>');
+  document.getElementById('flagModal').classList.add('open');
+  document.getElementById('flagName').focus();
+}
+function closeFlag(){document.getElementById('flagModal').classList.remove('open');}
+function buildFlagMailto(){
+  const p=D.people.find(x=>x.name===selected)||D.people[0];
+  const who=document.getElementById('flagName').value.trim()||'(name not given)';
+  const msg=document.getElementById('flagMsg').value.trim();
+  if(!msg)return null;
+  const L=[];
+  L.push(`Raised by: ${who}`);
+  L.push(`Viewing: ${p.name}`);
+  L.push(`Dashboard as at: ${document.querySelector('.date-badge').textContent.replace(/\s+/g,' ').trim()}`);
+  L.push('');
+  L.push('--- What looks wrong ---');
+  L.push(msg);
+  L.push('');
+  L.push('--- Figures on screen ---');
+  L.push(`Earned since 20/07/26: ${fmt2(p.earned)}`);
+  L.push(`Pending pipeline: ${fmt2(p.pending)}`);
+  if(p.to_cover>0)L.push(`Total to cover: ${fmt2(p.to_cover)}`);
+  L.push(`Current position: ${fmt2(p.current)}`);
+  L.push(`Projected position: ${fmt2(p.projected)}`);
+  const ds=repDeals(selected);
+  if(ds.length){
+    L.push('');
+    L.push('--- Their pending deals ---');
+    ds.forEach(d=>{
+      const share=selected==="Full Team"?Object.values(d.benef).reduce((a,b)=>a+b,0):(d.benef[selected]!==undefined?d.benef[selected]:0);
+      L.push(`${d.son||'—'}  ${d.name}  [${d.status}]  ${fmt2(share)}`);
+    });
+  }
+  const subj=`Commission discrepancy — ${p.name} — raised by ${who}`;
+  let href=`mailto:${FLAG_TO}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(L.join('\n'))}`;
+  if(FLAG_CC)href+=`&cc=${encodeURIComponent(FLAG_CC)}`;
+  return href;
+}
+function sendFlag(){
+  const href=buildFlagMailto();
+  if(!href){document.getElementById('flagMsg').focus();return;}
+  window.location.href=href;
+  closeFlag();
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeFlag();});
 
 renderRep();
 renderList();

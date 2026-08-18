@@ -161,7 +161,7 @@ tr:last-child td{border-bottom:none}
 <div class="container">
   <div class="info-strip">
     <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-6h2zm0-8h-2V7h2z"/></svg>
-    <div>Fresh-start tracker. Everyone's position was struck at 20/07/26; commission counts forward only. Nothing has installed since the reset yet, so the <strong>pending pipeline</strong> is what shows each person working toward their line. Denzel is the only person still on a retainer draw. Hugo has no ongoing retainer but is earning back his 20/07/26 opening deficit. Ollie and Joe accrue commission only. Super (12%) is payable in addition for FTEs via payroll.</div>
+    <div>Fresh-start tracker. Everyone's position was struck at 20/07/26; commission counts forward only. Nothing has installed since the reset yet, so the <strong>pending pipeline</strong> is what shows each person working toward their line. Denzel is the only person still on a retainer draw. Hugo has no ongoing retainer but is earning back his 20/07/26 opening deficit. Ollie and Joe accrue commission only. <strong>All pending deals are based on cash amounts and may change with finance and ACP charges.</strong> Super (12%) is payable in addition for FTEs via payroll.</div>
   </div>
 
   <div class="view-tabs">
@@ -181,7 +181,8 @@ tr:last-child td{border-bottom:none}
     <div style="margin-top:20px"><h3>Pipeline deals (<span id="fcCount"></span>)</h3>
       <div class="deal-scroll"><table><thead><tr>
         <th>SON</th><th>Deal Name</th><th>Lead Gen / Specialist</th><th>Type</th><th>Stage</th><th class="num">Deal Value</th><th class="num">Comm/Person</th>
-      </tr></thead><tbody id="fcDealBody"></tbody></table></div></div>
+      </tr></thead><tbody id="fcDealBody"></tbody></table></div>
+      <div class="proj-note" style="margin-top:10px;color:var(--amber)">All pending deals are based on cash amounts and may change with finance and ACP charges.</div></div>
   </div>
 
   <div id="view-rep" class="view">
@@ -198,7 +199,7 @@ tr:last-child td{border-bottom:none}
     <div class="deal-scroll"><table class="list-table"><thead><tr>
       <th>Name</th><th>Type</th><th class="num">Start</th><th class="num">Retainer<br>+ ad spend</th><th class="num">Earned</th><th class="num">Current</th><th class="num divider pend-h">Pending</th><th class="num proj-h">Projected</th>
     </tr></thead><tbody id="listBody"></tbody></table></div>
-    <div class="proj-note" style="margin-top:10px">Projected = Current + Pending &mdash; where each person lands once the pending pipeline installs. <span style="color:var(--red)">Red = owed to SSA / to earn back.</span> <span style="color:var(--green)">Green = SSA owes them.</span> <span style="color:var(--blue)">Blue = pending (not yet installed).</span></div>
+    <div class="proj-note" style="margin-top:10px">Projected = Current + Pending &mdash; where each person lands once the pending pipeline installs. <span style="color:var(--red)">Red = owed to SSA / to earn back.</span> <span style="color:var(--green)">Green = SSA owes them.</span> <span style="color:var(--blue)">Blue = pending (not yet installed).</span><br><span style="color:var(--amber)">All pending deals are based on cash amounts and may change with finance and ACP charges.</span></div>
   </div>
 
   <div id="view-historic" class="view">
@@ -332,7 +333,7 @@ function renderRep(){
     <div class="deal-scroll"><table><thead><tr><th>SON</th><th>Deal</th><th>Stage</th><th>Type</th><th class="num">Their share</th></tr></thead><tbody>`;
   ds.forEach(d=>{const share=selected==="Full Team"?Object.values(d.benef).reduce((a,b)=>a+b,0):(d.benef[selected]!==undefined?d.benef[selected]:(d.benef[Object.keys(d.benef).find(k=>k.split(" ")[0]===selected.split(" ")[0])]||0));
     html+=`<tr><td style="font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--teal)">${d.son||'—'}</td><td class="dname">${d.name}</td><td><span class="status-dot"></span>${d.status}</td><td><span class="type-tag ${d.type.toLowerCase()}">${d.type}</span></td><td class="num">${fmt2(share)}</td></tr>`;});
-  html+=`</tbody></table></div></div>`;
+  html+=`</tbody></table></div><div class="proj-note" style="margin-top:10px;color:var(--amber)">All pending deals are based on cash amounts and may change with finance and ACP charges.</div></div>`;
   document.getElementById("repBody").innerHTML=html;
 }
 

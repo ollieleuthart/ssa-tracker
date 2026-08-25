@@ -1,470 +1,365 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>SSA Commission Tracker — Reset 20/07/26</title>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SSA Commission Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0F1A2E;--surface:#172137;--surface2:#1E2B45;--surface3:#243350;--border:#2A3A58;
---text:#E2E8F0;--text2:#94A3B8;--text3:#64748B;--teal:#3ECDC6;--teal-dim:rgba(62,205,198,.15);
---green:#34D399;--blue:#60A5FA;--amber:#FBBF24;--amber-dim:rgba(251,191,36,.12);--red:#F87171;--purple:#A78BFA;}
+:root{--bg:#0F1A2E;--surface:#172137;--surface2:#1E2B45;--surface3:#243350;
+--border:#2A3A58;--text:#E2E8F0;--text2:#94A3B8;--text3:#64748B;
+--teal:#3ECDC6;--green:#34D399;--blue:#60A5FA;--amber:#FBBF24;--red:#F87171;--purple:#A78BFA;
+--mono:ui-monospace,Menlo,monospace}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);font-size:14px}
-.header{background:var(--surface);border-bottom:1px solid var(--border);padding:18px 30px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-.logo{display:flex;align-items:center;gap:11px;font-weight:700;font-size:16px}
-.logo-icon{width:32px;height:32px;background:var(--teal);border-radius:8px;display:flex;align-items:center;justify-content:center}
-.logo-icon svg{width:18px;height:18px;fill:var(--bg)}
-.logo span{color:var(--teal);font-style:italic}
-.date-badge{font-size:11px;color:var(--text3);background:var(--surface2);padding:5px 12px;border-radius:20px}
-.container{max-width:1180px;margin:0 auto;padding:26px 30px}
-.info-strip{display:flex;gap:11px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:10px;padding:14px 16px;margin-bottom:22px;font-size:12.5px;color:var(--text2);line-height:1.5}
-.info-strip svg{width:18px;height:18px;fill:var(--teal);flex-shrink:0;margin-top:1px}
-.selector-row{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
-.selector-label{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
-select{background:var(--surface2);border:1px solid var(--border);color:#fff;font-family:inherit;font-size:15px;font-weight:600;padding:10px 40px 10px 16px;border-radius:8px;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%2394A3B8'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;min-width:240px}
+body{background:var(--bg);color:var(--text);font:400 14px/1.55 Inter,system-ui,sans-serif;
+font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+#gate{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;
+justify-content:center;z-index:99}
+.gatebox{background:var(--surface);border:1px solid var(--border);border-radius:14px;
+padding:38px 34px;width:340px;text-align:center}
+.gatebox h1{font-size:19px;font-weight:700;margin-bottom:6px}
+.gatebox p{color:var(--text3);font-size:12.5px;margin-bottom:20px}
+input[type=password]{width:100%;background:var(--surface2);border:1px solid var(--border);
+border-radius:8px;color:var(--text);padding:11px 13px;font:500 14px Inter,sans-serif;text-align:center}
+input[type=password]:focus{outline:none;border-color:var(--teal)}
+button.go{margin-top:12px;width:100%;background:var(--teal);color:#08131f;border:0;
+border-radius:8px;padding:11px;font:700 14px Inter,sans-serif;cursor:pointer}
+#err{color:var(--red);font-size:12px;margin-top:10px;min-height:16px}
+#app{display:none;max-width:1240px;margin:0 auto;padding:26px 22px 70px}
+header{border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:18px}
+.logo{font-size:20px;font-weight:800;letter-spacing:-.3px}
+.logo span{color:var(--teal)}
+.badge{font:500 11px/1.5 var(--mono);color:var(--text3);margin-top:6px;letter-spacing:.2px}
+.caveat{background:rgba(96,165,250,.09);border-left:3px solid var(--blue);color:var(--text2);
+font-size:12px;padding:9px 13px;border-radius:0 7px 7px 0;margin:14px 0}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+nav button{background:var(--surface);border:1px solid var(--border);color:var(--text2);
+padding:9px 15px;border-radius:8px;font:600 13px Inter,sans-serif;cursor:pointer}
+nav button.on{background:var(--teal);border-color:var(--teal);color:#08131f}
+.tab{display:none}.tab.on{display:block}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:15px 17px}
+.kpi .lab{font:600 10px var(--mono);letter-spacing:.9px;text-transform:uppercase;color:var(--text3)}
+.kpi .val{font-size:21px;font-weight:700;margin-top:7px}
+.kpi .sub{font-size:11.5px;color:var(--text3);margin-top:4px}
+.pos{color:var(--green)}.neg{color:var(--red)}.pend{color:var(--blue)}
+.amb{color:var(--amber)}.tl{color:var(--teal)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;
+padding:18px 20px;margin-bottom:18px}
+.card h2{font-size:14px;font-weight:700;margin-bottom:3px}
+.card .hint{font-size:11.5px;color:var(--text3);margin-bottom:14px}
+.hero{font-size:38px;font-weight:800;letter-spacing:-1px;line-height:1.1}
+.herosub{color:var(--text2);font-size:13.5px;margin-top:9px;max-width:660px}
+select{background:var(--surface2);border:1px solid var(--border);color:var(--text);
+border-radius:8px;padding:9px 13px;font:600 13.5px Inter,sans-serif;min-width:210px}
 select:focus{outline:none;border-color:var(--teal)}
-.wtype{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:600}
-.wtype.emp{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(62,205,198,.3)}
-.wtype.con{background:rgba(96,165,250,.12);color:var(--blue);border:1px solid rgba(96,165,250,.3)}
-.hero{background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:14px;padding:26px 30px;margin-bottom:20px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;background:var(--teal)}
-.hero.debt::before{background:var(--red)}
-.hero-eyebrow{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:1.5px;color:var(--text3);text-transform:uppercase;margin-bottom:7px}
-.hero-value{font-size:38px;font-weight:800;letter-spacing:-1px}
-.hero-value.teal{color:var(--teal)}.hero-value.amber{color:var(--amber)}.hero-value.red{color:var(--red)}.hero-value.purple{color:var(--purple)}
-.hero-caption{font-size:13px;color:var(--text2);margin-top:9px;line-height:1.5;max-width:640px}
-.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:13px;margin-bottom:20px}
-.kpi{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:15px 17px;position:relative;overflow:hidden}
-.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.kpi.navy::before{background:var(--text3)}.kpi.blue::before{background:var(--blue)}.kpi.green::before{background:var(--green)}.kpi.amber::before{background:var(--amber)}.kpi.teal::before{background:var(--teal)}
-.kpi-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.kpi-value{font-size:21px;font-weight:700}
-.kpi-value.green{color:var(--green)}.kpi-value.blue{color:var(--blue)}.kpi-value.amber{color:var(--amber)}.kpi-value.teal{color:var(--teal)}.kpi-value.red{color:var(--red)}
-.kpi-sub{font-size:10.5px;color:var(--text3);margin-top:3px}
-.proj-section{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:20px}
-.proj-title{font-size:13px;font-weight:600;margin-bottom:4px}
-.legend{display:flex;gap:16px;font-size:11px;color:var(--text2)}
-.legend-item{display:flex;align-items:center;gap:5px}
-.legend-dot{width:10px;height:10px;border-radius:2px}
-.legend-dot.cleared{background:var(--green)}.legend-dot.pending{background:var(--blue)}.legend-dot.gap{background:var(--surface3)}
-.bar-container{position:relative;margin:14px 0 6px}
-.bar-track{display:flex;height:34px;background:var(--surface3);border-radius:7px;overflow:hidden}
-.bar-segment{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;min-width:0;transition:width .4s}
-.bar-segment.cleared{background:var(--green)}.bar-segment.pending{background:var(--blue)}.bar-segment.gap{background:transparent;color:var(--text3)}
-.bar-scale{position:relative;height:18px;margin-top:2px}
-.bar-tick{position:absolute;top:0;transform:translateX(-50%);font-size:9.5px;color:var(--text3);font-variant-numeric:tabular-nums}
-.bar-tick::before{content:'';position:absolute;left:50%;top:-6px;width:1px;height:5px;background:var(--border)}
-.retainer-line{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--red);z-index:2}
-.retainer-line::after{content:attr(data-label);position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--red);white-space:nowrap;font-weight:600}
-.proj-note{font-size:11.5px;color:var(--text3);margin-top:12px;line-height:1.5}
-h3{font-size:14px;margin-bottom:12px}
-.deal-scroll{max-height:440px;overflow:auto;border:1px solid var(--border);border-radius:10px}
 table{width:100%;border-collapse:collapse;font-size:12.5px}
-th{position:sticky;top:0;background:var(--surface3);color:var(--text2);text-align:left;padding:10px 12px;font-weight:600;z-index:1}
-th.num{text-align:right}
-td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text2)}
-td.num{text-align:right;font-variant-numeric:tabular-nums;color:#fff}
-td.dname{color:#fff}
-tr:last-child td{border-bottom:none}
-.type-tag{font-size:10px;padding:2px 7px;border-radius:5px;font-weight:600}
-.type-tag.away{background:rgba(96,165,250,.15);color:var(--blue)}.type-tag.home{background:rgba(167,139,250,.15);color:var(--purple)}
-.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;background:var(--amber)}
-.list-table td .pos{color:var(--green);font-weight:600}.list-table td .neg{color:var(--red);font-weight:600}
-.list-table td .sub{display:block;font-size:9.5px;color:var(--text3);font-weight:400}
-.divider{border-left:2px solid var(--blue)!important}
-.pend-h{color:var(--blue)!important}
-.proj-h{color:var(--blue)!important}
-.comm-h{color:var(--teal)!important}
-.list-table td .pend{color:var(--blue)}
-.list-table td .em{font-weight:700;font-size:13px}
-/* gate */
-#gate{position:fixed;inset:0;background:#0F1A2E;z-index:9999;display:flex;align-items:center;justify-content:center}
-#gate.hidden{display:none}
-.gate-box{background:#172137;border:1px solid #2A3A58;border-radius:12px;padding:38px 34px;width:370px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)}
-.gate-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:22px}
-.gate-logo-icon{width:34px;height:34px;background:#3ECDC6;border-radius:8px;display:flex;align-items:center;justify-content:center}
-.gate-logo-icon svg{width:19px;height:19px;fill:#0F1A2E}
-.gate-logo h2{font-size:15px;font-weight:700}.gate-logo span{color:#3ECDC6;font-style:italic}
-.gate-subtitle{font-size:12px;color:#64748B;margin-bottom:24px}
-#gate-input{width:100%;padding:12px 16px;background:#1E2B45;border:1px solid #2A3A58;border-radius:8px;color:#fff;font-family:Inter;font-size:14px;text-align:center;letter-spacing:2px}
-#gate-input:focus{outline:none;border-color:#3ECDC6}
-#gate-btn{width:100%;padding:12px;margin-top:13px;background:#3ECDC6;color:#0F1A2E;border:none;border-radius:8px;font-family:Inter;font-size:14px;font-weight:700;cursor:pointer}
-#gate-btn:hover{background:#34b8b1}
-#gate-error{color:#F87171;font-size:12px;margin-top:11px;min-height:16px}
-.gate-footer{font-size:10px;color:#4A5568;margin-top:18px}
+th{text-align:left;font:600 10px var(--mono);letter-spacing:.7px;text-transform:uppercase;
+color:var(--text3);padding:9px 9px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:9px 9px;border-bottom:1px solid rgba(42,58,88,.5);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;white-space:nowrap}
+.son{font:500 11.5px var(--mono);color:var(--teal);white-space:nowrap}
+.tw{max-width:250px}
+.divL{border-left:2px solid var(--blue)}
+.flagrow td{background:rgba(251,191,36,.08)}
+.pill{display:inline-block;font:600 10px var(--mono);padding:2px 7px;border-radius:20px;
+border:1px solid var(--border);color:var(--text2);white-space:nowrap}
+.bars .row{display:grid;grid-template-columns:150px 1fr 108px;gap:11px;align-items:center;margin-bottom:9px}
+.bars .nm{font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.track{background:var(--surface3);border-radius:5px;height:19px;overflow:hidden;display:flex}
+.track i{display:block;height:100%}
+.bars .amt{text-align:right;font-size:12.5px;font-weight:600}
+.prog{margin-top:30px}
+.progtrack{position:relative;background:var(--surface3);border-radius:7px;height:32px;display:flex;overflow:visible}
+.progtrack i{display:block;height:100%}
+.progtrack i:first-child{border-radius:7px 0 0 7px}
+.line{position:absolute;top:-6px;bottom:-6px;width:2px;background:var(--red);z-index:3}
+.line::after{content:attr(data-label);position:absolute;top:-19px;left:50%;
+transform:translateX(-50%);font:700 10px var(--mono);color:var(--red);white-space:nowrap}
+.ticks{position:relative;height:19px;margin-top:5px}
+.tick{position:absolute;font:500 9.5px var(--mono);color:var(--text3);transform:translateX(-50%);white-space:nowrap}
+.tick::before{content:'';position:absolute;top:-5px;left:50%;width:1px;height:4px;background:var(--border)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--text3);margin-top:13px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.sumbox{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;margin-bottom:16px}
+.est{background:rgba(251,191,36,.09);border-left:3px solid var(--amber);color:var(--text2);
+font-size:12px;padding:11px 14px;border-radius:0 7px 7px 0;margin-bottom:16px}
+.foot{font-size:11.5px;color:var(--text3);margin-top:12px;line-height:1.7}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}
+.filters button{background:var(--surface2);border:1px solid var(--border);color:var(--text2);
+padding:5px 11px;border-radius:16px;font:600 11.5px Inter,sans-serif;cursor:pointer}
+.filters button.on{background:var(--teal);border-color:var(--teal);color:#08131f}
+.wrap{overflow-x:auto}
+.dis{position:fixed;right:18px;bottom:18px;background:var(--surface2);border:1px solid var(--border);
+color:var(--text2);padding:10px 15px;border-radius:24px;font:600 12px Inter,sans-serif;
+cursor:pointer;z-index:20}
+.dis:hover{border-color:var(--teal);color:var(--teal)}
+@media(max-width:640px){.hero{font-size:29px}.bars .row{grid-template-columns:96px 1fr 84px}}
+</style></head><body>
 
-.view-tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:5px;margin-bottom:22px;width:fit-content}
-.view-tab{background:transparent;border:none;color:var(--text2);font-family:inherit;font-size:13px;font-weight:600;padding:9px 18px;border-radius:7px;cursor:pointer;transition:.15s}
-.view-tab:hover{color:var(--text)}
-.view-tab.active{background:var(--teal);color:var(--bg)}
-.view{display:none}.view.active{display:block}
-.fc-bars{display:flex;flex-direction:column;gap:10px;margin:8px 0}
-.fc-bar-row{display:flex;align-items:center;gap:12px}
-.fc-bar-name{width:150px;font-size:12.5px;color:var(--text2);text-align:right;flex-shrink:0}
-.fc-bar-wrap{flex:1;background:var(--surface3);border-radius:6px;height:26px;position:relative;overflow:hidden}
-.fc-bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:10px;font-size:11px;font-weight:600;color:#fff;transition:width .4s}
-.fc-bar-fill.pos{background:linear-gradient(90deg,var(--green),#26a97c)}
-.fc-bar-fill.neg{background:linear-gradient(90deg,var(--red),#d95555)}
-
-.flag-btn{background:rgba(96,165,250,.14);border:1.5px solid var(--amber);color:var(--blue);font-family:inherit;font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:.15s;white-space:nowrap}
-.flag-btn:hover{background:rgba(96,165,250,.24);color:#93c5fd;border-color:#fcd34d}
-.flag-btn svg{width:14px;height:14px;fill:var(--amber)}
-#flagModal{position:fixed;inset:0;background:rgba(15,26,46,.82);z-index:9998;display:none;align-items:center;justify-content:center;padding:20px}
-#flagModal.open{display:flex}
-.flag-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:26px 28px;width:100%;max-width:520px;max-height:90vh;overflow:auto}
-.flag-box h3{font-size:16px;margin-bottom:4px}
-.flag-sub{font-size:12px;color:var(--text3);margin-bottom:18px;line-height:1.5}
-.flag-ctx{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 14px;margin-bottom:16px;font-size:11.5px;color:var(--text2);line-height:1.7}
-.flag-ctx b{color:var(--text)}
-.flag-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block}
-.flag-input,.flag-area{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13.5px;padding:10px 12px;margin-bottom:14px}
-.flag-area{min-height:110px;resize:vertical;line-height:1.5}
-.flag-input:focus,.flag-area:focus{outline:none;border-color:var(--teal)}
-.flag-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:4px}
-.flag-send{background:var(--teal);color:var(--bg);border:none;border-radius:8px;padding:10px 20px;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer}
-.flag-send:hover{background:#34b8b1}
-.flag-cancel{background:transparent;border:1px solid var(--border);color:var(--text2);border-radius:8px;padding:10px 18px;font-family:inherit;font-size:13.5px;cursor:pointer}
-@media(max-width:760px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
-</style></head>
-<body>
-<div id="gate"><div class="gate-box">
-  <div class="gate-logo"><div class="gate-logo-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h7v8l10-12h-7z"/></svg></div><h2>Smart Switch <span>Tracker</span></h2></div>
-  <div class="gate-subtitle">Enter the team password to view the reset commission dashboard</div>
-  <input id="gate-input" type="password" placeholder="Password" autocomplete="off">
-  <button id="gate-btn" onclick="checkPw()">Open Dashboard</button>
-  <div id="gate-error"></div>
-  <div class="gate-footer">Contact your manager for access</div>
+<div id="gate"><div class="gatebox">
+<h1>SSA Commission Tracker</h1><p>Enter the team password</p>
+<input type="password" id="pw" autocomplete="off" placeholder="••••••••">
+<button class="go" id="btn">Unlock</button><div id="err"></div>
 </div></div>
 
-<div class="header">
-  <div class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h7v8l10-12h-7z"/></svg></div>Smart Switch <span>Commission Tracker</span></div>
-  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-    <div class="date-badge">RESET 20/07/26 &nbsp;·&nbsp; HubSpot pull 18/08/26 &nbsp;·&nbsp; Ad spend: Cesca report to 07/08/26 + receipts to 10/08/26</div>
-    <button class="flag-btn" onclick="openFlag()"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2zm0-4h-2V7h2z"/></svg>Something not right?</button>
-  </div>
+<div id="app">
+<header>
+  <div class="logo">Smart<span>Zero</span> · Commission Tracker</div>
+  <div class="badge" id="badge"></div>
+</header>
+<nav>
+  <button class="on" data-t="0">Pipeline Forecast</button>
+  <button data-t="1">My Position</button>
+  <button data-t="2">Team List</button>
+  <button data-t="3">Historic Deals Log</button>
+</nav>
+<div class="tab on" id="t0"></div>
+<div class="tab" id="t1"></div>
+<div class="tab" id="t2"></div>
+<div class="tab" id="t3"></div>
 </div>
-
-<div id="flagModal" onclick="if(event.target===this)closeFlag()">
-  <div class="flag-box">
-    <h3>Something not right?</h3>
-    <div class="flag-sub">Tell Ollie and Scott. Your figures are attached automatically &mdash; no need to retype anything, just say what looks off.</div>
-    <div class="flag-ctx" id="flagCtx"></div>
-    <label class="flag-label">Your name</label>
-    <input class="flag-input" id="flagName" placeholder="Who's raising this?">
-    <label class="flag-label">What looks off?</label>
-    <textarea class="flag-area" id="flagMsg" placeholder="e.g. Katie Young installed on 22/07 but I can't see my share — I was specialist on that one."></textarea>
-    <div class="flag-actions">
-      <button class="flag-cancel" onclick="closeFlag()">Cancel</button>
-      <button class="flag-send" onclick="sendFlag()">Send</button>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="info-strip">
-    <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-6h2zm0-8h-2V7h2z"/></svg>
-    <div>Fresh-start tracker. Everyone's position was struck at 20/07/26; commission counts forward only. Nothing has installed since the reset yet, so the <strong>pending pipeline</strong> is what shows each person working toward their line. Denzel is the only person still on a retainer draw. Hugo has no ongoing retainer but is earning back his 20/07/26 opening deficit. Ollie and Joe accrue commission only. <strong>All pending deals are based on cash amounts and may change with finance and ACP charges.</strong> Super (12%) is payable in addition for FTEs via payroll.</div>
-  </div>
-
-  <div class="view-tabs">
-    <button class="view-tab active" onclick="switchView('forecast',event)">Pipeline Forecast</button>
-    <button class="view-tab" onclick="switchView('rep',event)">My Position</button>
-    <button class="view-tab" onclick="switchView('list',event)">Team List</button>
-    <button class="view-tab" onclick="switchView('historic',event)">Historic Deals Log</button>
-  </div>
-
-  <div id="view-forecast" class="view active">
-    <div class="kpi-row" id="fcKpis"></div>
-    <div class="proj-section">
-      <div class="proj-title" style="margin-bottom:6px">Projected position by person (once pipeline installs)</div>
-      <div class="fc-bars" id="fcBars"></div>
-      <div class="proj-note">Bars show each person's projected position after pending pipeline installs. Green = SSA will owe them; red = still to earn back.</div>
-    </div>
-    <div style="margin-top:20px"><h3>Pipeline deals (<span id="fcCount"></span>)</h3>
-      <div class="deal-scroll"><table><thead><tr>
-        <th>SON</th><th>Deal Name</th><th>Lead Gen / Specialist</th><th>Type</th><th>Stage</th><th class="num">Deal Value</th><th class="num">Comm/Person</th>
-      </tr></thead><tbody id="fcDealBody"></tbody></table></div>
-      <div class="proj-note" style="margin-top:10px;color:var(--amber)">All pending deals are based on cash amounts and may change with finance and ACP charges.</div></div>
-  </div>
-
-  <div id="view-rep" class="view">
-  <div class="selector-row">
-    <span class="selector-label">Viewing</span>
-    <select id="repSelect"></select>
-    <span id="wtypeBadge"></span>
-  </div>
-  <div id="repBody"></div>
-  </div>
-
-  <div id="view-list" class="view">
-    <h3>Team — reset position</h3>
-    <div class="deal-scroll"><table class="list-table"><thead><tr>
-      <th>Name</th><th>Type</th><th class="num">Start</th><th class="num">Retainer<br>+ ad spend</th><th class="num">Earned</th><th class="num">Current</th><th class="num divider pend-h">Pending</th><th class="num proj-h">Projected</th>
-    </tr></thead><tbody id="listBody"></tbody></table></div>
-    <div class="proj-note" style="margin-top:10px">Projected = Current + Pending &mdash; where each person lands once the pending pipeline installs. <span style="color:var(--red)">Red = owed to SSA / to earn back.</span> <span style="color:var(--green)">Green = SSA owes them.</span> <span style="color:var(--blue)">Blue = pending (not yet installed).</span><br><span style="color:var(--amber)">All pending deals are based on cash amounts and may change with finance and ACP charges.</span></div>
-  </div>
-
-  <div id="view-historic" class="view">
-    <h3>Historic Deals Log — all installed deals since 09/25</h3>
-    <div class="kpi-row" id="histKpis" style="margin-top:12px"></div>
-    <div class="info-strip" style="border-left-color:var(--amber);margin-bottom:16px">
-      <svg viewBox="0 0 24 24" style="fill:var(--amber)"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-6h2zm0-8h-2V7h2z"/></svg>
-      <div><strong>Estimate up to 20/07/26.</strong> Figures before the 20/07/26 reset are reconstructed from HubSpot and contain known inconsistencies — some deals have no install date, no deal value, or no attribution recorded (<span id="histFlagCount"></span> rows flagged amber below). Commission shown is <em>earned/owed on install</em>, not cash paid. Treat pre-reset totals as an estimate for cross-referencing, not a settled ledger.</div>
-    </div>
-    <div class="deal-scroll" style="max-height:600px"><table class="list-table"><thead><tr>
-      <th>SON</th><th>Deal</th><th>Installed</th><th>Lead Gen / Specialist</th><th>Type</th><th class="num">Deal Value</th><th class="num comm-h">Commission</th><th>Flag</th>
-    </tr></thead><tbody id="histBody"></tbody></table></div>
-    <div class="proj-note" style="margin-top:10px">SON = Sales Order Number from HubSpot, for cross-referencing against the Xero transcript. Deal Value = cash + rebate (incl GST). Commission = total earned across all people on the deal.</div>
-  </div>
-</div>
+<button class="dis" id="dis">Something not right?</button>
 
 <script>
-const D={"people":[{"name":"Full Team","type":"All 5 people \u2014 aggregate","fte":false,"track":false,"isTeam":true,"note":"","start":-12519.47,"retainer":7779.02,"adspend":1779.02,"retainer_only":6000.0,"earned":8018.02,"pending":18888.25,"current":-12280.47,"projected":6607.78,"line":20298.49,"to_cover":20298.49},{"name":"Denzel Winterbeard","type":"FTE (Salaried) \u2014 on retainer","start":-4789.06,"fte":true,"track":false,"isTeam":false,"note":"","earned":3338.7,"pending":5943.48,"retainer":5000.0,"adspend":0.0,"retainer_only":5000.0,"current":-6450.36,"projected":-506.88,"line":9789.06,"to_cover":9789.06},{"name":"Hugo","type":"FTE (Salaried) \u2014 earning back opening deficit","start":-7730.41,"fte":true,"track":false,"isTeam":false,"note":"No ongoing retainer \u2014 commission earns back the 20/07/26 opening deficit","earned":3554.56,"pending":1360.76,"retainer":0.0,"adspend":0.0,"retainer_only":0.0,"current":-4175.85,"projected":-2815.09,"line":7730.41,"to_cover":7730.41},{"name":"Ollie","type":"FTE (Salaried)","start":0.0,"fte":true,"track":false,"isTeam":false,"note":"","earned":0.0,"pending":0.0,"retainer":0.0,"adspend":0.0,"retainer_only":0.0,"current":0.0,"projected":0.0,"line":0.0,"to_cover":0.0},{"name":"Joe","type":"FTE (Salaried)","start":0.0,"fte":true,"track":false,"isTeam":false,"note":"","earned":617.52,"pending":9318.05,"retainer":0.0,"adspend":0.0,"retainer_only":0.0,"current":617.52,"projected":9935.57,"line":0.0,"to_cover":0.0},{"name":"Holly","type":"Independent Contractor (Marketing)","start":0.0,"fte":false,"track":false,"isTeam":false,"note":"","earned":507.24,"pending":2265.96,"retainer":2779.02,"adspend":1779.02,"retainer_only":1000.0,"current":-2271.78,"projected":-5.82,"line":2779.02,"to_cover":2779.02}],"deals":[{"name":"Christopher Beveridge - 1 Slater Road Cable Beach WA 6726","status":"Upcoming","type":"Home","son":"SSA038","benef":{"Joe":2394.09}},{"name":"Dave Nolan - 6 Blick Drive Broome WA 6725","status":"Upcoming","type":"Home","son":"210726.JS01","benef":{"Joe":0.0}},{"name":"John Haig - 3 Oxley Street Tallimba NSW 2669","status":"Upcoming","type":"Home","son":"060526.DWB01","benef":{"Joe":821.27,"Holly":471.78}},{"name":"Jenny Real - 37 Stratheden Street Kyogle NSW 2474","status":"In Progress","type":"Away","son":"140526.DWB01","benef":{"Denzel Winterbeard":153.7,"Hugo":153.7}},{"name":"Dieter Steinman - 1 Yamashita Street Roebuck WA 6725","status":"In Progress","type":"Home","son":"SSA037","benef":{"Joe":1276.59}},{"name":"Lachlan and Kayla Cooper - 11 Major Mitchell Drive Gulmarrad NSW 2463","status":"Upcoming","type":"Home","son":"240726.HS01","benef":{"Hugo":0.0}},{"name":"Stephen Yu - 14 Carnarvon Street Broome WA 6725","status":"Upcoming","type":"Home","son":"SSA042","benef":{"Denzel Winterbeard":1595.91,"Holly":1794.18,"Joe":3191.82}},{"name":"Ian Potter - 11 Pickfords Road Yetman 2410 NSW","status":"Upcoming","type":"Home","son":"100826.JS01","benef":{"Denzel Winterbeard":0.0,"Hugo":0.0}},{"name":"Francis and Andrefe Abrenica - 38 Prince Street Junee NSW 2663","status":"Upcoming","type":"Home","son":"150726.HS01","benef":{"Joe":443.18,"Hugo":443.18}},{"name":"Ian & Leonie Taylor - 4 White Street Guyra NSW 2365","status":"Upcoming","type":"Away","son":"210526.DWB02","benef":{"Denzel Winterbeard":180.91,"Joe":180.91,"Hugo":180.91}},{"name":"James & Lorraine Best - 19 Donaldson Street Coraki NSW 2471","status":"Upcoming","type":"Home","son":"080526.JS01","benef":{"Joe":1010.18}},{"name":"Ian Potter","status":"Upcoming","type":"Home","son":"\u2014","benef":{"Joe":0.0}},{"name":"Mark Wilson - 3 Mcrae Court Yarrawonga VIC 3730","status":"Upcoming","type":"Home","son":"150626.DWB01","benef":{"Denzel Winterbeard":3430.0}},{"name":"Zanthia & Travis Peters - 2 Connors Lane Maclean NSW 2463","status":"Upcoming","type":"Away","son":"130726.JS01","benef":{"Denzel Winterbeard":582.97,"Hugo":582.97}},{"name":"Courtney Farrel - 220 Merton Street Boggabri NSW 2382","status":"Upcoming","type":"Away","son":"120826.JS01","benef":{"Denzel Winterbeard":0.0,"Ollie":0.0,"Hugo":0.0}},{"name":"Courtney Farrel","status":"Upcoming","type":"Home","son":"\u2014","benef":{"Joe":0.0}}],"forecast":{"deals":[{"son":"SSA038","name":"Christopher Beveridge - 1 Slater Road Cable Beach WA 6726","lg":"Joe","spec":"Joe","type":"Home","stage":"Upcoming","value":26335.0,"commp":2394.09,"benef":{"Joe":2394.09}},{"son":"210726.JS01","name":"Dave Nolan - 6 Blick Drive Broome WA 6725","lg":"\u2014","spec":"Joe","type":"Home","stage":"Upcoming","value":0.0,"commp":0.0,"benef":{"Joe":0.0}},{"son":"060526.DWB01","name":"John Haig - 3 Oxley Street Tallimba NSW 2669","lg":"Holly","spec":"Joe","type":"Home","stage":"Upcoming","value":18068.0,"commp":821.27,"benef":{"Joe":821.27,"Holly":471.78}},{"son":"140526.DWB01","name":"Jenny Real - 37 Stratheden Street Kyogle NSW 2474","lg":"Max Bradfield; Hugo","spec":"Denzel Winterbeard","type":"Away","stage":"In Progress","value":5072.0,"commp":153.7,"benef":{"Denzel Winterbeard":153.7,"Hugo":153.7}},{"son":"SSA037","name":"Dieter Steinman - 1 Yamashita Street Roebuck WA 6725","lg":"Beau Jolly","spec":"Joe","type":"Home","stage":"In Progress","value":28085.0,"commp":1276.59,"benef":{"Joe":1276.59}},{"son":"240726.HS01","name":"Lachlan and Kayla Cooper - 11 Major Mitchell Drive Gulmarrad NSW 2463","lg":"Hugo","spec":"Hugo","type":"Home","stage":"Upcoming","value":0.0,"commp":0.0,"benef":{"Hugo":0.0}},{"son":"SSA042","name":"Stephen Yu - 14 Carnarvon Street Broome WA 6725","lg":"Holly; Joe","spec":"Joe; Denzel Winterbeard","type":"Home","stage":"Upcoming","value":70220.0,"commp":3191.82,"benef":{"Denzel Winterbeard":1595.91,"Holly":1794.18,"Joe":3191.82}},{"son":"100826.JS01","name":"Ian Potter - 11 Pickfords Road Yetman 2410 NSW","lg":"\u2014","spec":"Hugo; Denzel Winterbeard","type":"Home","stage":"Upcoming","value":0.0,"commp":0.0,"benef":{"Denzel Winterbeard":0.0,"Hugo":0.0}},{"son":"150726.HS01","name":"Francis and Andrefe Abrenica - 38 Prince Street Junee NSW 2663","lg":"Joe","spec":"Hugo","type":"Home","stage":"Upcoming","value":9750.0,"commp":443.18,"benef":{"Joe":443.18,"Hugo":443.18}},{"son":"210526.DWB02","name":"Ian & Leonie Taylor - 4 White Street Guyra NSW 2365","lg":"Hugo; Max Bradfield; Rosa; Simon","spec":"Denzel Winterbeard; Max Bradfield; Hugo; Cian Jefferson; Joe","type":"Away","stage":"Upcoming","value":13930.0,"commp":180.91,"benef":{"Denzel Winterbeard":180.91,"Joe":180.91,"Hugo":180.91}},{"son":"080526.JS01","name":"James & Lorraine Best - 19 Donaldson Street Coraki NSW 2471","lg":"Harley","spec":"Joe","type":"Home","stage":"Upcoming","value":22224.0,"commp":1010.18,"benef":{"Joe":1010.18}},{"son":"\u2014","name":"Ian Potter","lg":"\u2014","spec":"Joe","type":"Home","stage":"Upcoming","value":0.0,"commp":0.0,"benef":{"Joe":0.0}},{"son":"150626.DWB01","name":"Mark Wilson - 3 Mcrae Court Yarrawonga VIC 3730","lg":"Denzel Winterbeard","spec":"Denzel Winterbeard","type":"Home","stage":"Upcoming","value":37730.0,"commp":3430.0,"benef":{"Denzel Winterbeard":3430.0}},{"son":"130726.JS01","name":"Zanthia & Travis Peters - 2 Connors Lane Maclean NSW 2463","lg":"Hugo; Max Bradfield","spec":"Denzel Winterbeard","type":"Away","stage":"Upcoming","value":19238.0,"commp":582.97,"benef":{"Denzel Winterbeard":582.97,"Hugo":582.97}},{"son":"120826.JS01","name":"Courtney Farrel - 220 Merton Street Boggabri NSW 2382","lg":"Ollie; Denzel Winterbeard; Hugo","spec":"Denzel Winterbeard; Hugo","type":"Away","stage":"Upcoming","value":0.0,"commp":0.0,"benef":{"Denzel Winterbeard":0.0,"Ollie":0.0,"Hugo":0.0}},{"son":"\u2014","name":"Courtney Farrel","lg":"\u2014","spec":"Joe","type":"Home","stage":"Upcoming","value":0.0,"commp":0.0,"benef":{"Joe":0.0}}],"kpis":{"pipeline_value":250652.0,"total_pending_comm":18888.25,"deal_count":16,"earned_since":8018.02}},"historic":{"deals":[{"son":"250626.DWB01","name":"Brenda Walker - 6 Jubilee Street Maclean NSW 2463","date":"2026-08-07","lg":"\u2014","spec":"Denzel Winterbeard","type":"Home","value":14988.0,"comm":681.27,"flag":""},{"son":"230426.JS02","name":"Amanda Bernauer - 20 Inverell Road Warialda NSW 2402","date":"2026-07-25","lg":"Denzel Winterbeard; Cian Jefferson; Mark Isaac; Max Bradfield; Hugo","spec":"Denzel Winterbeard; Cian Jefferson; Mark Isaac; Max Bradfield; Hugo","type":"Away","value":35355.0,"comm":3214.09,"flag":""},{"son":"130726.HS01","name":"Jane Armitage - 8/18 Gwydir Terrace Bingara NSW 2404","date":"2026-07-24","lg":"Holly","spec":"Hugo","type":"Home","value":19737.0,"comm":1404.38,"flag":""},{"son":"240526.JS01","name":"Connie Minos - 1349 Bonshaw Road Ashford NSW 2361","date":"2026-07-24","lg":"Rosa; Hugo; Max Bradfield; Denzel Winterbeard; Cian Jefferson; Simon; Hannah; Joe","spec":"Joe; Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Rosa; Dermot; Fran","type":"Away","value":67927.0,"comm":6175.18,"flag":""},{"son":"190626.DWB03","name":"Jennifer Baker - 106 Alma Street Wee Waa NSW 2388","date":"2026-07-23","lg":"Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Mark Isaac","spec":"Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Mark Isaac","type":"Away","value":19737.0,"comm":1794.27,"flag":""},{"son":"170626.DWB01","name":"Paul & Judy Couley - 92 Boundary Street Wee Waa NSW 2388","date":"2026-07-23","lg":"Hugo; Mark Isaac; Max Bradfield; Cian Jefferson; Denzel Winterbeard","spec":"Denzel Winterbeard; Cian Jefferson; Hugo; Max Bradfield; Mark Isaac","type":"Away","value":23763.0,"comm":2160.27,"flag":""},{"son":"190626.DWB01","name":"Katie Young - 66 Dangar Street Narrabri NSW 2390","date":"2026-07-22","lg":"Cian Jefferson; Denzel Winterbeard; Max Bradfield; Hugo; Mark Isaac","spec":"Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Mark Isaac","type":"Away","value":28945.0,"comm":2631.36,"flag":""},{"son":"180526.DWB02","name":"Christine & Peter Broderick - 24 Frazer Street Ashford NSW 2361","date":"2026-07-22","lg":"Simon; Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Rosa","spec":"Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Fran; Dermot; Rosa","type":"Away","value":7032.0,"comm":639.27,"flag":""},{"son":"120626.JS01","name":"Rebecca Hudson - 93 Main Street Clunes NSW 2480","date":"2026-07-14","lg":"Cian Jefferson; Hugo","spec":"Joe; Denzel Winterbeard","type":"Away","value":28992.0,"comm":2635.64,"flag":""},{"son":"SSA039","name":"Cristopher Iquin - 5 Euro Way Djugun WA 6725","date":"2026-07-13","lg":"Holly","spec":"Joe","type":"Home","value":37273.2,"comm":2485.15,"flag":""},{"son":"100626.JS01","name":"Georgina Kelly - 21 Puertollano Place Broome WA 6725","date":"2026-07-10","lg":"Holly","spec":"Cian Jefferson","type":"Home","value":29100.0,"comm":2204.26,"flag":""},{"son":"230526.DWB02","name":"Barry O'Farrell - 45 Frazer Street Ashford NSW 2361","date":"2026-07-07","lg":"Denzel Winterbeard; Cian Jefferson; Hugo; Max Bradfield; Rosa; Simon","spec":"Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Fran; Dermot; Rosa","type":"Away","value":26747.0,"comm":2431.55,"flag":""},{"son":"060526.DWB01","name":"Craig Robinson- 14 Cedar Street Woodburn NSW 2472","date":"2026-07-06","lg":"Harley","spec":"Denzel Winterbeard","type":"Home","value":17113.0,"comm":1555.73,"flag":""},{"son":"190526.DWB04","name":"Beverly & Graeme Voss - 3 David Street Ashford NSW 2361","date":"2026-07-06","lg":"Rosa; Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Simon","spec":"Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Fran; Rosa; Dermot","type":"Away","value":27325.0,"comm":2484.09,"flag":""},{"son":"070426.DWB01","name":"Terry Moore - 6 Bank Street Woodburn NSW 2472","date":"2026-07-03","lg":"Simon","spec":"Denzel Winterbeard","type":"Home","value":0.0,"comm":0.0,"flag":"no value"},{"son":"130526.JS01","name":"Daryl Boyd - 48 Martyn Street Ashford NSW 2361","date":"2026-07-03","lg":"Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Mark Isaac; Joe","spec":"Cian Jefferson; Denzel Winterbeard; Max Bradfield; Hugo; Mark Isaac; Joe","type":"Away","value":24878.0,"comm":2261.64,"flag":""},{"son":"070526.DWB02","name":"Rosalee and Greg Foran- 2 Bank Street Woodburn NSW 2471","date":"2026-07-02","lg":"Cian Jefferson","spec":"Denzel Winterbeard","type":"Home","value":23615.0,"comm":2146.82,"flag":""},{"son":"100626.JS02","name":"Lee Achurch - 11 Myall Street Evans Head NSW 2473","date":"2026-07-01","lg":"Simon","spec":"Joe","type":"Home","value":12925.0,"comm":1175.0,"flag":""},{"son":"260526.DWB02","name":"Adrian Currell - 37 Cameron Street Maclean NSW 2463","date":"2026-06-26","lg":"Hugo","spec":"Denzel Winterbeard","type":"Home","value":16488.0,"comm":1498.91,"flag":""},{"son":"160526.DWB01","name":"Christopher Hutton - 31 Boorabee Street Kyogle NSW 2474","date":"2026-06-24","lg":"Hugo; Max Bradfield","spec":"Denzel Winterbeard","type":"Away","value":15439.0,"comm":1403.55,"flag":""},{"son":"SSA040","name":"Don Wood - 11 Pembroke Road Broome WA 6725","date":"2026-06-18","lg":"Joe","spec":"Joe","type":"Home","value":78848.0,"comm":7168.0,"flag":""},{"son":"SSA043","name":"Ian Mcgrath - 6 Rivergum Avenue Broome WA 6725","date":"2026-06-17","lg":"Joe","spec":"Joe","type":"Home","value":45416.8,"comm":4128.8,"flag":""},{"son":"SSA056","name":"Mick Prokopiwskyi - 9 McMillan Court Newborough VIC 3825","date":"2026-06-15","lg":"Beau Jolly","spec":"Beau Jolly","type":"Home","value":34986.6,"comm":3180.6,"flag":""},{"son":"SSA041","name":"Allan Marks - 27 Hay Road Cable Beach WA 6726","date":"2026-06-12","lg":"Joe","spec":"Joe","type":"Home","value":26011.6,"comm":2364.69,"flag":""},{"son":"SSA057","name":"Tom Jolly - 11 Ness Street Diamond Creek VIC 3089","date":"2026-06-10","lg":"Joe","spec":"\u2014","type":"Home","value":35698.8,"comm":1622.67,"flag":""},{"son":"180526.JS01","name":"Dee & Steve Mansfield - 206 Summerland Way Kyogle NSW 2474","date":"2026-06-03","lg":"Joe","spec":"Joe","type":"Home","value":0.0,"comm":0.0,"flag":"no value"},{"son":"180526.JS01","name":"Dee & Steve Mansfield - 6 Rosewood Place Kyogle NSW 2474","date":"2026-06-02","lg":"\u2014","spec":"\u2014","type":"Home","value":35000.0,"comm":0,"flag":"no attribution"},{"son":"SSA032","name":"Damien Woodmansey - 126-128 Hoddle Street Howlong NSW 2643","date":"2026-05-31","lg":"Beau Jolly","spec":"Beau Jolly","type":"Home","value":20594.6,"comm":1872.24,"flag":""},{"son":"250426.DWB01","name":"Summer Stewart - 3-5 Gleno Street Delungra NSW 2403","date":"2026-05-23","lg":"Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Mark Isaac","spec":"Cian Jefferson; Hugo; Max Bradfield; Mark Isaac; Denzel Winterbeard","type":"Away","value":31267.25,"comm":2842.48,"flag":""},{"son":"250426.DWB01","name":"Summer Stewart - 1 Gleno Street Delungra NSW 2403","date":"2026-05-23","lg":"Cian Jefferson; Max Bradfield; Hugo; Denzel Winterbeard; Mark Isaac","spec":"Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Mark Isaac","type":"Away","value":37882.25,"comm":3443.84,"flag":""},{"son":"230426.DWB01","name":"Vicki Davis - 36 Burnett Street Delungra NSW 2403","date":"2026-05-23","lg":"Cian Jefferson; Max Bradfield; Hugo; Denzel Winterbeard; Mark Isaac","spec":"Hugo; Denzel Winterbeard; Cian Jefferson; Max Bradfield; Mark Isaac","type":"Away","value":22668.0,"comm":2060.73,"flag":""},{"son":"230426.JS01","name":"Felicity Menchin - 28 Inverell Street Delungra NSW 2403","date":"2026-05-22","lg":"Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Mark Isaac","spec":"Denzel Winterbeard; Max Bradfield; Hugo; Cian Jefferson; Mark Isaac","type":"Away","value":35548.0,"comm":3231.64,"flag":""},{"son":"040526.DWB03","name":"Richard Gray - 10 Cross Street Warialda NSW 2402","date":"2026-05-21","lg":"Hugo; Max Bradfield; Cian Jefferson; Mark Isaac; Denzel Winterbeard","spec":"Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Mark Isaac","type":"Away","value":24667.0,"comm":2242.45,"flag":""},{"son":"260426.DWB02","name":"Peter Hancock - 105 High Street Warialda NSW 2402","date":"2026-05-21","lg":"Cian Jefferson; Denzel Winterbeard; Max Bradfield; Hugo; Mark Isaac","spec":"Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Mark Isaac","type":"Away","value":22630.0,"comm":2057.27,"flag":""},{"son":"210426.DWB02","name":"Serena Kash - 23 Crane Street Warialda NSW 2402","date":"2026-05-20","lg":"Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo; Mark Isaac","spec":"Denzel Winterbeard; Cian Jefferson; Max Bradfield; Mark Isaac; Hugo","type":"Away","value":36086.0,"comm":3280.55,"flag":""},{"son":"SSA034","name":"Amy Wong - 10 O'Connor Street Eastlakes NSW 2018","date":"2026-05-19","lg":"Denzel Winterbeard","spec":"Denzel Winterbeard","type":"Home","value":33761.6,"comm":3069.24,"flag":""},{"son":"SSA019","name":"Rob Matta - 109 Brighton Street Croydon Park NSW 2133","date":"2026-05-08","lg":"Beau Jolly","spec":"Joe","type":"Home","value":27025.4,"comm":2456.85,"flag":""},{"son":"SSA030","name":"Allen Paskins - 11 Heathwood Court Hampden QLD 4741","date":"2026-05-08","lg":"Joe; Denzel Winterbeard; Cian Jefferson; Simon; Max Bradfield","spec":"Joe; Simon; Denzel Winterbeard; Cian Jefferson; Max Bradfield","type":"Away","value":19261.6,"comm":1751.05,"flag":""},{"son":"SSA031","name":"Richard Campbell - 100 Dunwold-Cattle Creek Road Gargett QLD 4741","date":"2026-05-07","lg":"Denzel Winterbeard","spec":"Joe; Denzel Winterbeard","type":"Home","value":53448.08,"comm":4858.92,"flag":""},{"son":"SSA052","name":"Anne Moore - 93 Stephen Street Warialda NSW 2402","date":"2026-04-25","lg":"Denzel Winterbeard; Harley; Max Bradfield; Cian Jefferson","spec":"Denzel Winterbeard; Max Bradfield; Harley; Cian Jefferson","type":"Away","value":29199.2,"comm":2654.47,"flag":""},{"son":"SSA055","name":"Rosemary Arnold - 38 Holden Street Warialda NSW 2402","date":"2026-04-25","lg":"Denzel Winterbeard; Harley; Max Bradfield; Cian Jefferson","spec":"Denzel Winterbeard; Max Bradfield; Harley; Cian Jefferson","type":"Away","value":23526.6,"comm":2138.78,"flag":""},{"son":"SSA053","name":"Annette Towers - 2 Finch Street Bingara NSW 2404","date":"2026-04-24","lg":"Denzel Winterbeard; Harley; Max Bradfield; Cian Jefferson","spec":"Denzel Winterbeard; Max Bradfield; Harley; Cian Jefferson","type":"Away","value":38748.2,"comm":3522.56,"flag":""},{"son":"200426.DWB01","name":"Dianne Burke - 91 Cunningham Street Bingara NSW 2404","date":"2026-04-24","lg":"Denzel Winterbeard; Max Bradfield; Cian Jefferson; Hugo","spec":"Denzel Winterbeard; Cian Jefferson; Max Bradfield; Hugo","type":"Away","value":24250.0,"comm":2204.55,"flag":""},{"son":"SSA051","name":"Andy Callaway - 69 Maitland Street Bingara NSW 2404","date":"2026-04-23","lg":"Denzel Winterbeard; Harley; Max Bradfield; Cian Jefferson","spec":"Denzel Winterbeard; Max Bradfield; Harley; Cian Jefferson","type":"Away","value":32097.6,"comm":2917.96,"flag":""},{"son":"SSA054","name":"Adrian Dick - 36 Keera Street Bingara NSW 2404","date":"2026-04-23","lg":"Denzel Winterbeard; Harley; Max Bradfield; Cian Jefferson","spec":"Denzel Winterbeard; Max Bradfield; Harley; Cian Jefferson","type":"Away","value":14851.2,"comm":1350.11,"flag":""},{"son":"SSA036","name":"Scott Mooney - 17 Philip Street South Golden Beach NSW 2483","date":"2026-04-17","lg":"Beau Jolly","spec":"Joe","type":"Home","value":71953.2,"comm":6541.2,"flag":""},{"son":"SSA035","name":"John Tooler - 8 Tranquil Place Alstonville NSW 2477","date":"2026-04-15","lg":"Joe","spec":"Joe","type":"Home","value":31049.2,"comm":2822.65,"flag":""},{"son":"SSA026","name":"Gibb French - 34 Alan Street Marian QLD 4753","date":"2026-04-12","lg":"Joe; Denzel Winterbeard; Cian Jefferson; Simon; Max Bradfield","spec":"Joe; Simon; Denzel Winterbeard; Cian Jefferson; Max Bradfield","type":"Away","value":48152.8,"comm":4377.53,"flag":""},{"son":"SSA024","name":"Dean Boland - 16 Blackmur Street Marian QLD 4753","date":"2026-04-11","lg":"Joe; Denzel Winterbeard; Cian Jefferson; Simon; Max Bradfield","spec":"Joe; Simon; Denzel Winterbeard; Cian Jefferson; Max Bradfield","type":"Away","value":30114.0,"comm":2737.64,"flag":""},{"son":"SSA028","name":"Bernie Shields - 9 Coral Drive Blacks Beach QLD 4740","date":"2026-04-11","lg":"Joe; Denzel Winterbeard; Cian Jefferson; Simon; Max Bradfield","spec":"Joe; Simon; Denzel Winterbeard; Cian Jefferson; Max Bradfield","type":"Away","value":30394.4,"comm":2763.13,"flag":""},{"son":"SSA025","name":"Peter Schaper - 22 Elizabeth Street Mirani QLD 4754","date":"2026-04-10","lg":"Joe","spec":"Joe","type":"Home","value":29890.0,"comm":2717.27,"flag":""},{"son":"SSA027","name":"Vincent Reeves - 5 Lucy Court Mirani QLD 4754","date":"2026-04-10","lg":"Joe; Denzel Winterbeard; Cian Jefferson; Simon; Max Bradfield","spec":"Joe; Simon; Denzel Winterbeard; Cian Jefferson; Max Bradfield","type":"Away","value":27098.8,"comm":2463.53,"flag":""},{"son":"SSA029","name":"Danielle Campbell - 11 Vesta Lane Ooralea QLD 4740","date":"2026-04-08","lg":"\u2014","spec":"\u2014","type":"Home","value":16511.6,"comm":0,"flag":"no attribution"},{"son":"SSA018","name":"Marion Priestly - 31 Adams Street Heddon Greta NSW 2321","date":"2026-04-07","lg":"Beau Jolly","spec":"Beau Jolly","type":"Home","value":18139.6,"comm":1649.05,"flag":""},{"son":"SSA022","name":"Murray Heath - Unit 5 - 11 Prospect Street Mackay QLD 4740","date":"2026-03-30","lg":"Holly","spec":"Joe","type":"Home","value":19415.1,"comm":1118.1,"flag":""},{"son":"SSA049","name":"1 Bob & Lawson Muir - 1516 Delungra Road Bingara NSW 2404","date":"2026-03-27","lg":"Joe","spec":"Joe","type":"Home","value":57409.2,"comm":5219.02,"flag":""},{"son":"SSA050","name":"2 Bob & Lawson Muir - 1787 Delubngra Road Bingara NSW 2404","date":"2026-03-26","lg":"Joe","spec":"Joe","type":"Home","value":36436.2,"comm":3312.38,"flag":""},{"son":"SSA044","name":"Maria E Kelly - 2529 Pyramids Road Wyberba QLD 4382","date":"2026-03-19","lg":"Denzel Winterbeard; Cian Jefferson; Joe","spec":"Joe; Denzel Winterbeard; Cian Jefferson","type":"Away","value":29420.2,"comm":2674.56,"flag":""},{"son":"SSA033","name":"Peter Rallings - 122 Eyles Drive East Ballina NSW 2478","date":"2026-02-24","lg":"Beau Jolly","spec":"Joe","type":"Home","value":12877.6,"comm":1170.69,"flag":""},{"son":"SSA016","name":"Mark Cummins - 9 Waipori Street St Ives Chase NSW 2075","date":"2026-02-20","lg":"Beau Jolly","spec":"Beau Jolly","type":"Home","value":21878.0,"comm":1988.91,"flag":""},{"son":"SSA017","name":"Edward Watt - 41 Milburn Place St Ives Chase NSW 2075","date":"2026-02-19","lg":"Joe","spec":"Joe","type":"Home","value":15218.0,"comm":1383.45,"flag":""},{"son":"SSA007","name":"Larry Grant - 77 Cecil Road Orange NSW 2800","date":"2026-02-15","lg":"Beau Jolly","spec":"Joe","type":"Home","value":5000.0,"comm":454.55,"flag":""},{"son":"SSA020","name":"Tony Tedesco - 7 Wasley Road Wasleys SA 5400","date":"2026-02-02","lg":"Beau Jolly","spec":"Beau Jolly","type":"Home","value":8175.0,"comm":743.18,"flag":""},{"son":"SSA015","name":"Ray Schriever - 32 Bungama Street Maroochydore QLD 4558","date":"2026-01-28","lg":"Joe","spec":"Joe","type":"Home","value":15535.6,"comm":1412.33,"flag":""},{"son":"SSA045","name":"Glenda Eyears - 4 Wood Street Tenterfield NSW 2372","date":"2026-01-27","lg":"Denzel Winterbeard; Cian Jefferson; Joe","spec":"Joe; Denzel Winterbeard; Cian Jefferson","type":"Away","value":22201.0,"comm":2018.27,"flag":""},{"son":"SSA048","name":"Dale Baldock - 85 Finch Street Bingara NSW 2404","date":"2026-01-19","lg":"Joe","spec":"Joe","type":"Home","value":13527.6,"comm":1229.78,"flag":""},{"son":"SSA047","name":"Sandra de Jong - 9 White Street Bingara NSW 2404","date":"2026-01-19","lg":"Joe","spec":"Joe","type":"Home","value":10729.0,"comm":975.36,"flag":""},{"son":"SSA046","name":"Eddie Scofield & Liz Mitchelson - 7674 Bruxner Highway Drake NSW 2469","date":"2026-01-15","lg":"Denzel Winterbeard; Cian Jefferson; Joe","spec":"Joe; Denzel Winterbeard; Cian Jefferson","type":"Away","value":17583.0,"comm":1598.45,"flag":""},{"son":"SSA002","name":"Cecilia Curtis - 10 Sinclair Street Kambah ACT 2902","date":"2025-12-15","lg":"\u2014","spec":"Joe","type":"Home","value":4000.0,"comm":181.82,"flag":""},{"son":"SSA001","name":"Judy Mannix - 68 Clanwilliam Street Blackheath NSW 2785","date":"2025-12-15","lg":"Joe","spec":"Joe","type":"Home","value":5000.0,"comm":454.55,"flag":""},{"son":"SSA009","name":"Trevor Haskins - 77 Lambeth Street Glen Innes NSW 2370","date":"2025-12-05","lg":"Joe","spec":"Joe","type":"Home","value":5250.0,"comm":477.27,"flag":""},{"son":"SSA005","name":"Mark Olley - 7 Dixon Place Jerrabomberra NSW 2619","date":"2025-12-01","lg":"Joe","spec":"Joe","type":"Home","value":10000.0,"comm":909.09,"flag":""},{"son":"SSA008","name":"James Satrapa -","date":"2025-11-25","lg":"Joe","spec":"Joe","type":"Home","value":150.0,"comm":13.64,"flag":""},{"son":"SSA006","name":"David Middleton - 35 Cooya Beach Road Bonnie Doon QLD 4873","date":"2025-11-14","lg":"Joe","spec":"Joe","type":"Home","value":20000.0,"comm":1818.18,"flag":""},{"son":"SSA004","name":"Benjamin Hart - 46 Grimshaw Street Richardson ACT 2905","date":"2025-10-21","lg":"Joe","spec":"Joe","type":"Home","value":5000.0,"comm":454.55,"flag":""},{"son":"SSA003","name":"Robert Fitz - 46 Churchill Avenue Orange NSW 2800","date":"2025-10-16","lg":"Joe","spec":"Joe","type":"Home","value":5500.0,"comm":500.0,"flag":""}],"kpis":{"total_value":1904462.68,"total_comm":163583.01,"deal_count":76,"flagged":4}}};
-const PW_HASH="a41594e694e3b6814ea409311f61cf9cb2fca4708bb60bd67acb3f2bd00a8979";
-async function sha256(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,"0")).join("");}
-async function checkPw(){const v=document.getElementById("gate-input").value;const h=await sha256(v);if(h===PW_HASH){document.getElementById("gate").classList.add("hidden");}else{document.getElementById("gate-error").textContent="Incorrect password";}}
-document.getElementById("gate-input").addEventListener("keydown",e=>{if(e.key==="Enter")checkPw();});
+const HASH="a41594e694e3b6814ea409311f61cf9cb2fca4708bb60bd67acb3f2bd00a8979";
+const D={"pull":"25/08/26","reset":"20/07/26","adspend_to":"20/08/26","nzd_aud":0.833,"people":[{"name":"Denzel Winterbeard","type":"FTE (Salaried)","start":-4789.06,"retainer":5000.0,"adspend":0.0,"drawn":5000.0,"earned":3418.73,"current":-6370.33,"pending":8664.3,"projected":2293.97,"to_cover":9789.06,"note":"$2,500.00 / fortnight \u2014 2 draws since reset (03/08, 17/08)"},{"name":"Hugo","type":"Contractor","start":-7730.41,"retainer":0.0,"adspend":0.0,"drawn":0.0,"earned":3634.59,"current":-4095.82,"pending":3271.52,"projected":-824.3,"to_cover":7730.41,"note":"No ongoing draw \u2014 earns back opening deficit"},{"name":"Joe","type":"Contractor","start":0.0,"retainer":0.0,"adspend":0.0,"drawn":0.0,"earned":686.13,"current":686.13,"pending":11804.4,"projected":12490.53,"to_cover":0.0,"note":"No retainer"},{"name":"Holly","type":"Contractor","start":0.0,"retainer":1000.0,"adspend":2807.25,"drawn":3807.25,"earned":507.24,"current":-3300.01,"pending":2339.64,"projected":-960.37,"to_cover":3807.25,"note":"$500.00 / fortnight \u2014 2 draws since reset (03/08, 17/08), plus Meta ad spend"},{"name":"Ollie","type":"FTE (Salaried)","start":0.0,"retainer":0.0,"adspend":0.0,"drawn":0.0,"earned":0.0,"current":0.0,"pending":615.7,"projected":615.7,"to_cover":0.0,"note":"No retainer \u2014 commission not tracked against any draw"}],"full":{"name":"Full Team","type":"\u2014","start":-12519.47,"retainer":6000.0,"adspend":2807.25,"drawn":8807.25,"earned":8246.69,"current":-13080.03,"pending":26695.56,"projected":13615.53,"to_cover":21326.72,"note":"All five tracked people combined"},"pending":[{"son":"SSA023","deal":"Henri Lago - 67 Amhurst Street Slade Point QLD 4740","status":"In Progress","date":"2026-05-08","type":"Home","way":1,"cash":13500.0,"rebate":12709.62,"total":26209.620000000003,"lg":["Joe"],"spec":["Joe"],"per":{"Joe":2382.69},"allper":{"Joe":2382.69}},{"son":"SSA042","deal":"Stephen Yu - 14 Carnarvon Street Broome WA 6725","status":"Upcoming","date":"","type":"Home","way":1,"cash":49340.0,"rebate":20880.0,"total":70220.0,"lg":["Holly","Joe"],"spec":["Joe","Denzel Winterbeard"],"per":{"Holly":1794.18,"Joe":3191.82,"Denzel Winterbeard":1595.91},"allper":{"Holly":1794.18,"Joe":3191.82,"Denzel Winterbeard":1595.91}},{"son":"","deal":"Courtney Farrel","status":"Upcoming","date":"","type":"Home","way":1,"cash":0.0,"rebate":0.0,"total":0.0,"lg":[],"spec":["Joe"],"per":{"Joe":0.0},"allper":{"Joe":0.0}},{"son":"150726.HS01","deal":"Francis and Andrefe Abrenica - 38 Prince Street Junee NSW 2663","status":"Upcoming","date":"","type":"Home","way":1,"cash":9750.0,"rebate":0.0,"total":9750.0,"lg":["Joe"],"spec":["Hugo"],"per":{"Joe":443.18,"Hugo":443.18},"allper":{"Joe":443.18,"Hugo":443.18}},{"son":"","deal":"2 Scott Mooney - 17 Phillip Street South Golden Beach NSW 2483","status":"In Progress","date":"","type":"Home","way":1,"cash":0.0,"rebate":0.0,"total":0.0,"lg":[],"spec":[],"per":{},"allper":{}},{"son":"SSA038","deal":"Christopher Beveridge - 1 Slater Road Cable Beach WA 6726","status":"Upcoming","date":"","type":"Home","way":1,"cash":18250.0,"rebate":8085.0,"total":26335.0,"lg":["Joe"],"spec":["Joe"],"per":{"Joe":2394.09},"allper":{"Joe":2394.09}},{"son":"140526.DWB01","deal":"Jenny Real - 37 Stratheden Street Kyogle NSW 2474","status":"In Progress","date":"","type":"Away","way":3,"cash":5072.0,"rebate":0.0,"total":5072.0,"lg":["Max Bradfield","Hugo"],"spec":["Denzel Winterbeard"],"per":{"Hugo":153.7,"Denzel Winterbeard":153.7},"allper":{"Max Bradfield":153.7,"Hugo":153.7,"Denzel Winterbeard":153.7}},{"son":"SSA037","deal":"Dieter Steinman - 1 Yamashita Street Roebuck WA 6725","status":"In Progress","date":"","type":"Home","way":1,"cash":20000.0,"rebate":8085.0,"total":28085.0,"lg":["Beau Jolly"],"spec":["Joe"],"per":{"Joe":1276.59},"allper":{"Beau Jolly":1276.59,"Joe":1276.59}},{"son":"100826.JS01","deal":"Ian Potter - 11 Pickfords Road Yetman 2410 NSW","status":"Upcoming","date":"","type":"Home","way":1,"cash":33000.0,"rebate":24978.0,"total":57978.0,"lg":[],"spec":["Hugo","Denzel Winterbeard"],"per":{"Hugo":1317.68,"Denzel Winterbeard":1317.68},"allper":{"Hugo":1317.68,"Denzel Winterbeard":1317.68}},{"son":"190826.JS01","deal":"Nicole McKechnie - 86 Wee Waa Street Boggabri NSW 2382","status":"Upcoming","date":"","type":"Away","way":3,"cash":0.0,"rebate":0.0,"total":0.0,"lg":["Denzel Winterbeard","Ollie","Hugo"],"spec":["Denzel Winterbeard","Hugo","Ollie"],"per":{"Hugo":0.0,"Denzel Winterbeard":0.0,"Ollie":0.0},"allper":{"Hugo":0.0,"Denzel Winterbeard":0.0,"Ollie":0.0}},{"son":"130826.JS01","deal":"Rosemary Arnold 2 - 38 Holden Street Warialda NSW 2402","status":"Upcoming","date":"","type":"Away","way":3,"cash":0.0,"rebate":0.0,"total":0.0,"lg":["Ollie","Denzel Winterbeard","Hugo"],"spec":["Hugo","Denzel Winterbeard"],"per":{"Hugo":0.0,"Denzel Winterbeard":0.0,"Ollie":0.0},"allper":{"Hugo":0.0,"Denzel Winterbeard":0.0,"Ollie":0.0}},{"son":"210526.DWB02","deal":"Ian & Leonie Taylor - 4 White Street Guyra NSW 2365","status":"Upcoming","date":"","type":"Away","way":8,"cash":13930.0,"rebate":0.0,"total":13930.0,"lg":["Hugo","Dermot","Max Bradfield","Rosa","Fran"],"spec":["Denzel Winterbeard","Max Bradfield","Hugo","Cian Jefferson","Joe"],"per":{"Hugo":158.3,"Denzel Winterbeard":158.3,"Joe":158.3},"allper":{"Dermot":158.3,"Max Bradfield":158.3,"Rosa":158.3,"Cian Jefferson":158.3,"Fran":158.3,"Hugo":158.3,"Denzel Winterbeard":158.3,"Joe":158.3}},{"son":"130726.JS01","deal":"Zanthia & Travis Peters - 2 Connors Lane Maclean NSW 2463","status":"Upcoming","date":"","type":"Away","way":3,"cash":15000.0,"rebate":4238.0,"total":19238.0,"lg":["Hugo","Max Bradfield"],"spec":["Denzel Winterbeard"],"per":{"Hugo":582.97,"Denzel Winterbeard":582.97},"allper":{"Max Bradfield":582.97,"Hugo":582.97,"Denzel Winterbeard":582.97}},{"son":"080526.JS01","deal":"James & Lorraine Best - 19 Donaldson Street Coraki NSW 2471","status":"Upcoming","date":"","type":"Home","way":1,"cash":18495.0,"rebate":3729.0,"total":22224.0,"lg":["Harley"],"spec":["Joe"],"per":{"Joe":1010.18},"allper":{"Harley":1010.18,"Joe":1010.18}},{"son":"130826.JS01","deal":"John Hill - 43-45 Warialda Street Yetman NSW 2410","status":"Upcoming","date":"","type":"Away","way":3,"cash":0.0,"rebate":0.0,"total":0.0,"lg":[],"spec":["Ollie","Hugo","Denzel Winterbeard"],"per":{"Hugo":0.0,"Denzel Winterbeard":0.0,"Ollie":0.0},"allper":{"Hugo":0.0,"Denzel Winterbeard":0.0,"Ollie":0.0}},{"son":"120826.JS01","deal":"Courtney Farrel - 220 Merton Street Boggabri NSW 2382","status":"Upcoming","date":"","type":"Away","way":3,"cash":0.0,"rebate":0.0,"total":0.0,"lg":["Ollie","Denzel Winterbeard","Hugo"],"spec":["Denzel Winterbeard","Hugo"],"per":{"Hugo":0.0,"Denzel Winterbeard":0.0,"Ollie":0.0},"allper":{"Hugo":0.0,"Denzel Winterbeard":0.0,"Ollie":0.0}},{"son":"14082026.DWB01","deal":"Ken Anderson - 1 Inglewood Avenue Wee Waa NSW 2388","status":"Upcoming","date":"","type":"Away","way":3,"cash":14530.0,"rebate":5788.0,"total":20318.0,"lg":["Ollie","Hugo","Denzel Winterbeard"],"spec":["Hugo","Denzel Winterbeard","Ollie"],"per":{"Hugo":615.7,"Denzel Winterbeard":615.7,"Ollie":615.7},"allper":{"Hugo":615.7,"Denzel Winterbeard":615.7,"Ollie":615.7}},{"son":"060526.DWB01","deal":"John Haig - 3 Oxley Street Tallimba NSW 2669","status":"Upcoming","date":"","type":"Home","way":1,"cash":15000.0,"rebate":5846.0,"total":20846.0,"lg":["Holly"],"spec":["Joe"],"per":{"Holly":545.45,"Joe":947.55},"allper":{"Holly":545.45,"Joe":947.55}},{"son":"120826.DWB01","deal":"Rachel & Steve Bowd - 107 Laidlaw Street Boggabri NSW 2382","status":"Upcoming","date":"","type":"Home","way":1,"cash":0.0,"rebate":0.0,"total":0.0,"lg":[],"spec":[],"per":{},"allper":{}},{"son":"210726.JS01","deal":"Dave Nolan - 6 Blick Drive Broome WA 6725","status":"Upcoming","date":"","type":"Home","way":1,"cash":0.0,"rebate":0.0,"total":0.0,"lg":[],"spec":["Joe"],"per":{"Joe":0.0},"allper":{"Joe":0.0}},{"son":"140826.DWB01","deal":"Sophia Muino - 61 Nandewar Street Narrabri NSW 2390","status":"Upcoming","date":"","type":"Away","way":3,"cash":0.0,"rebate":0.0,"total":0.0,"lg":["Denzel Winterbeard","Ollie","Hugo"],"spec":["Denzel Winterbeard","Hugo","Ollie"],"per":{"Hugo":0.0,"Denzel Winterbeard":0.0,"Ollie":0.0},"allper":{"Hugo":0.0,"Denzel Winterbeard":0.0,"Ollie":0.0}},{"son":"240826.DWB01","deal":"Bobson Davis - 10a Brennan Court Coffs Harbour NSW 2450","status":"Upcoming","date":"","type":"Home","way":1,"cash":14404.0,"rebate":3417.0,"total":17821.0,"lg":[],"spec":["Denzel Winterbeard"],"per":{"Denzel Winterbeard":810.05},"allper":{"Denzel Winterbeard":810.05}},{"son":"240726.HS01","deal":"Lachlan and Kayla Cooper - 11 Major Mitchell Drive Gulmarrad NSW 2463","status":"Upcoming","date":"","type":"Home","way":1,"cash":0.0,"rebate":0.0,"total":0.0,"lg":["Hugo"],"spec":["Hugo"],"per":{"Hugo":0.0},"allper":{"Hugo":0.0}},{"son":"050826.DWB01","deal":"Jocellin & John Manchee - 912 Maules Creek Road Narrabri NSW 2390","status":"Upcoming","date":"","type":"Home","way":1,"cash":0.0,"rebate":0.0,"total":0.0,"lg":[],"spec":["Denzel Winterbeard","Hugo"],"per":{"Denzel Winterbeard":0.0,"Hugo":0.0},"allper":{"Denzel Winterbeard":0.0,"Hugo":0.0}},{"son":"150626.DWB01","deal":"Mark Wilson - 3 Mcrae Court Yarrawonga VIC 3730","status":"Installed (no date)","date":"","type":"Home","way":1,"cash":30529.0,"rebate":7201.0,"total":37730.0,"lg":["Denzel Winterbeard"],"spec":["Denzel Winterbeard"],"per":{"Denzel Winterbeard":3430.0},"allper":{"Denzel Winterbeard":3430.0},"flag":"Installed with no install date - carried as pending until dated"}],"earned":[{"son":"250626.DWB01","deal":"Brenda Walker - 6 Jubilee Street Maclean NSW 2463","status":"Installed","date":"2026-08-07","type":"Home","way":1,"cash":10750.0,"rebate":4238.0,"total":14988.0,"lg":[],"spec":["Denzel Winterbeard"],"per":{"Denzel Winterbeard":681.27},"allper":{"Denzel Winterbeard":681.27}},{"son":"230426.JS02","deal":"Amanda Bernauer - 20 Inverell Road Warialda NSW 2402","status":"Installed","date":"2026-07-25","type":"Away","way":5,"cash":28250.0,"rebate":7105.0,"total":35355.0,"lg":["Denzel Winterbeard","Cian Jefferson","Mark Isaac","Max Bradfield","Hugo"],"spec":["Denzel Winterbeard","Cian Jefferson","Mark Isaac","Max Bradfield","Hugo"],"per":{"Hugo":642.82,"Denzel Winterbeard":642.82},"allper":{"Mark Isaac":642.82,"Max Bradfield":642.82,"Cian Jefferson":642.82,"Hugo":642.82,"Denzel Winterbeard":642.82}},{"son":"240526.JS01","deal":"Connie Minos - 1349 Bonshaw Road Ashford NSW 2361","status":"Installed","date":"2026-07-24","type":"Away","way":9,"cash":57543.0,"rebate":10384.0,"total":67927.0,"lg":["Rosa","Dermot","Hugo","Max Bradfield","Denzel Winterbeard","Cian Jefferson","Fran","Hannah","Joe"],"spec":["Joe","Denzel Winterbeard","Cian Jefferson","Max Bradfield","Hugo","Rosa","Dermot","Fran"],"per":{"Hugo":686.13,"Denzel Winterbeard":686.13,"Joe":686.13},"allper":{"Dermot":686.13,"Max Bradfield":686.13,"Rosa":686.13,"Cian Jefferson":686.13,"Fran":686.13,"Hugo":686.13,"Denzel Winterbeard":686.13,"Hannah":686.13,"Joe":686.13}},{"son":"130726.HS01","deal":"Jane Armitage - 8/18 Gwydir Terrace Bingara NSW 2404","status":"Installed","date":"2026-07-24","type":"Home","way":1,"cash":13949.0,"rebate":5788.0,"total":19737.0,"lg":["Holly"],"spec":["Hugo"],"per":{"Holly":507.24,"Hugo":897.14},"allper":{"Holly":507.24,"Hugo":897.14}},{"son":"190626.DWB03","deal":"Jennifer Baker - 106 Alma Street Wee Waa NSW 2388","status":"Installed","date":"2026-07-23","type":"Away","way":5,"cash":13949.0,"rebate":5788.0,"total":19737.0,"lg":["Denzel Winterbeard","Cian Jefferson","Max Bradfield","Hugo","Mark Isaac"],"spec":["Denzel Winterbeard","Cian Jefferson","Max Bradfield","Hugo","Mark Isaac"],"per":{"Hugo":358.85,"Denzel Winterbeard":358.85},"allper":{"Mark Isaac":358.85,"Max Bradfield":358.85,"Cian Jefferson":358.85,"Hugo":358.85,"Denzel Winterbeard":358.85}},{"son":"170626.DWB01","deal":"Paul & Judy Couley - 92 Boundary Street Wee Waa NSW 2388","status":"Installed","date":"2026-07-23","type":"Away","way":5,"cash":19093.0,"rebate":4670.0,"total":23763.0,"lg":["Hugo","Mark Isaac","Max Bradfield","Cian Jefferson","Denzel Winterbeard"],"spec":["Denzel Winterbeard","Cian Jefferson","Hugo","Max Bradfield","Mark Isaac"],"per":{"Hugo":432.05,"Denzel Winterbeard":432.05},"allper":{"Mark Isaac":432.05,"Max Bradfield":432.05,"Cian Jefferson":432.05,"Hugo":432.05,"Denzel Winterbeard":432.05}},{"son":"190626.DWB01","deal":"Katie Young - 66 Dangar Street Narrabri NSW 2390","status":"Installed","date":"2026-07-22","type":"Away","way":5,"cash":22370.0,"rebate":6575.0,"total":28945.0,"lg":["Cian Jefferson","Denzel Winterbeard","Max Bradfield","Hugo","Mark Isaac"],"spec":["Denzel Winterbeard","Cian Jefferson","Max Bradfield","Hugo","Mark Isaac"],"per":{"Hugo":526.27,"Denzel Winterbeard":526.27},"allper":{"Mark Isaac":526.27,"Max Bradfield":526.27,"Cian Jefferson":526.27,"Hugo":526.27,"Denzel Winterbeard":526.27}},{"son":"180526.DWB02","deal":"Christine & Peter Broderick - 24 Frazer Street Ashford NSW 2361","status":"Installed","date":"2026-07-22","type":"Away","way":7,"cash":6006.0,"rebate":1026.0,"total":7032.0,"lg":["Fran","Denzel Winterbeard","Cian Jefferson","Max Bradfield","Hugo","Dermot","Rosa"],"spec":["Denzel Winterbeard","Cian Jefferson","Max Bradfield","Hugo","Fran","Dermot","Rosa"],"per":{"Hugo":91.32,"Denzel Winterbeard":91.32},"allper":{"Dermot":91.32,"Max Bradfield":91.32,"Rosa":91.32,"Cian Jefferson":91.32,"Fran":91.32,"Hugo":91.32,"Denzel Winterbeard":91.32}}],"flags":{"installed_no_date":[["150626.DWB01","Mark Wilson - 3 Mcrae Court Yarrawonga VIC 3730"]],"unknown_names":[],"no_value":[["","Courtney Farrel","Upcoming"],["","2 Scott Mooney - 17 Phillip Street South Golden Beach NSW 2483","In Progress"],["190826.JS01","Nicole McKechnie - 86 Wee Waa Street Boggabri NSW 2382","Upcoming"],["130826.JS01","Rosemary Arnold 2 - 38 Holden Street Warialda NSW 2402","Upcoming"],["130826.JS01","John Hill - 43-45 Warialda Street Yetman NSW 2410","Upcoming"],["120826.JS01","Courtney Farrel - 220 Merton Street Boggabri NSW 2382","Upcoming"],["120826.DWB01","Rachel & Steve Bowd - 107 Laidlaw Street Boggabri NSW 2382","Upcoming"],["210726.JS01","Dave Nolan - 6 Blick Drive Broome WA 6725","Upcoming"],["140826.DWB01","Sophia Muino - 61 Nandewar Street Narrabri NSW 2390","Upcoming"],["240726.HS01","Lachlan and Kayla Cooper - 11 Major Mitchell Drive Gulmarrad NSW 2463","Upcoming"],["050826.DWB01","Jocellin & John Manchee - 912 Maules Creek Road Narrabri NSW 2390","Upcoming"]],"dup_son":{"250626.DWB01":["Brenda Walker - 6 Jubilee Street Maclean NSW 2463"],"230426.JS02":["Amanda Bernauer - 20 Inverell Road Warialda NSW 2402"],"240526.JS01":["Connie Minos - 1349 Bonshaw Road Ashford NSW 2361"],"130726.HS01":["Jane Armitage - 8/18 Gwydir Terrace Bingara NSW 2404"],"190626.DWB03":["Jennifer Baker - 106 Alma Street Wee Waa NSW 2388"],"170626.DWB01":["Paul & Judy Couley - 92 Boundary Street Wee Waa NSW 2388"],"190626.DWB01":["Katie Young - 66 Dangar Street Narrabri NSW 2390"],"180526.DWB02":["Christine & Peter Broderick - 24 Frazer Street Ashford NSW 2361"],"120626.JS01":["Rebecca Hudson - 93 Main Street Clunes NSW 2480"],"SSA039":["Cristopher Iquin - 5 Euro Way Djugun WA 6725"],"100626.JS01":["Georgina Kelly - 21 Puertollano Place Broome WA 6725"],"230526.DWB02":["Barry O'Farrell - 45 Frazer Street Ashford NSW 2361"],"060526.DWB01":["Craig Robinson- 14 Cedar Street Woodburn NSW 2472","John Haig - 3 Oxley Street Tallimba NSW 2669"],"190526.DWB04":["Beverly & Graeme Voss - 3 David Street Ashford NSW 2361"],"070426.DWB01":["Terry Moore - 6 Bank Street Woodburn NSW 2472"],"130526.JS01":["Daryl Boyd - 48 Martyn Street Ashford NSW 2361"],"070526.DWB02":["Rosalee & Greg Foran - 2 Bank Street Woodburn NSW 2471"],"100626.JS02":["Lee Achurch - 11 Myall Street Evans Head NSW 2473"],"260526.DWB02":["Adrian Currell - 37 Cameron Street Maclean NSW 2463"],"160526.DWB01":["Christopher Hutton - 31 Boorabee Street Kyogle NSW 2474"],"SSA040":["Don Wood - 11 Pembroke Road Broome WA 6725"],"SSA043":["Ian Mcgrath - 6 Rivergum Avenue Broome WA 6725"],"SSA056":["Mick Prokopiwskyi - 9 McMillan Court Newborough VIC 3825"],"SSA041":["Allan Marks - 27 Hay Road Cable Beach WA 6726"],"SSA057":["Tom Jolly - 11 Ness Street Diamond Creek VIC 3089"],"180526.JS01":["Dee & Steve Mansfield - 206 Summerland Way Kyogle NSW  2474","Dee & Steve Mansfield - 6 Rosewood Place Kyogle NSW 2474"],"SSA032":["Damien Woodmansey - 126-128 Hoddle Street Howlong NSW 2643"],"230426.DWB01":["Vicki Davis - 36 Burnett Street Delungra NSW 2403"],"250426.DWB01":["Summer Stewart - 3-5 Gleno Street Delungra NSW 2403","Summer Stewart - 1 Gleno Street Delungra NSW 2403"],"230426.JS01":["Felicity Menchin - 28 Inverell Street Delungra NSW 2403"],"040526.DWB03":["Richard Gray - 10 Cross Street  Warialda NSW 2402"],"260426.DWB02":["Peter Hancock - 105 High Street Warialda NSW 2402"],"210426.DWB02":["Serena Kash - 23 Crane Street Warialda NSW 2402"],"SSA034":["Amy Wong - 10 O'Connor Street Eastlakes NSW 2018"],"SSA023":["Henri Lago - 67 Amhurst Street Slade Point QLD 4740"],"SSA019":["Rob Matta - 109 Brighton Street Croydon Park NSW 2133"],"SSA030":["Allen Paskins - 11 Heathwood Court Hampden QLD 4741"],"SSA031":["Richard Campbell - 100 Dunwold-Cattle Creek Road Gargett QLD 4741"],"SSA052":["Anne Moore - 93 Stephen Street Warialda NSW 2402"],"SSA055":["Rosemary Arnold - 38 Holden Street Warialda NSW 2402"],"200426.DWB01":["Dianne Burke - 91 Cunningham Street Bingara NSW 2404"],"SSA053":["Annette Towers - 2 Finch Street Bingara NSW 2404"],"SSA051":["Andy Callaway - 69 Maitland Street Bingara NSW 2404"],"SSA054":["Adrian Dick - 36 Keera Street  Bingara NSW 2404"],"SSA036":["Scott Mooney - 17 Philip Street South Golden Beach NSW 2483"],"SSA035":["John Tooler - 8 Tranquil Place Alstonville NSW 2477"],"SSA026":["Gibb French - 34 Alan Street Marian QLD 4753"],"SSA028":["Bernie Shields - 9 Coral Drive Blacks Beach QLD 4740"],"SSA024":["Dean Boland - 16 Blackmur Street Marian QLD 4753"],"SSA027":["Vincent Reeves - 5 Lucy Court Mirani QLD 4754"],"SSA025":["Peter Schaper - 22 Elizabeth Street Mirani QLD 4754"],"SSA029":["Danielle Campbell - 11 Vesta Lane Ooralea QLD 4740"],"SSA018":["Marion Priestly - 31 Adams Street Heddon Greta NSW 2321"],"SSA022":["Murray Heath - Unit 5 - 11 Prospect Street Mackay QLD 4740"],"SSA049":["1 Bob & Lawson Muir - 1516 Delungra Road Bingara NSW 2404"],"SSA050":["2 Bob & Lawson Muir - 1787 Delubngra Road Bingara NSW 2404"],"SSA044":["Maria E Kelly - 2529 Pyramids Road Wyberba QLD 4382"],"SSA033":["Peter Rallings - 122 Eyles Drive East Ballina NSW 2478"],"SSA016":["Mark Cummins - 9 Waipori Street St Ives Chase NSW 2075"],"SSA017":["Edward Watt - 41 Milburn Place St Ives Chase NSW 2075"],"SSA007":["Larry Grant - 77 Cecil Road Orange NSW 2800"],"SSA020":["Tony Tedesco - 7 Wasley Road Wasleys SA 5400"],"SSA015":["Ray Schriever - 32 Bungama Street Maroochydore QLD 4558"],"SSA045":["Glenda Eyears - 4 Wood Street Tenterfield NSW 2372"],"SSA048":["Dale Baldock - 85 Finch Street Bingara NSW 2404"],"SSA047":["Sandra de Jong - 9 White Street Bingara NSW 2404"],"SSA046":["Eddie Scofield  & Liz Mitchelson - 7674 Bruxner Highway Drake NSW 2469"],"SSA002":["Cecilia Curtis - 10 Sinclair Street Kambah ACT 2902"],"SSA001":["Judy Mannix - 68 Clanwilliam Street Blackheath NSW 2785"],"SSA009":["Trevor Haskins - 77 Lambeth Street Glen Innes NSW 2370"],"SSA005":["Mark Olley - 7 Dixon Place Jerrabomberra NSW 2619"],"SSA008":["James Satrapa -"],"SSA006":["David Middleton - 35 Cooya Beach Road Bonnie Doon QLD 4873"],"SSA004":["Benjamin Hart - 46 Grimshaw Street Richardson ACT 2905"],"SSA003":["Robert Fitz - 46 Churchill Avenue Orange NSW 2800"],"SSA042":["Stephen Yu - 14 Carnarvon Street Broome WA 6725"],"150726.HS01":["Francis and Andrefe Abrenica - 38 Prince Street Junee NSW 2663"],"SSA038":["Christopher Beveridge - 1 Slater Road Cable Beach WA 6726"],"140526.DWB01":["Jenny Real - 37 Stratheden Street Kyogle NSW 2474"],"SSA037":["Dieter Steinman - 1 Yamashita Street Roebuck WA 6725"],"100826.JS01":["Ian Potter - 11 Pickfords Road Yetman 2410 NSW"],"190826.JS01":["Nicole McKechnie - 86 Wee Waa Street Boggabri NSW 2382"],"130826.JS01":["Rosemary Arnold 2 - 38 Holden Street Warialda NSW 2402","John Hill - 43-45 Warialda Street Yetman NSW 2410"],"210526.DWB02":["Ian & Leonie Taylor - 4 White Street Guyra NSW 2365"],"130726.JS01":["Zanthia & Travis Peters - 2 Connors Lane Maclean NSW 2463"],"150626.DWB01":["Mark Wilson - 3 Mcrae Court Yarrawonga VIC 3730"],"080526.JS01":["James & Lorraine Best - 19 Donaldson Street Coraki NSW 2471"],"120826.JS01":["Courtney Farrel - 220 Merton Street Boggabri NSW 2382"],"14082026.DWB01":["Ken Anderson - 1 Inglewood Avenue Wee Waa NSW 2388"],"120826.DWB01":["Rachel & Steve Bowd - 107 Laidlaw Street Boggabri NSW 2382"],"210726.JS01":["Dave Nolan - 6 Blick Drive Broome WA 6725"],"140826.DWB01":["Sophia Muino - 61 Nandewar Street Narrabri NSW 2390"],"240826.DWB01":["Bobson Davis - 10a Brennan Court Coffs Harbour NSW 2450"],"240726.HS01":["Lachlan and Kayla Cooper - 11 Major Mitchell Drive Gulmarrad NSW 2463"],"050826.DWB01":["Jocellin & John Manchee - 912 Maules Creek Road Narrabri NSW 2390"]}},"adspend_detail":{"au":2555.22,"nz_nzd":302.56,"nz_aud":252.03,"total":2807.25,"au_txns":18,"nz_txns":1},"historic":[{"son":"120626.JS01","deal":"Rebecca Hudson - 93 Main Street Clunes NSW 2480","installed":"14/07/26","iso":"2026-07-14","lg":["Cian Jefferson","Hugo"],"spec":["Joe","Denzel Winterbeard"],"type":"Away","value":28992.0,"commission":2635.64,"flag":""},{"son":"SSA039","deal":"Cristopher Iquin - 5 Euro Way Djugun WA 6725","installed":"13/07/26","iso":"2026-07-13","lg":["Holly"],"spec":["Joe"],"type":"Home","value":37273.2,"commission":2485.15,"flag":""},{"son":"100626.JS01","deal":"Georgina Kelly - 21 Puertollano Place Broome WA 6725","installed":"10/07/26","iso":"2026-07-10","lg":["Holly"],"spec":["Cian Jefferson"],"type":"Home","value":29100.0,"commission":2204.25,"flag":""},{"son":"230526.DWB02","deal":"Barry O'Farrell - 45 Frazer Street Ashford NSW 2361","installed":"07/07/26","iso":"2026-07-07","lg":["Denzel Winterbeard","Cian Jefferson","Hugo","Max Bradfield","Rosa","Dermot","Fran"],"spec":["Denzel Winterbeard","Cian Jefferson","Max Bradfield","Hugo","Fran","Dermot","Rosa"],"type":"Away","value":26747.0,"commission":2431.55,"flag":""},{"son":"060526.DWB01","deal":"Craig Robinson- 14 Cedar Street Woodburn NSW 2472","installed":"06/07/26","iso":"2026-07-06","lg":["Harley"],"spec":["Denzel Winterbeard"],"type":"Home","value":17113.0,"commission":1555.73,"flag":""},{"son":"190526.DWB04","deal":"Beverly & Graeme Voss - 3 David Street Ashford NSW 2361","installed":"06/07/26","iso":"2026-07-06","lg":["Rosa","Denzel Winterbeard","Cian Jefferson","Max Bradfield","Hugo","Fran"],"spec":["Denzel Winterbeard","Cian Jefferson","Max Bradfield","Hugo","Fran","Rosa","Dermot"],"type":"Away","value":27325.0,"commission":2484.09,"flag":""},{"son":"070426.DWB01","deal":"Terry Moore - 6 Bank Street Woodburn NSW 2472","installed":"03/07/26","iso":"2026-07-03","lg":["Fran"],"spec":["Denzel Winterbeard"],"type":"Home","value":0.0,"commission":0.0,"flag":"no deal value"},{"son":"130526.JS01","deal":"Daryl Boyd - 48 Martyn Street Ashford NSW 2361","installed":"03/07/26","iso":"2026-07-03","lg":["Denzel Winterbeard","Cian Jefferson","Max Bradfield","Hugo","Mark Isaac","Joe"],"spec":["Cian Jefferson","Denzel Winterbeard","Max Bradfield","Hugo","Mark Isaac","Joe"],"type":"Away","value":24878.0,"commission":2261.64,"flag":""},{"son":"070526.DWB02","deal":"Rosalee & Greg Foran - 2 Bank Street Woodburn NSW 2471","installed":"02/07/26","iso":"2026-07-02","lg":["Cian Jefferson"],"spec":["Denzel Winterbeard"],"type":"Home","value":23615.0,"commission":2146.82,"flag":""},{"son":"100626.JS02","deal":"Lee Achurch - 11 Myall Street Evans Head NSW 2473","installed":"01/07/26","iso":"2026-07-01","lg":["Fran"],"spec":["Joe"],"type":"Home","value":12925.0,"commission":1175.0,"flag":""},{"son":"260526.DWB02","deal":"Adrian Currell - 37 Cameron Street Maclean NSW 2463","installed":"26/06/26","iso":"2026-06-26","lg":["Hugo"],"spec":["Denzel Winterbeard"],"type":"Home","value":16488.0,"commission":1498.91,"flag":""},{"son":"160526.DWB01","deal":"Christopher Hutton - 31 Boorabee Street Kyogle NSW 2474","installed":"24/06/26","iso":"2026-06-24","lg":["Hugo","Max Bradfield"],"spec":["Denzel Winterbeard"],"type":"Away","value":15439.0,"commission":1403.55,"flag":""},{"son":"SSA040","deal":"Don Wood - 11 Pembroke Road Broome WA 6725","installed":"18/06/26","iso":"2026-06-18","lg":["Joe"],"spec":["Joe"],"type":"Home","value":78848.0,"commission":7168.0,"flag":""},{"son":"SSA043","deal":"Ian Mcgrath - 6 Rivergum Avenue Broome WA 6725","installed":"17/06/26","iso":"2026-06-17","lg":["Joe"],"spec":["Joe"],"type":"Home","value":45416.8,"commission":4128.8,"flag":""},{"son":"SSA056","deal":"Mick Prokopiwskyi - 9 McMillan Court Newborough VIC 3825","installed":"15/06/26","iso":"2026-06-15","lg":["Beau Jolly"],"spec":["Beau Jolly"],"type":"Home","value":34986.6,"commission":3180.6,"flag":""},{"son":"SSA041","deal":"Allan Marks - 27 Hay Road Cable Beach WA 6726","installed":"12/06/26","iso":"2026-06-12","lg":["Joe"],"spec":["Joe"],"type":"Home","value":26011.6,"commission":2364.69,"flag":""},{"son":"SSA057","deal":"Tom Jolly - 11 Ness Street Diamond Creek VIC 3089","installed":"10/06/26","iso":"2026-06-10","lg":["Joe"],"spec":[],"type":"Home","value":35698.8,"commission":1622.67,"flag":""},{"son":"180526.JS01","deal":"Dee & Steve Mansfield - 206 Summerland Way Kyogle NSW  2474","installed":"03/06/26","iso":"2026-06-03","lg":["Joe","Dermot"],"spec":["Joe"],"type":"Home","value":0.0,"commission":0.0,"flag":"no deal value"},{"son":"180526.JS01","deal":"Dee & Steve Mansfield - 6 Rosewood Place Kyogle NSW 2474","installed":"02/06/26","iso":"2026-06-02","lg":[],"spec":[],"type":"Home","value":35000.0,"commission":0,"flag":"no attribution"},{"son":"SSA032","deal":"Damien Woodmansey - 126-128 Hoddle Street Howlong NSW 2643","installed":"31/05/26","iso":"2026-05-31","lg":["Beau Jolly"],"spec":["Beau Jolly"],"type":"Home","value":20594.6,"commission":1872.24,"flag":""},{"son":"230426.DWB01","deal":"Vicki Davis - 36 Burnett Street Delungra NSW 2403","installed":"23/05/26","iso":"2026-05-23","lg":["Cian Jefferson","Max Bradfield","Hugo","Denzel Winterbeard","Mark Isaac"],"spec":["Hugo","Denzel Winterbeard","Cian Jefferson","Max Bradfield","Mark Isaac"],"type":"Away","value":22668.0,"commission":2060.73,"flag":""},{"son":"250426.DWB01","deal":"Summer Stewart - 3-5 Gleno Street Delungra NSW 2403","installed":"23/05/26","iso":"2026-05-23","lg":["Denzel Winterbeard","Cian Jefferson","Max Bradfield","Hugo","Mark Isaac"],"spec":["Cian Jefferson","Hugo","Max Bradfield","Mark Isaac","Denzel Winterbeard"],"type":"Away","value":31267.25,"commission":2842.48,"flag":""},{"son":"250426.DWB01","deal":"Summer Stewart - 1 Gleno Street Delungra NSW 2403","installed":"23/05/26","iso":"2026-05-23","lg":["Cian Jefferson","Max Bradfield","Hugo","Denzel Winterbeard","Mark Isaac"],"spec":["Denzel Winterbeard","Cian Jefferson","Max Bradfield","Hugo","Mark Isaac"],"type":"Away","value":37882.25,"commission":3443.84,"flag":""},{"son":"230426.JS01","deal":"Felicity Menchin - 28 Inverell Street Delungra NSW 2403","installed":"22/05/26","iso":"2026-05-22","lg":["Denzel Winterbeard","Cian Jefferson","Max Bradfield","Hugo","Mark Isaac"],"spec":["Denzel Winterbeard","Max Bradfield","Hugo","Cian Jefferson","Mark Isaac"],"type":"Away","value":35548.0,"commission":3231.64,"flag":""},{"son":"040526.DWB03","deal":"Richard Gray - 10 Cross Street  Warialda NSW 2402","installed":"21/05/26","iso":"2026-05-21","lg":["Hugo","Max Bradfield","Cian Jefferson","Mark Isaac","Denzel Winterbeard"],"spec":["Denzel Winterbeard","Cian Jefferson","Max Bradfield","Hugo","Mark Isaac"],"type":"Away","value":24667.0,"commission":2242.45,"flag":""},{"son":"260426.DWB02","deal":"Peter Hancock - 105 High Street Warialda NSW 2402","installed":"21/05/26","iso":"2026-05-21","lg":["Cian Jefferson","Denzel Winterbeard","Max Bradfield","Hugo","Mark Isaac"],"spec":["Denzel Winterbeard","Cian Jefferson","Max Bradfield","Hugo","Mark Isaac"],"type":"Away","value":22630.0,"commission":2057.27,"flag":""},{"son":"210426.DWB02","deal":"Serena Kash - 23 Crane Street Warialda NSW 2402","installed":"20/05/26","iso":"2026-05-20","lg":["Denzel Winterbeard","Cian Jefferson","Max Bradfield","Hugo","Mark Isaac"],"spec":["Denzel Winterbeard","Cian Jefferson","Max Bradfield","Mark Isaac","Hugo"],"type":"Away","value":36086.0,"commission":3280.55,"flag":""},{"son":"SSA034","deal":"Amy Wong - 10 O'Connor Street Eastlakes NSW 2018","installed":"19/05/26","iso":"2026-05-19","lg":["Denzel Winterbeard"],"spec":["Denzel Winterbeard"],"type":"Home","value":33761.6,"commission":3069.24,"flag":""},{"son":"SSA019","deal":"Rob Matta - 109 Brighton Street Croydon Park NSW 2133","installed":"08/05/26","iso":"2026-05-08","lg":["Beau Jolly"],"spec":["Joe"],"type":"Home","value":27025.4,"commission":2456.85,"flag":""},{"son":"SSA030","deal":"Allen Paskins - 11 Heathwood Court Hampden QLD 4741","installed":"08/05/26","iso":"2026-05-08","lg":["Joe","Denzel Winterbeard","Cian Jefferson","Fran","Max Bradfield"],"spec":["Joe","Simon","Denzel Winterbeard","Cian Jefferson","Max Bradfield"],"type":"Away","value":19261.6,"commission":1751.05,"flag":""},{"son":"SSA031","deal":"Richard Campbell - 100 Dunwold-Cattle Creek Road Gargett QLD 4741","installed":"07/05/26","iso":"2026-05-07","lg":["Denzel Winterbeard"],"spec":["Joe","Denzel Winterbeard"],"type":"Home","value":53448.08,"commission":4858.92,"flag":""},{"son":"SSA052","deal":"Anne Moore - 93 Stephen Street Warialda NSW 2402","installed":"25/04/26","iso":"2026-04-25","lg":["Denzel Winterbeard","Harley","Max Bradfield","Cian Jefferson"],"spec":["Denzel Winterbeard","Max Bradfield","Harley","Cian Jefferson"],"type":"Away","value":29199.2,"commission":2654.47,"flag":""},{"son":"SSA055","deal":"Rosemary Arnold - 38 Holden Street Warialda NSW 2402","installed":"25/04/26","iso":"2026-04-25","lg":["Denzel Winterbeard","Harley","Max Bradfield","Cian Jefferson"],"spec":["Denzel Winterbeard","Max Bradfield","Harley","Cian Jefferson"],"type":"Away","value":23526.6,"commission":2138.78,"flag":""},{"son":"200426.DWB01","deal":"Dianne Burke - 91 Cunningham Street Bingara NSW 2404","installed":"24/04/26","iso":"2026-04-24","lg":["Denzel Winterbeard","Max Bradfield","Cian Jefferson","Hugo"],"spec":["Denzel Winterbeard","Cian Jefferson","Max Bradfield","Hugo"],"type":"Away","value":24250.0,"commission":2204.55,"flag":""},{"son":"SSA053","deal":"Annette Towers - 2 Finch Street Bingara NSW 2404","installed":"24/04/26","iso":"2026-04-24","lg":["Denzel Winterbeard","Harley","Max Bradfield","Cian Jefferson"],"spec":["Denzel Winterbeard","Max Bradfield","Harley","Cian Jefferson"],"type":"Away","value":38748.2,"commission":3522.56,"flag":""},{"son":"SSA051","deal":"Andy Callaway - 69 Maitland Street Bingara NSW 2404","installed":"23/04/26","iso":"2026-04-23","lg":["Denzel Winterbeard","Harley","Max Bradfield","Cian Jefferson"],"spec":["Denzel Winterbeard","Max Bradfield","Harley","Cian Jefferson"],"type":"Away","value":32097.6,"commission":2917.96,"flag":""},{"son":"SSA054","deal":"Adrian Dick - 36 Keera Street  Bingara NSW 2404","installed":"23/04/26","iso":"2026-04-23","lg":["Denzel Winterbeard","Harley","Max Bradfield","Cian Jefferson"],"spec":["Denzel Winterbeard","Max Bradfield","Harley","Cian Jefferson"],"type":"Away","value":14851.2,"commission":1350.11,"flag":""},{"son":"SSA036","deal":"Scott Mooney - 17 Philip Street South Golden Beach NSW 2483","installed":"17/04/26","iso":"2026-04-17","lg":["Beau Jolly"],"spec":["Joe"],"type":"Home","value":71953.2,"commission":6541.2,"flag":""},{"son":"SSA035","deal":"John Tooler - 8 Tranquil Place Alstonville NSW 2477","installed":"15/04/26","iso":"2026-04-15","lg":["Joe"],"spec":["Joe"],"type":"Home","value":31049.2,"commission":2822.65,"flag":""},{"son":"SSA026","deal":"Gibb French - 34 Alan Street Marian QLD 4753","installed":"12/04/26","iso":"2026-04-12","lg":["Joe","Denzel Winterbeard","Cian Jefferson","Fran","Max Bradfield"],"spec":["Joe","Simon","Denzel Winterbeard","Cian Jefferson","Max Bradfield"],"type":"Away","value":48152.8,"commission":4377.53,"flag":""},{"son":"SSA028","deal":"Bernie Shields - 9 Coral Drive Blacks Beach QLD 4740","installed":"11/04/26","iso":"2026-04-11","lg":["Joe","Denzel Winterbeard","Cian Jefferson","Fran","Max Bradfield"],"spec":["Joe","Simon","Denzel Winterbeard","Cian Jefferson","Max Bradfield"],"type":"Away","value":30394.4,"commission":2763.13,"flag":""},{"son":"SSA024","deal":"Dean Boland - 16 Blackmur Street Marian QLD 4753","installed":"11/04/26","iso":"2026-04-11","lg":["Joe","Denzel Winterbeard","Cian Jefferson","Fran","Max Bradfield"],"spec":["Joe","Simon","Denzel Winterbeard","Cian Jefferson","Max Bradfield"],"type":"Away","value":30114.0,"commission":2737.64,"flag":""},{"son":"SSA027","deal":"Vincent Reeves - 5 Lucy Court Mirani QLD 4754","installed":"10/04/26","iso":"2026-04-10","lg":["Joe","Denzel Winterbeard","Cian Jefferson","Fran","Max Bradfield"],"spec":["Joe","Simon","Denzel Winterbeard","Cian Jefferson","Max Bradfield"],"type":"Away","value":27098.8,"commission":2463.53,"flag":""},{"son":"SSA025","deal":"Peter Schaper - 22 Elizabeth Street Mirani QLD 4754","installed":"10/04/26","iso":"2026-04-10","lg":["Joe"],"spec":["Joe"],"type":"Home","value":29890.0,"commission":2717.27,"flag":""},{"son":"SSA029","deal":"Danielle Campbell - 11 Vesta Lane Ooralea QLD 4740","installed":"08/04/26","iso":"2026-04-08","lg":["Dermot"],"spec":[],"type":"Home","value":16511.6,"commission":750.53,"flag":""},{"son":"SSA018","deal":"Marion Priestly - 31 Adams Street Heddon Greta NSW 2321","installed":"07/04/26","iso":"2026-04-07","lg":["Beau Jolly"],"spec":["Beau Jolly"],"type":"Home","value":18139.6,"commission":1649.05,"flag":""},{"son":"SSA022","deal":"Murray Heath - Unit 5 - 11 Prospect Street Mackay QLD 4740","installed":"30/03/26","iso":"2026-03-30","lg":["Holly"],"spec":["Joe"],"type":"Home","value":19415.1,"commission":1118.11,"flag":""},{"son":"SSA049","deal":"1 Bob & Lawson Muir - 1516 Delungra Road Bingara NSW 2404","installed":"27/03/26","iso":"2026-03-27","lg":["Joe"],"spec":["Joe"],"type":"Home","value":57409.2,"commission":5219.02,"flag":""},{"son":"SSA050","deal":"2 Bob & Lawson Muir - 1787 Delubngra Road Bingara NSW 2404","installed":"26/03/26","iso":"2026-03-26","lg":["Joe"],"spec":["Joe"],"type":"Home","value":36436.2,"commission":3312.38,"flag":""},{"son":"SSA044","deal":"Maria E Kelly - 2529 Pyramids Road Wyberba QLD 4382","installed":"19/03/26","iso":"2026-03-19","lg":["Denzel Winterbeard","Cian Jefferson","Joe"],"spec":["Joe","Denzel Winterbeard","Cian Jefferson"],"type":"Away","value":29420.2,"commission":2674.56,"flag":""},{"son":"SSA033","deal":"Peter Rallings - 122 Eyles Drive East Ballina NSW 2478","installed":"24/02/26","iso":"2026-02-24","lg":["Beau Jolly"],"spec":["Joe"],"type":"Home","value":12877.6,"commission":1170.69,"flag":""},{"son":"SSA016","deal":"Mark Cummins - 9 Waipori Street St Ives Chase NSW 2075","installed":"20/02/26","iso":"2026-02-20","lg":["Beau Jolly"],"spec":["Beau Jolly"],"type":"Home","value":21878.0,"commission":1988.91,"flag":""},{"son":"SSA017","deal":"Edward Watt - 41 Milburn Place St Ives Chase NSW 2075","installed":"19/02/26","iso":"2026-02-19","lg":["Joe"],"spec":["Joe"],"type":"Home","value":15218.0,"commission":1383.45,"flag":""},{"son":"SSA007","deal":"Larry Grant - 77 Cecil Road Orange NSW 2800","installed":"15/02/26","iso":"2026-02-15","lg":["Beau Jolly"],"spec":["Joe"],"type":"Home","value":5000.0,"commission":454.55,"flag":""},{"son":"SSA020","deal":"Tony Tedesco - 7 Wasley Road Wasleys SA 5400","installed":"02/02/26","iso":"2026-02-02","lg":["Beau Jolly"],"spec":["Beau Jolly"],"type":"Home","value":8175.0,"commission":743.18,"flag":""},{"son":"SSA015","deal":"Ray Schriever - 32 Bungama Street Maroochydore QLD 4558","installed":"28/01/26","iso":"2026-01-28","lg":["Joe"],"spec":["Joe"],"type":"Home","value":15535.6,"commission":1412.33,"flag":""},{"son":"SSA045","deal":"Glenda Eyears - 4 Wood Street Tenterfield NSW 2372","installed":"27/01/26","iso":"2026-01-27","lg":["Denzel Winterbeard","Cian Jefferson","Joe"],"spec":["Joe","Denzel Winterbeard","Cian Jefferson"],"type":"Away","value":22201.0,"commission":2018.27,"flag":""},{"son":"SSA048","deal":"Dale Baldock - 85 Finch Street Bingara NSW 2404","installed":"19/01/26","iso":"2026-01-19","lg":["Joe"],"spec":["Joe"],"type":"Home","value":13527.6,"commission":1229.78,"flag":""},{"son":"SSA047","deal":"Sandra de Jong - 9 White Street Bingara NSW 2404","installed":"19/01/26","iso":"2026-01-19","lg":["Joe"],"spec":["Joe"],"type":"Home","value":10729.0,"commission":975.36,"flag":""},{"son":"SSA046","deal":"Eddie Scofield  & Liz Mitchelson - 7674 Bruxner Highway Drake NSW 2469","installed":"15/01/26","iso":"2026-01-15","lg":["Denzel Winterbeard","Cian Jefferson","Joe"],"spec":["Joe","Denzel Winterbeard","Cian Jefferson"],"type":"Away","value":17583.0,"commission":1598.45,"flag":""},{"son":"SSA002","deal":"Cecilia Curtis - 10 Sinclair Street Kambah ACT 2902","installed":"15/12/25","iso":"2025-12-15","lg":["Dermot"],"spec":["Joe"],"type":"Home","value":4000.0,"commission":363.64,"flag":""},{"son":"SSA001","deal":"Judy Mannix - 68 Clanwilliam Street Blackheath NSW 2785","installed":"15/12/25","iso":"2025-12-15","lg":["Joe"],"spec":["Joe"],"type":"Home","value":5000.0,"commission":454.55,"flag":""},{"son":"SSA009","deal":"Trevor Haskins - 77 Lambeth Street Glen Innes NSW 2370","installed":"05/12/25","iso":"2025-12-05","lg":["Joe"],"spec":["Joe"],"type":"Home","value":5250.0,"commission":477.27,"flag":""},{"son":"SSA005","deal":"Mark Olley - 7 Dixon Place Jerrabomberra NSW 2619","installed":"01/12/25","iso":"2025-12-01","lg":["Joe"],"spec":["Joe"],"type":"Home","value":10000.0,"commission":909.09,"flag":""},{"son":"SSA008","deal":"James Satrapa -","installed":"25/11/25","iso":"2025-11-25","lg":["Joe"],"spec":["Joe"],"type":"Home","value":150.0,"commission":13.64,"flag":""},{"son":"SSA006","deal":"David Middleton - 35 Cooya Beach Road Bonnie Doon QLD 4873","installed":"14/11/25","iso":"2025-11-14","lg":["Joe"],"spec":["Joe"],"type":"Home","value":20000.0,"commission":1818.18,"flag":""},{"son":"SSA004","deal":"Benjamin Hart - 46 Grimshaw Street Richardson ACT 2905","installed":"21/10/25","iso":"2025-10-21","lg":["Joe"],"spec":["Joe"],"type":"Home","value":5000.0,"commission":454.55,"flag":""},{"son":"SSA003","deal":"Robert Fitz - 46 Churchill Avenue Orange NSW 2800","installed":"16/10/25","iso":"2025-10-16","lg":["Joe"],"spec":["Joe"],"type":"Home","value":5500.0,"commission":500.0,"flag":""}],"historic_summary":{"total_value":1686978.68,"total_commission":145815.27,"deals":68,"flagged":3}};
+const CAVEAT="All pending deals are based on cash amounts and may change with finance and ACP charges.";
 
-const fmt=v=>{if(v===null||v===undefined)return"—";const a=Math.abs(v);const s="$"+a.toLocaleString("en-AU",{minimumFractionDigits:0,maximumFractionDigits:0});return v<0?"("+s+")":s;};
-const fmtDate=s=>{if(!s||s==="\u2014"||s==="-")return "\u2014";const m=String(s).match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?`${m[3]}/${m[2]}/${m[1].slice(2)}`:s;};
-const fmt2=v=>{if(v===null||v===undefined)return"—";const a=Math.abs(v);const s="$"+a.toLocaleString("en-AU",{minimumFractionDigits:2,maximumFractionDigits:2});return v<0?"("+s+")":s;};
-
-const sel=document.getElementById("repSelect");
-D.people.forEach(p=>{const o=document.createElement("option");o.value=p.name;o.textContent=p.name;sel.appendChild(o);});
-let selected=D.people[0].name;  // Full Team = default
-sel.onchange=()=>{selected=sel.value;renderRep();};
-
-function repDeals(name){if(name==="Full Team")return D.deals;const first=name.split(" ")[0];return D.deals.filter(d=>Object.keys(d.benef).some(b=>b===name||b.split(" ")[0]===first));}
-
-function niceStep(maxVal){
-  const raw=maxVal/5;
-  const pow=Math.pow(10,Math.floor(Math.log10(raw)));
-  const c=raw/pow;
-  const step=(c<=1?1:c<=2?2:c<=2.5?2.5:c<=5?5:10)*pow;
-  return step;
+async function check(){
+  const v=document.getElementById('pw').value;
+  const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v));
+  const h=[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+  if(h===HASH){document.getElementById('gate').style.display='none';
+    document.getElementById('app').style.display='block';render();}
+  else{document.getElementById('err').textContent='Incorrect password';}
 }
-function barTicks(maxVal){
-  const step=niceStep(maxVal);
-  let out='';
-  let lastPct=0;
-  for(let v=0;v<=maxVal+0.001;v+=step){
-    const pct=v/maxVal*100;
-    if(pct>100.5)break;
-    lastPct=pct;
-    const lbl=v>=1000?('$'+(v/1000).toLocaleString('en-AU',{maximumFractionDigits:1})+'k'):('$'+Math.round(v));
-    out+=`<div class="bar-tick" style="left:${pct}%">${lbl}</div>`;
-  }
-  if(lastPct<93){
-    const lbl=maxVal>=1000?('$'+(maxVal/1000).toLocaleString('en-AU',{maximumFractionDigits:1})+'k'):('$'+Math.round(maxVal));
-    out+=`<div class="bar-tick" style="left:100%">${lbl}</div>`;
-  }
-  return out;
+document.getElementById('btn').onclick=check;
+document.getElementById('pw').addEventListener('keydown',e=>{if(e.key==='Enter')check();});
+
+const fmt=v=>(v<0?'('+'$'+Math.abs(v).toLocaleString('en-AU',{maximumFractionDigits:0})+')'
+  :'$'+v.toLocaleString('en-AU',{maximumFractionDigits:0}));
+const fmt2=v=>(v<0?'('+'$'+Math.abs(v).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2})+')'
+  :'$'+v.toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2}));
+const sgn=v=>v<0?'neg':'pos';
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function niceStep(max,target){
+  const raw=max/target, p=Math.pow(10,Math.floor(Math.log10(raw))), n=raw/p;
+  return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*p;
 }
-function projBar(p){
-  // For FTE: line = deficit to clear (abs start). cleared=earned, pending=pending, toward line.
-  // For others: line = 0, just show earned+pending as owed.
-  const line=p.line;
-  const maxVal=Math.max(line, p.earned+p.pending, 1);
-  const scale=100/maxVal;
-  const clrW=Math.max(p.earned*scale,0), pndW=Math.max(p.pending*scale,0);
-  const linePct=line>0?Math.min(line*scale,100):0;
-  let seg="";
-  if(p.earned>0)seg+=`<div class="bar-segment cleared" style="width:${clrW}%">${fmt(p.earned)}</div>`;
-  if(p.pending>0)seg+=`<div class="bar-segment pending" style="width:${pndW}%">${fmt(p.pending)}</div>`;
-  const remaining=line-p.earned-p.pending;
-  if(remaining>0)seg+=`<div class="bar-segment gap" style="width:${Math.max(remaining*scale,0)}%">${fmt(remaining)} to line</div>`;
-  const title=p.isTeam
-    ? "Team progress toward covering everything drawn"
-    : (p.to_cover>0
-        ? (p.retainer_only>0 ? "Progress toward covering retainer + opening balance" : "Progress toward clearing opening balance")
-        : "Commission accruing");
-  return `<div class="proj-section">
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-      <div class="proj-title">${title}</div>
-      <div class="legend"><div class="legend-item"><div class="legend-dot cleared"></div>Earned</div><div class="legend-item"><div class="legend-dot pending"></div>Pending</div>${line>0?'<div class="legend-item"><div class="legend-dot gap"></div>To line</div>':''}</div>
-    </div>
-    <div class="bar-container"><div class="bar-track">${seg||'<div class="bar-segment gap" style="width:100%">No commission yet</div>'}</div>
-      ${line>0?`<div class="retainer-line" style="left:${linePct}%" data-label="line ${fmt(line)}"></div>`:''}
-      <div class="bar-scale">${barTicks(maxVal)}</div></div>
-    <div class="proj-note">${p.to_cover>0
-      ? `The red line is everything drawn against ${p.isTeam?'the team':p.name.split(" ")[0]} since 20/07/26 &mdash; ${fmt2(p.to_cover)}${p.retainer_only>0?` (opening balance plus retainer drawn)`:` (opening balance)`}. Green is commission already installed, blue is pending pipeline. Both have to reach the line before SSA is net owing.${p.retainer_only>0?` The retainer keeps drawing, so the line moves further out each week.`:''}`
-      : `Nothing drawn &mdash; commission simply accrues. Green is installed, blue is pending pipeline.`}</div>
-  </div>`;
+function ticks(max){
+  const st=niceStep(max,5); let h='';
+  for(let v=0;v<=max+.001;v+=st)
+    h+=`<div class="tick" style="left:${Math.min(v/max*100,100)}%">${fmt(v)}</div>`;
+  const lastT=Math.floor(max/st)*st;
+  if(lastT/max<0.93) h+=`<div class="tick" style="left:100%">${fmt(max)}</div>`;
+  return `<div class="ticks">${h}</div>`;
 }
 
-function renderRep(){
-  const p=D.people.find(x=>x.name===selected);
-  document.getElementById("wtypeBadge").innerHTML=p.isTeam?'<span class="wtype emp">Whole team · aggregate</span>':(p.fte?'<span class="wtype emp">Employee · draw</span>':'<span class="wtype con">Contractor</span>');
-  let html="";
-  const projPos=p.projected;
-  {
-    const proj=p.projected;
-    const clears=proj>=0;
-    const dir = clears ? "SSA will owe" : "will owe SSA";
-    const nm = p.name.split(" ")[0];
-    html+=`<div class="hero ${clears?'':'debt'}">
-      <div class="hero-eyebrow">Position since 20/07/26</div>
-      <div class="hero-value ${clears?'teal':'red'}">${fmt2(Math.abs(proj))}</div>
-      ${p.note?`<div style="font-size:11px;color:var(--amber);margin-bottom:6px">${p.note}</div>`:''}
-      <div class="hero-caption">${p.isTeam
-        ? `The team has ${fmt2(p.pending)} in pending commission still to install. Once it does, <strong>${clears?`SSA will owe the team ${fmt2(Math.abs(proj))}`:`the team will owe SSA ${fmt2(Math.abs(proj))}`}</strong> in total.`
-        : `${nm} has ${fmt2(p.pending)} in pending commission still to install. Once it does, <strong>${clears?`SSA will owe ${nm} ${fmt2(Math.abs(proj))}`:`${nm} will owe SSA ${fmt2(Math.abs(proj))}`}</strong>.`}</div>
-    </div>`;
-  }
-  const cards=[];
-  if(p.to_cover>0){
-    const bits=[];
-    if(p.start!==0) bits.push(`${fmt2(-p.start)} opening`);
-    if(p.retainer_only>0) bits.push(`${fmt2(p.retainer_only)} retainer`);
-    if(p.adspend>0) bits.push(`${fmt2(p.adspend)} ad spend`);
-    cards.push(`<div class="kpi amber"><div class="kpi-label">Total to cover</div><div class="kpi-value amber">${fmt2(p.to_cover)}</div><div class="kpi-sub">${bits.join(' + ')}</div></div>`);
-  }
-  cards.push(`<div class="kpi green"><div class="kpi-label">Earned since</div><div class="kpi-value green">${fmt2(p.earned)}</div><div class="kpi-sub">Installed post-20/07/26</div></div>`);
-  cards.push(`<div class="kpi blue"><div class="kpi-label">Pending pipeline</div><div class="kpi-value blue">${fmt2(p.pending)}</div><div class="kpi-sub">Projected on install</div></div>`);
-  cards.push(`<div class="kpi teal"><div class="kpi-label">Projected position</div><div class="kpi-value ${projPos>=0?'teal':'red'}">${fmt2(projPos)}</div><div class="kpi-sub">${projPos>=0?'SSA owes':'still to earn back'}</div></div>`);
-  html+=`<div class="kpi-row">${cards.join('')}</div>`;
-  const parts=[];
-  parts.push(`earned ${fmt2(p.earned)}`);
-  parts.push(`plus pending ${fmt2(p.pending)}`);
-  if(p.to_cover>0) parts.push(`less ${fmt2(p.to_cover)} to cover`);
-  parts.push(`<strong>projected ${fmt2(projPos)}</strong>`);
-  html+=`<div class="proj-note" style="margin:-8px 0 18px 2px">${parts.join(' &nbsp;·&nbsp; ')}</div>`;
-  html+=projBar(p);
-  const ds=repDeals(selected);
-  html+=`<div style="margin-top:6px"><h3>${selected==="Full Team"?"All pending deals":selected.split(" ")[0]+"'s pending deals"} (${ds.length})</h3>
-    <div class="deal-scroll"><table><thead><tr><th>SON</th><th>Deal</th><th>Stage</th><th>Type</th><th class="num">Their share</th></tr></thead><tbody>`;
-  ds.forEach(d=>{const share=selected==="Full Team"?Object.values(d.benef).reduce((a,b)=>a+b,0):(d.benef[selected]!==undefined?d.benef[selected]:(d.benef[Object.keys(d.benef).find(k=>k.split(" ")[0]===selected.split(" ")[0])]||0));
-    html+=`<tr><td style="font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--teal)">${d.son||'—'}</td><td class="dname">${d.name}</td><td><span class="status-dot"></span>${d.status}</td><td><span class="type-tag ${d.type.toLowerCase()}">${d.type}</span></td><td class="num">${fmt2(share)}</td></tr>`;});
-  html+=`</tbody></table></div><div class="proj-note" style="margin-top:10px;color:var(--amber)">All pending deals are based on cash amounts and may change with finance and ACP charges.</div></div>`;
-  document.getElementById("repBody").innerHTML=html;
+/* ---------------- tab 0 : pipeline forecast ---------------- */
+function tab0(){
+  const pv=D.pending.reduce((a,b)=>a+b.total,0);
+  const pc=D.full.pending, tracked=D.people.map(p=>p.name);
+  let h=`<div class="kpis">
+    <div class="kpi"><div class="lab">Pipeline value</div><div class="val tl">${fmt(pv)}</div>
+      <div class="sub">Total deal value not yet installed</div></div>
+    <div class="kpi"><div class="lab">Pending commission</div><div class="val pend">${fmt2(pc)}</div>
+      <div class="sub">Across the five tracked people</div></div>
+    <div class="kpi"><div class="lab">Earned since ${D.reset}</div><div class="val pos">${fmt2(D.full.earned)}</div>
+      <div class="sub">Installed and locked in</div></div>
+    <div class="kpi"><div class="lab">Deals in pipeline</div><div class="val">${D.pending.length}</div>
+      <div class="sub">${D.pending.filter(d=>d.total===0).length} with no value recorded yet</div></div>
+  </div>
+  <div class="caveat">${CAVEAT}</div>
+  <div class="card"><h2>Pending commission by person</h2>
+  <div class="hint">Full Team omitted — it dwarfs the scale.</div><div class="bars">`;
+  const mx=Math.max(...tracked.map(n=>D.people.find(p=>p.name===n).pending),1);
+  D.people.slice().sort((a,b)=>b.pending-a.pending).forEach(p=>{
+    h+=`<div class="row"><div class="nm">${esc(p.name)}</div>
+      <div class="track"><i style="width:${p.pending/mx*100}%;background:var(--blue)"></i></div>
+      <div class="amt pend">${fmt2(p.pending)}</div></div>`;});
+  h+=`</div></div>
+  <div class="card"><h2>Pipeline deals</h2><div class="hint">${D.pending.length} deals · largest first</div>
+  <div class="filters" id="f0">
+    <button class="on" data-f="all">All</button><button data-f="Away">Away</button>
+    <button data-f="Home">Home</button><button data-f="noval">No value yet</button></div>
+  <div class="wrap"><table><thead><tr><th>SON</th><th>Deal</th><th>Lead Gen / Specialist</th>
+  <th>Type</th><th>Stage</th><th class="n">Value</th><th>Commission / person</th></tr></thead>
+  <tbody id="b0"></tbody></table></div>
+  <div class="foot">${CAVEAT}</div></div>`;
+  return h;
+}
+function rows0(f){
+  let rs=D.pending.slice().sort((a,b)=>b.total-a.total);
+  if(f==='Away'||f==='Home')rs=rs.filter(d=>d.type===f);
+  if(f==='noval')rs=rs.filter(d=>d.total===0);
+  return rs.map(d=>{
+    const sh=Object.entries(d.allper).sort().map(([k,v])=>`${esc(k)}: ${fmt2(v)}`).join('<br>')||'—';
+    return `<tr class="${d.total===0||d.flag?'flagrow':''}">
+    <td class="son">${esc(d.son||'—')}</td><td class="tw">${esc(d.deal)}</td>
+    <td class="tw" style="font-size:11.5px;color:var(--text2)">${esc(d.lg.join(', ')||'—')}<br>
+      <span style="color:var(--text3)">${esc(d.spec.join(', ')||'—')}</span></td>
+    <td><span class="pill">${esc(d.type)}</span></td>
+    <td style="font-size:11.5px;color:var(--text2)">${esc(d.status)}</td>
+    <td class="n">${fmt(d.total)}</td>
+    <td style="font-size:11.5px">${sh}</td></tr>`;}).join('');
 }
 
-function renderList(){
-  document.getElementById("listBody").innerHTML=D.people.filter(p=>!p.isTeam).map(p=>{
-    const curCell=(p.current>=0?`<span class="pos">${fmt2(p.current)}</span><span class="sub">SSA owes</span>`:`<span class="neg">${fmt2(p.current)}</span><span class="sub">to earn back</span>`);
-    const projCell=(p.projected>=0?`<span class="pos">${fmt2(p.projected)}</span><span class="sub">SSA owes</span>`:`<span class="neg">${fmt2(p.projected)}</span><span class="sub">to earn back</span>`);
-    return `<tr><td class="dname">${p.name}</td><td style="color:var(--text3);font-size:11px">${p.type}</td>
-      <td class="num">${fmt2(p.start)}</td><td class="num">${fmt2(p.retainer)}</td><td class="num">${fmt2(p.earned)}</td><td class="num">${curCell}</td>
-      <td class="num divider"><span class="pend">${fmt2(p.pending)}</span></td><td class="num em">${projCell}</td></tr>`;
-  }).join("");
+/* ---------------- tab 1 : my position ---------------- */
+function tab1(){
+  const opts=[D.full,...D.people].map((p,i)=>`<option value="${i}">${esc(p.name)}</option>`).join('');
+  return `<div class="card"><h2>Choose a person</h2>
+    <div class="hint">Full Team shows the combined position.</div>
+    <select id="who">${opts}</select></div><div id="pane"></div>`;
+}
+function pane(p){
+  const cover=p.to_cover, prog=Math.max(cover,p.earned+p.pending)*1.06||1;
+  const eW=Math.min(p.earned/prog*100,100), pW=Math.min(p.pending/prog*100,100-eW);
+  let title,line=true;
+  if(p.drawn>0&&p.start<0)title='Progress toward covering retainer + opening balance';
+  else if(p.drawn>0)title='Progress toward covering retainer';
+  else if(p.start<0)title='Progress toward clearing opening balance';
+  else {title='Commission accruing';line=false;}
+  const who=p.name==='Full Team'?'The team':p.name, low=p.name==='Full Team'?'the team':p.name;
+  const tot=p.name==='Full Team'?' in total':'';
+  const sent=`${who} has ${fmt2(p.pending)} in pending commission still to install. Once it does, `+
+    (p.projected>=0?`SSA will owe ${low} ${fmt2(Math.abs(p.projected))}`
+                   :`${low} will owe SSA ${fmt2(Math.abs(p.projected))}`)+`${tot}.`;
+  const sub=[];
+  if(p.start<0)sub.push(`${fmt2(Math.abs(p.start))} opening`);
+  if(p.retainer>0)sub.push(`${fmt2(p.retainer)} retainer`);
+  if(p.adspend>0)sub.push(`${fmt2(p.adspend)} ad spend`);
+  let h=`<div class="card">
+    <div class="badge" style="margin:0 0 9px">${esc(p.type)} · ${esc(p.note)}</div>
+    <div class="hero ${sgn(p.current)}">${fmt2(p.current)}</div>
+    <div class="herosub">${esc(sent)}</div></div>
+  <div class="kpis">
+    <div class="kpi"><div class="lab">Total to cover</div><div class="val amb">${fmt2(cover)}</div>
+      <div class="sub">${sub.join(' + ')||'Nothing drawn'}</div></div>
+    <div class="kpi"><div class="lab">Earned since ${D.reset}</div><div class="val pos">${fmt2(p.earned)}</div>
+      <div class="sub">Installed and locked in</div></div>
+    <div class="kpi"><div class="lab">Pending</div><div class="val pend">${fmt2(p.pending)}</div>
+      <div class="sub">Not yet installed</div></div>
+    <div class="kpi"><div class="lab">Projected</div><div class="val ${sgn(p.projected)}">${fmt2(p.projected)}</div>
+      <div class="sub">${p.projected>=0?'✅ SSA OWES':'⛔ TO EARN BACK'}</div></div>
+  </div>
+  <div class="caveat">${CAVEAT}</div>
+  <div class="card"><h2>${title}</h2>
+    <div class="hint">${line?'The red line is everything drawn against '+esc(low)+' — opening balance plus every draw since. Green and blue must reach it before SSA is net owing.':'Nothing has been drawn — commission simply accrues.'}</div>
+    <div class="prog"><div class="progtrack">
+      <i style="width:${eW}%;background:var(--green)"></i>
+      <i style="width:${pW}%;background:var(--blue)"></i>
+      ${line?`<div class="line" style="left:${Math.min(cover/prog*100,100)}%" data-label="${fmt2(cover)}"></div>`:''}
+    </div>${ticks(prog)}</div>
+    <div class="legend"><span><i style="background:var(--green)"></i>Earned</span>
+    <span><i style="background:var(--blue)"></i>Pending</span>
+    <span><i style="background:var(--surface3)"></i>Remaining</span>
+    ${line?'<span><i style="background:var(--red)"></i>Total to cover</span>':''}</div></div>`;
+  const rs=D.pending.filter(d=>p.name==='Full Team'?Object.keys(d.per).length:d.per[p.name]);
+  h+=`<div class="card"><h2>Pending deals</h2><div class="hint">${rs.length} deals</div>
+    <div class="wrap"><table><thead><tr><th>SON</th><th>Deal</th><th>Stage</th><th>Type</th>
+    <th class="n">${p.name==='Full Team'?'Team share':'Their share'}</th></tr></thead><tbody>`;
+  rs.sort((a,b)=>{const g=x=>p.name==='Full Team'?Object.values(x.per).reduce((m,n)=>m+n,0):x.per[p.name];
+    return g(b)-g(a);});
+  rs.forEach(d=>{const v=p.name==='Full Team'?Object.values(d.per).reduce((m,n)=>m+n,0):d.per[p.name];
+    h+=`<tr class="${d.flag?'flagrow':''}"><td class="son">${esc(d.son||'—')}</td>
+      <td class="tw">${esc(d.deal)}</td>
+      <td style="font-size:11.5px;color:var(--text2)">${esc(d.status)}</td>
+      <td><span class="pill">${esc(d.type)}</span></td>
+      <td class="n pend">${fmt2(v)}</td></tr>`;});
+  h+=`</tbody></table></div><div class="foot">${CAVEAT}</div></div>`;
+  return h;
 }
 
-
-function switchView(v,e){
-  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
-  document.querySelectorAll('.view-tab').forEach(x=>x.classList.remove('active'));
-  document.getElementById('view-'+v).classList.add('active');
-  if(e&&e.target)e.target.classList.add('active');
+/* ---------------- tab 2 : team list ---------------- */
+function tab2(){
+  let h=`<div class="card"><h2>Team position</h2>
+  <div class="hint">Reset ${D.reset} baseline · pull ${D.pull}</div>
+  <div class="wrap"><table><thead><tr><th>Name</th><th>Type</th><th class="n">Start</th>
+  <th class="n">Retainer + ad spend</th><th class="n">Earned</th><th class="n">Current</th>
+  <th class="n divL">Pending</th><th class="n">Projected</th></tr></thead><tbody>`;
+  D.people.forEach(p=>{
+    h+=`<tr><td style="font-weight:600">${esc(p.name)}</td>
+      <td style="font-size:11.5px;color:var(--text2)">${esc(p.type)}</td>
+      <td class="n">${p.start?fmt2(p.start):'—'}</td>
+      <td class="n amb">${p.drawn?fmt2(p.drawn):'—'}</td>
+      <td class="n pos">${fmt2(p.earned)}</td>
+      <td class="n ${sgn(p.current)}"><strong>${fmt2(p.current)}</strong><br>
+        <span style="font-size:10px;font-family:var(--mono)">${p.current>=0?'SSA OWES':'TO EARN BACK'}</span></td>
+      <td class="n pend divL">${fmt2(p.pending)}</td>
+      <td class="n ${sgn(p.projected)}"><strong>${fmt2(p.projected)}</strong><br>
+        <span style="font-size:10px;font-family:var(--mono)">${p.projected>=0?'SSA OWES':'TO EARN BACK'}</span></td></tr>`;});
+  const f=D.full;
+  h+=`<tr style="background:var(--surface2)"><td style="font-weight:700">FULL TEAM</td><td>—</td>
+    <td class="n">${fmt2(f.start)}</td><td class="n amb">${fmt2(f.drawn)}</td>
+    <td class="n pos">${fmt2(f.earned)}</td>
+    <td class="n ${sgn(f.current)}"><strong>${fmt2(f.current)}</strong></td>
+    <td class="n pend divL">${fmt2(f.pending)}</td>
+    <td class="n ${sgn(f.projected)}"><strong>${fmt2(f.projected)}</strong></td></tr>`;
+  h+=`</tbody></table></div>
+  <div class="foot"><strong>Projected = Current + Pending.</strong>
+  Current = Start + Earned − (Retainer + ad spend).<br>
+  <span class="pos">■</span> owed to the person &nbsp;
+  <span class="neg">■</span> to earn back &nbsp;
+  <span class="pend">■</span> pending / projected &nbsp;
+  <span class="amb">■</span> drawn — a neutral fact, not a debt<br>${CAVEAT}</div></div>`;
+  return h;
 }
-function renderForecast(){
-  const k=D.forecast.kpis;
-  document.getElementById('fcKpis').innerHTML=`
-    <div class="kpi navy"><div class="kpi-label">Pipeline value</div><div class="kpi-value">${fmt(k.pipeline_value)}</div><div class="kpi-sub">${k.deal_count} pending deals</div></div>
-    <div class="kpi blue"><div class="kpi-label">Pending commission</div><div class="kpi-value blue">${fmt2(k.total_pending_comm)}</div><div class="kpi-sub">Across the team</div></div>
-    <div class="kpi green"><div class="kpi-label">Earned since 20/07/26</div><div class="kpi-value green">${fmt2(k.earned_since)}</div><div class="kpi-sub">Installed post-reset</div></div>
-    <div class="kpi teal"><div class="kpi-label">Deals in pipeline</div><div class="kpi-value teal">${k.deal_count}</div><div class="kpi-sub">Upcoming / In progress</div></div>`;
-  // bars: projected position per person
-  const indiv=D.people.filter(p=>!p.isTeam);
-  const maxAbs=Math.max(...indiv.map(p=>Math.abs(p.projected)),1);
-  document.getElementById('fcBars').innerHTML=indiv.map(p=>{
-    const w=Math.max(Math.abs(p.projected)/maxAbs*100,6);
-    const cls=p.projected>=0?'pos':'neg';
-    const lbl=fmt2(p.projected);
-    return `<div class="fc-bar-row"><div class="fc-bar-name">${p.name}</div>
-      <div class="fc-bar-wrap"><div class="fc-bar-fill ${cls}" style="width:${w}%">${lbl}</div></div></div>`;
-  }).join('');
-  document.getElementById('fcCount').textContent=D.forecast.deals.length;
-  document.getElementById('fcDealBody').innerHTML=D.forecast.deals.map(d=>`
-    <tr><td style="font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--teal)">${d.son||'—'}</td>
-      <td class="dname">${d.name}</td>
-      <td style="font-size:11px;color:var(--text3)">${d.lg}<br><span style="color:var(--text2)">${d.spec}</span></td>
-      <td><span class="type-tag ${d.type.toLowerCase()}">${d.type}</span></td>
-      <td><span class="status-dot"></span>${d.stage}</td>
-      <td class="num">${fmt(d.value)}</td><td class="num">${fmt2(d.commp)}</td></tr>`).join('');
-}
-renderForecast();
 
-
-function renderHistoric(){
-  const k=D.historic.kpis;
-  document.getElementById('histKpis').innerHTML=`
-    <div class="kpi navy"><div class="kpi-label">Total installed value</div><div class="kpi-value">${fmt(k.total_value)}</div><div class="kpi-sub">${k.deal_count} deals since 09/25</div></div>
-    <div class="kpi teal"><div class="kpi-label">Total commission</div><div class="kpi-value teal">${fmt2(k.total_comm)}</div><div class="kpi-sub">Earned/owed on install</div></div>
-    <div class="kpi green"><div class="kpi-label">Deals logged</div><div class="kpi-value green">${k.deal_count}</div><div class="kpi-sub">All installed</div></div>
-    <div class="kpi amber"><div class="kpi-label">Flagged rows</div><div class="kpi-value amber">${k.flagged}</div><div class="kpi-sub">Missing data</div></div>`;
-  document.getElementById('histFlagCount').textContent=k.flagged;
-  document.getElementById('histBody').innerHTML=D.historic.deals.map(d=>`
-    <tr${d.flag?' style="background:rgba(251,191,36,.07)"':''}>
-      <td style="font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--teal)">${d.son}</td>
-      <td class="dname">${d.name}</td>
-      <td style="font-size:11.5px;color:var(--text2)">${fmtDate(d.date)}</td>
-      <td style="font-size:11px;color:var(--text3)">${d.lg}<br><span style="color:var(--text2)">${d.spec}</span></td>
-      <td><span class="type-tag ${d.type.toLowerCase()}">${d.type}</span></td>
-      <td class="num">${fmt(d.value)}</td>
-      <td class="num em">${fmt2(d.comm)}</td>
-      <td style="font-size:10.5px;color:var(--amber)">${d.flag||''}</td>
-    </tr>`).join('');
+/* ---------------- tab 3 : historic ---------------- */
+function tab3(){
+  const s=D.historic_summary;
+  let h=`<div class="sumbox">
+    <div class="kpi"><div class="lab">Installed value</div><div class="val tl">${fmt(s.total_value)}</div></div>
+    <div class="kpi"><div class="lab">Commission</div><div class="val tl">${fmt2(s.total_commission)}</div></div>
+    <div class="kpi"><div class="lab">Deals logged</div><div class="val">${s.deals}</div></div>
+    <div class="kpi"><div class="lab">Flagged rows</div><div class="val amb">${s.flagged}</div></div></div>
+  <div class="est"><strong>⚠ Estimate up to ${D.reset}.</strong> Figures before the reset are reconstructed
+  from HubSpot and contain known inconsistencies — ${s.flagged} rows flagged below have no install date,
+  no deal value, or no attribution recorded. Commission shown is <strong>earned/owed on install</strong>,
+  not cash paid. Treat pre-reset totals as an estimate for cross-referencing, not a settled ledger.</div>
+  <div class="card"><h2>Historic deals</h2>
+  <div class="hint">Installed before ${D.reset} · newest first · reference only, not counted in current positions</div>
+  <div class="wrap"><table><thead><tr><th>SON</th><th>Deal</th><th>Installed</th>
+  <th>Lead Gen / Specialist</th><th>Type</th><th class="n">Value</th><th class="n">Commission</th>
+  <th>Flag</th></tr></thead><tbody>`;
+  D.historic.forEach(d=>{
+    h+=`<tr class="${d.flag?'flagrow':''}"><td class="son">${esc(d.son||'—')}</td>
+      <td class="tw">${esc(d.deal)}</td><td style="white-space:nowrap">${esc(d.installed)}</td>
+      <td class="tw" style="font-size:11.5px;color:var(--text2)">${esc(d.lg.join(', ')||'—')}<br>
+        <span style="color:var(--text3)">${esc(d.spec.join(', ')||'—')}</span></td>
+      <td><span class="pill">${esc(d.type)}</span></td>
+      <td class="n">${fmt(d.value)}</td><td class="n tl">${fmt2(d.commission)}</td>
+      <td class="amb" style="font-size:11px">${esc(d.flag||'')}</td></tr>`;});
+  h+=`</tbody></table></div></div>`;
+  return h;
 }
-renderHistoric();
 
-
-const FLAG_TO="ollie@smart-switchappliances.com";
-const FLAG_CC="";   // <-- add Scott's address here
-function openFlag(){
-  const p=D.people.find(x=>x.name===selected)||D.people[0];
-  const rows=[
-    ['Viewing',p.name],
-    ['Earned since 20/07/26',fmt2(p.earned)],
-    ['Pending pipeline',fmt2(p.pending)],
-  ];
-  if(p.to_cover>0)rows.push(['Total to cover',fmt2(p.to_cover)]);
-  rows.push(['Current position',fmt2(p.current)]);
-  rows.push(['Projected position',fmt2(p.projected)]);
-  document.getElementById('flagCtx').innerHTML=rows.map(r=>`${r[0]}: <b>${r[1]}</b>`).join('<br>');
-  document.getElementById('flagModal').classList.add('open');
-  document.getElementById('flagName').focus();
+function render(){
+  document.getElementById('badge').textContent =
+    `RESET · ${D.reset} baseline · HubSpot pull ${D.pull} · ad spend to ${D.adspend_to}`;
+  document.getElementById('t0').innerHTML=tab0();
+  document.getElementById('t1').innerHTML=tab1();
+  document.getElementById('t2').innerHTML=tab2();
+  document.getElementById('t3').innerHTML=tab3();
+  document.getElementById('b0').innerHTML=rows0('all');
+  document.querySelectorAll('#f0 button').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('#f0 button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); document.getElementById('b0').innerHTML=rows0(b.dataset.f);});
+  const sel=document.getElementById('who');
+  const all=[D.full,...D.people];
+  const draw=()=>document.getElementById('pane').innerHTML=pane(all[+sel.value]);
+  sel.onchange=draw; draw();
 }
-function closeFlag(){document.getElementById('flagModal').classList.remove('open');}
-function buildFlagMailto(){
-  const p=D.people.find(x=>x.name===selected)||D.people[0];
-  const who=document.getElementById('flagName').value.trim()||'(name not given)';
-  const msg=document.getElementById('flagMsg').value.trim();
-  if(!msg)return null;
-  const L=[];
-  L.push(`Raised by: ${who}`);
-  L.push(`Viewing: ${p.name}`);
-  L.push(`Dashboard as at: ${document.querySelector('.date-badge').textContent.replace(/\s+/g,' ').trim()}`);
-  L.push('');
-  L.push('--- What looks off ---');
-  L.push(msg);
-  L.push('');
-  L.push('--- Figures on screen ---');
-  L.push(`Earned since 20/07/26: ${fmt2(p.earned)}`);
-  L.push(`Pending pipeline: ${fmt2(p.pending)}`);
-  if(p.to_cover>0)L.push(`Total to cover: ${fmt2(p.to_cover)}`);
-  L.push(`Current position: ${fmt2(p.current)}`);
-  L.push(`Projected position: ${fmt2(p.projected)}`);
-  const ds=repDeals(selected);
-  if(ds.length){
-    L.push('');
-    L.push('--- Their pending deals ---');
-    ds.forEach(d=>{
-      const share=selected==="Full Team"?Object.values(d.benef).reduce((a,b)=>a+b,0):(d.benef[selected]!==undefined?d.benef[selected]:0);
-      L.push(`${d.son||'—'}  ${d.name}  [${d.status}]  ${fmt2(share)}`);
-    });
-  }
-  const subj=`Commission query — ${p.name} — raised by ${who}`;
-  let href=`mailto:${FLAG_TO}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(L.join('\n'))}`;
-  if(FLAG_CC)href+=`&cc=${encodeURIComponent(FLAG_CC)}`;
-  return href;
-}
-function sendFlag(){
-  const href=buildFlagMailto();
-  if(!href){document.getElementById('flagMsg').focus();return;}
-  window.location.href=href;
-  closeFlag();
-}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeFlag();});
-
-renderRep();
-renderList();
-</script>
-</body></html>
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); document.getElementById('t'+b.dataset.t).classList.add('on');});
+document.getElementById('dis').onclick=()=>{
+  const s=encodeURIComponent('SSA Commission Tracker — possible discrepancy ('+D.pull+')');
+  const b=encodeURIComponent('Which person / deal:\n\nWhat looks wrong:\n\nWhat you expected:\n\n'+
+    '---\nTracker pull '+D.pull+', reset '+D.reset+' baseline.');
+  window.location.href='mailto:ollie@smartswitchappliances.com.au?subject='+s+'&body='+b;};
+</script></body></html>

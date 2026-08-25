@@ -91,10 +91,10 @@ font-size:12px;padding:11px 14px;border-radius:0 7px 7px 0;margin-bottom:16px}
 padding:5px 11px;border-radius:16px;font:600 11.5px Inter,sans-serif;cursor:pointer}
 .filters button.on{background:var(--teal);border-color:var(--teal);color:#08131f}
 .wrap{overflow-x:auto}
-.dis{position:fixed;right:18px;bottom:18px;background:var(--surface2);border:1px solid var(--border);
-color:var(--text2);padding:10px 15px;border-radius:24px;font:600 12px Inter,sans-serif;
-cursor:pointer;z-index:20}
-.dis:hover{border-color:var(--teal);color:var(--teal)}
+.dis{position:fixed;right:18px;bottom:18px;background:var(--surface2);border:2px solid #FDE047;
+color:#FDE047;padding:10px 15px;border-radius:24px;font:700 12px Inter,sans-serif;
+cursor:pointer;z-index:20;box-shadow:0 0 0 3px rgba(253,224,71,.14)}
+.dis:hover{background:#FDE047;color:#08131f;border-color:#FDE047}
 @media(max-width:640px){.hero{font-size:29px}.bars .row{grid-template-columns:96px 1fr 84px}}
 </style></head><body>
 
@@ -361,5 +361,5 @@ document.getElementById('dis').onclick=()=>{
   const s=encodeURIComponent('SSA Commission Tracker — possible discrepancy ('+D.pull+')');
   const b=encodeURIComponent('Which person / deal:\n\nWhat looks wrong:\n\nWhat you expected:\n\n'+
     '---\nTracker pull '+D.pull+', reset '+D.reset+' baseline.');
-  window.location.href='mailto:ollie@smartswitchappliances.com.au?subject='+s+'&body='+b;};
+  window.location.href='mailto:ollie@ampra.au?cc=scott@ampra.au&subject='+s+'&body='+b;};
 </script></body></html>

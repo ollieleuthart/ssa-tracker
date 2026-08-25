@@ -40,18 +40,20 @@ font:700 19px var(--body);cursor:pointer;box-shadow:var(--shadow)}
 button.go:hover{background:var(--red-deep)}
 #err{color:var(--error);font-size:14px;margin-top:12px;min-height:18px;font-weight:500}
 .gatefoot{color:var(--muted);font-size:14px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
-.pickrow{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
-.pickrow select{flex:0 1 300px}
-#patchslot{flex:1 1 260px;display:flex;justify-content:flex-end;min-width:0}
-#patchslot .patch{width:100%;max-width:420px}
-.patch{display:inline-flex;align-items:center;justify-content:center;background:var(--paper);
-border:var(--keyline) solid var(--burgundy);border-radius:var(--r-full);padding:14px 34px;
-position:relative;box-shadow:var(--shadow)}
-.patch::before{content:"";position:absolute;inset:5px;border:1.5px dashed var(--burgundy);
-border-radius:var(--r-full);opacity:.5}
-.patch b{font:400 clamp(30px,3.4vw,40px)/1.05 var(--script);color:var(--red-deep);
-position:relative;padding:0 2px;font-weight:400;white-space:nowrap;overflow:hidden;
-text-overflow:ellipsis}
+.pickcard{display:flex;align-items:stretch;gap:28px;flex-wrap:wrap}
+.pickleft{flex:0 1 330px;min-width:260px}
+.pickleft select{width:100%;margin-top:4px}
+#patchslot{flex:1 1 320px;display:flex;align-items:center;justify-content:center;min-width:0}
+/* Hold the lens near its drawn proportion - stretched wide it reads as a surfboard. */
+.patch{position:relative;display:flex;align-items:center;justify-content:center;
+width:100%;max-width:560px;aspect-ratio:400/150;flex:none}
+.patchshape{position:absolute;inset:0;width:100%;height:100%;
+filter:drop-shadow(3px 3px 0 rgba(74,21,19,.16))}
+.po{fill:var(--paper);stroke:var(--burgundy);stroke-width:2;vector-effect:non-scaling-stroke}
+.pi{fill:none;stroke:var(--burgundy);stroke-width:1.5;stroke-dasharray:7 5;opacity:.5;
+vector-effect:non-scaling-stroke}
+.patch b{position:relative;z-index:1;font:400 clamp(30px,4.2vw,46px)/1.05 var(--script);
+color:var(--red-deep);font-weight:400;white-space:nowrap;padding:0 8%}
 #app{display:none;max-width:1240px;margin:0 auto;padding:26px 22px 80px}
 header{border-bottom:var(--keyline) solid var(--burgundy);padding:6px 0 20px;margin-bottom:22px;
 display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap}
@@ -159,7 +161,7 @@ border:var(--keyline) solid var(--burgundy)}
 .msend{background:var(--red);color:var(--white);box-shadow:var(--shadow)}
 .msend:hover:not(:disabled){background:var(--red-deep)}
 .msend:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
-@media(max-width:640px){#patchslot{justify-content:flex-start}#patchslot .patch{max-width:none}
+@media(max-width:640px){.patch{max-width:none}
 .hero{font-size:32px}.kpi .val{font-size:25px}
 .bars .row{grid-template-columns:104px 1fr 92px}.brandmark{width:110px}}
 </style></head><body>
@@ -227,6 +229,13 @@ const fmt2=v=>(v<0?'('+'$'+Math.abs(v).toLocaleString('en-AU',{minimumFractionDi
 const sgn=v=>v<0?'neg':'pos';
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
+// Stitched oval - a rugby-ball lens, pointed at both ends. preserveAspectRatio="none"
+// lets it fill any box; non-scaling-stroke keeps the keyline an even 2px regardless.
+const patchHTML=n=>`<div class="patch">
+  <svg class="patchshape" viewBox="0 0 400 150" preserveAspectRatio="none" aria-hidden="true">
+    <path class="po" d="M2 75 C 90 2 310 2 398 75 C 310 148 90 148 2 75 Z"/>
+    <path class="pi" d="M20 75 C 100 20 300 20 380 75 C 300 130 100 130 20 75 Z"/>
+  </svg><b>${esc(n)}</b></div>`;
 const INFO=`<svg class="info" viewBox="0 0 24 24"><title>__T__</title><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-6h2zm0-8h-2V7h2z"/></svg>`;
 const info=t=>INFO.replace('__T__',t);
 function niceStep(max,target){
@@ -299,9 +308,13 @@ function rows0(f){
 /* ---------------- tab 1 : my position ---------------- */
 function tab1(){
   const opts=[D.full,...D.people].map((p,i)=>`<option value="${i}">${esc(p.name)}</option>`).join('');
-  return `<div class="card"><h2>Choose a person</h2>
-    <div class="hint">Full Team shows the combined position.</div>
-    <div class="pickrow"><select id="who">${opts}</select><div id="patchslot"></div></div>
+  return `<div class="card pickcard">
+    <div class="pickleft">
+      <h2>Choose a person</h2>
+      <div class="hint">Full Team shows the combined position.</div>
+      <select id="who">${opts}</select>
+    </div>
+    <div id="patchslot"></div>
     </div><div id="pane"></div>`;
 }
 function pane(p){
@@ -447,8 +460,7 @@ function render(){
     const p=all[+sel.value];
     document.getElementById('pane').innerHTML=pane(p);
     const first=p.name==='Full Team'?null:p.name.split(' ')[0];
-    document.getElementById('patchslot').innerHTML=
-      first?`<div class="patch"><b>${esc(first)}</b></div>`:'';
+    document.getElementById('patchslot').innerHTML=first?patchHTML(first):'';
   };
   sel.onchange=draw; draw();
 }

@@ -307,30 +307,9 @@ function ticks(max){
 
 /* ---------------- tab 0 : pipeline forecast ---------------- */
 function tab0(){
-  const L=D.lifetime;
   const pv=D.pending.reduce((a,b)=>a+b.total,0);
   const pc=D.full.pending, tracked=D.people.map(p=>p.name);
-  let h=`<div class="lifetime">
-    <div class="lifehead">Lifetime<span>Everything sold and still live — cancelled and on-hold deals excluded</span></div>
-    <div class="kpis">
-      <div class="kpi"><div class="lab">Installed ever${info('Total value of every deal marked Installed, cash plus rebate, including GST.')}</div>
-        <div class="val tl">${fmt(L.installed_value)}</div>
-        <div class="sub">${L.installed_deals} deals · ${fmt(L.installed_pre)} before 20/07, ${fmt(L.installed_post)} since</div></div>
-      <div class="kpi"><div class="lab">Sold ever${info('Installed plus everything sold and awaiting install. Cancelled and on-hold deals are excluded.')}</div>
-        <div class="val tl">${fmt(L.sold_value)}</div>
-        <div class="sub">${L.sold_deals} deals · ${fmt(L.pipeline_value)} still to install</div></div>
-      <div class="kpi"><div class="lab">Confirmed net revenue${info('GST-exclusive, after ACP (Formbay) and finance fee adjustments. Only reconciled deals.')}</div>
-        <div class="val pos">${fmt(L.net_revenue)}</div>
-        <div class="sub">${L.reconciled_deals} reconciled deals</div></div>
-      <div class="kpi"><div class="lab">Commission pot${info('10% of confirmed net revenue, before it is split between people.')}</div>
-        <div class="val amb">${fmt(L.pot)}</div>
-        <div class="sub">10% of net revenue, less ${fmt(L.suppressed_value)} on ${L.suppressed_deals} deals with nobody attributed</div></div>
-    </div>
-    <div class="foot" style="margin:0 0 22px">Sold and installed figures are cash plus rebate
-      <strong>including GST</strong>; confirmed net revenue is GST-exclusive and after adjustments,
-      which is why it sits below the installed total. ${L.novalue>0?L.novalue+' live deal'+(L.novalue===1?'':'s')+' carry no value yet, so sold is understated.':''}</div>
-  </div>
-  <div class="kpis">
+  let h=`<div class="kpis">
     <div class="kpi"><div class="lab">Pipeline value${info('Total deal value of everything not yet installed, cash plus rebate.')}</div><div class="val tl">${fmt(pv)}</div>
       <div class="sub">Total deal value not yet installed</div></div>
     <div class="kpi"><div class="lab">Pending commission${info('Commission owed across the five tracked people once pending deals install.')}</div><div class="val pend">${fmt2(pc)}</div>
@@ -580,11 +559,34 @@ function slip(p){
 /* ---------------- tab 3 : historic ---------------- */
 function tab3(){
   const s=D.historic_summary;
-  let h=`<div class="sumbox">
-    <div class="kpi"><div class="lab">Installed value</div><div class="val tl">${fmt(s.total_value)}</div></div>
-    <div class="kpi"><div class="lab">Commission</div><div class="val tl">${fmt2(s.total_commission)}</div></div>
-    <div class="kpi"><div class="lab">Deals logged</div><div class="val">${s.deals}</div></div>
-    <div class="kpi"><div class="lab">Flagged rows</div><div class="val amb">${s.flagged}</div></div></div>
+  const L=D.lifetime;
+  let h=`<div class="lifetime">
+    <div class="lifehead">Lifetime<span>Everything sold and still live — cancelled and on-hold deals excluded</span></div>
+    <div class="kpis">
+      <div class="kpi"><div class="lab">Installed ever${info('Total value of every deal marked Installed, cash plus rebate, including GST.')}</div>
+        <div class="val tl">${fmt(L.installed_value)}</div>
+        <div class="sub">${L.installed_deals} deals · ${fmt(L.installed_pre)} before 20/07, ${fmt(L.installed_post)} since</div></div>
+      <div class="kpi"><div class="lab">Sold ever${info('Installed plus everything sold and awaiting install. Cancelled and on-hold deals are excluded.')}</div>
+        <div class="val tl">${fmt(L.sold_value)}</div>
+        <div class="sub">${L.sold_deals} deals · ${fmt(L.pipeline_value)} still to install</div></div>
+      <div class="kpi"><div class="lab">Confirmed net revenue${info('GST-exclusive, after ACP (Formbay) and finance fee adjustments. Only reconciled deals.')}</div>
+        <div class="val pos">${fmt(L.net_revenue)}</div>
+        <div class="sub">${L.reconciled_deals} reconciled deals</div></div>
+      <div class="kpi"><div class="lab">Commission pot${info('10% of confirmed net revenue, before it is split between people.')}</div>
+        <div class="val amb">${fmt(L.pot)}</div>
+        <div class="sub">10% of net revenue, less ${fmt(L.suppressed_value)} on ${L.suppressed_deals} deals with nobody attributed</div></div>
+    </div>
+    <div class="foot" style="margin:0 0 22px">Sold and installed figures are cash plus rebate
+      <strong>including GST</strong>; confirmed net revenue is GST-exclusive and after adjustments,
+      which is why it sits below the installed total.${L.novalue>0?' '+L.novalue+' live deal'+(L.novalue===1?'':'s')+' carry no value yet, so sold is understated.':''}</div>
+  </div>
+  <div class="sumbox">
+    <div class="kpi"><div class="lab">Commission locked in</div><div class="val tl">${fmt2(s.total_commission)}</div>
+      <div class="sub">Confirmed on ${s.confirmed_deals} of ${s.deals} deals</div></div>
+    <div class="kpi"><div class="lab">Deals logged</div><div class="val">${s.deals}</div>
+      <div class="sub">Every install since 09/25</div></div>
+    <div class="kpi"><div class="lab">Flagged rows</div><div class="val amb">${s.flagged}</div>
+      <div class="sub">Missing value or attribution</div></div></div>
   <div class="est"><strong>Estimate up to ${D.reset}.</strong> Figures before that date are reconstructed
   from HubSpot and contain known inconsistencies — ${s.flagged} rows flagged below have no install date,
   no deal value, or no attribution recorded. Commission shown is <strong>earned/owed on install</strong>,

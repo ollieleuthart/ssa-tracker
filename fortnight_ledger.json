@@ -1,0 +1,198 @@
+{
+ "cycles": [
+  {
+   "date": "26/08/26",
+   "confirmed": {
+    "Denzel Winterbeard": 2656.19,
+    "Hugo": 3559.97,
+    "Joe": 693.11,
+    "Holly": 903.78,
+    "Ollie": 0.0
+   },
+   "pending": {
+    "Denzel Winterbeard": 12191.37,
+    "Hugo": 12648.18,
+    "Joe": 11916.31,
+    "Holly": 2339.63,
+    "Ollie": 6948.7
+   },
+   "deals": {
+    "Denzel Winterbeard": [
+     {
+      "son": "230426.JS02",
+      "deal": "Amanda Bernauer - 20 Inverell Road Warialda NSW 2402",
+      "date": "2026-07-25",
+      "type": "Away",
+      "net_revenue": 26703.23,
+      "pot": 2670.32,
+      "share": 534.06,
+      "estimated": 642.82,
+      "status": "Qualified"
+     },
+     {
+      "son": "240526.JS01",
+      "deal": "Connie Minos - 1349 Bonshaw Road Ashford NSW 2361",
+      "date": "2026-07-24",
+      "type": "Away",
+      "net_revenue": 62379.46,
+      "pot": 6237.95,
+      "share": 693.11,
+      "estimated": 686.13,
+      "status": "Qualified"
+     },
+     {
+      "son": "190626.DWB03",
+      "deal": "Jennifer Baker - 106 Alma Street Wee Waa NSW 2388",
+      "date": "2026-07-23",
+      "type": "Away",
+      "net_revenue": 18104.55,
+      "pot": 1810.45,
+      "share": 362.09,
+      "estimated": 358.85,
+      "status": "Qualified"
+     },
+     {
+      "son": "170626.DWB01",
+      "deal": "Paul & Judy Couley - 92 Boundary Street Wee Waa NSW 2388",
+      "date": "2026-07-23",
+      "type": "Away",
+      "net_revenue": 22046.67,
+      "pot": 2204.67,
+      "share": 440.93,
+      "estimated": 432.05,
+      "status": "Qualified"
+     },
+     {
+      "son": "180526.DWB02",
+      "deal": "Christine & Peter Broderick - 24 Frazer Street Ashford NSW 2361",
+      "date": "2026-07-22",
+      "type": "Away",
+      "net_revenue": 6460.36,
+      "pot": 646.04,
+      "share": 92.29,
+      "estimated": 91.32,
+      "status": "Qualified"
+     },
+     {
+      "son": "190626.DWB01",
+      "deal": "Katie Young - 66 Dangar Street Narrabri NSW 2390",
+      "date": "2026-07-22",
+      "type": "Away",
+      "net_revenue": 26685.41,
+      "pot": 2668.54,
+      "share": 533.71,
+      "estimated": 526.27,
+      "status": "Qualified"
+     }
+    ],
+    "Hugo": [
+     {
+      "son": "230426.JS02",
+      "deal": "Amanda Bernauer - 20 Inverell Road Warialda NSW 2402",
+      "date": "2026-07-25",
+      "type": "Away",
+      "net_revenue": 26703.23,
+      "pot": 2670.32,
+      "share": 534.06,
+      "estimated": 642.82,
+      "status": "Qualified"
+     },
+     {
+      "son": "240526.JS01",
+      "deal": "Connie Minos - 1349 Bonshaw Road Ashford NSW 2361",
+      "date": "2026-07-24",
+      "type": "Away",
+      "net_revenue": 62379.46,
+      "pot": 6237.95,
+      "share": 693.11,
+      "estimated": 686.13,
+      "status": "Qualified"
+     },
+     {
+      "son": "130726.HS01",
+      "deal": "Jane Armitage - 8/18 Gwydir Terrace Bingara NSW 2404",
+      "date": "2026-07-24",
+      "type": "Home",
+      "net_revenue": 18075.73,
+      "pot": 1807.57,
+      "share": 903.78,
+      "estimated": 897.14,
+      "status": "Qualified"
+     },
+     {
+      "son": "190626.DWB03",
+      "deal": "Jennifer Baker - 106 Alma Street Wee Waa NSW 2388",
+      "date": "2026-07-23",
+      "type": "Away",
+      "net_revenue": 18104.55,
+      "pot": 1810.45,
+      "share": 362.09,
+      "estimated": 358.85,
+      "status": "Qualified"
+     },
+     {
+      "son": "170626.DWB01",
+      "deal": "Paul & Judy Couley - 92 Boundary Street Wee Waa NSW 2388",
+      "date": "2026-07-23",
+      "type": "Away",
+      "net_revenue": 22046.67,
+      "pot": 2204.67,
+      "share": 440.93,
+      "estimated": 432.05,
+      "status": "Qualified"
+     },
+     {
+      "son": "180526.DWB02",
+      "deal": "Christine & Peter Broderick - 24 Frazer Street Ashford NSW 2361",
+      "date": "2026-07-22",
+      "type": "Away",
+      "net_revenue": 6460.36,
+      "pot": 646.04,
+      "share": 92.29,
+      "estimated": 91.32,
+      "status": "Qualified"
+     },
+     {
+      "son": "190626.DWB01",
+      "deal": "Katie Young - 66 Dangar Street Narrabri NSW 2390",
+      "date": "2026-07-22",
+      "type": "Away",
+      "net_revenue": 26685.41,
+      "pot": 2668.54,
+      "share": 533.71,
+      "estimated": 526.27,
+      "status": "Qualified"
+     }
+    ],
+    "Joe": [
+     {
+      "son": "240526.JS01",
+      "deal": "Connie Minos - 1349 Bonshaw Road Ashford NSW 2361",
+      "date": "2026-07-24",
+      "type": "Away",
+      "net_revenue": 62379.46,
+      "pot": 6237.95,
+      "share": 693.11,
+      "estimated": 686.13,
+      "status": "Qualified"
+     }
+    ],
+    "Holly": [
+     {
+      "son": "130726.HS01",
+      "deal": "Jane Armitage - 8/18 Gwydir Terrace Bingara NSW 2404",
+      "date": "2026-07-24",
+      "type": "Home",
+      "net_revenue": 18075.73,
+      "pot": 1807.57,
+      "share": 903.78,
+      "estimated": 507.24,
+      "status": "Qualified"
+     }
+    ],
+    "Ollie": []
+   },
+   "approvals": {}
+  }
+ ]
+}

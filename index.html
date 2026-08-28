@@ -95,7 +95,7 @@ color:var(--muted);margin-top:4px}
 .pickcard{display:flex;align-items:stretch;gap:28px;flex-wrap:wrap}
 .pickleft{flex:0 1 330px;min-width:260px}
 .pickleft select{width:100%;margin-top:4px}
-#patchslot{flex:1 1 320px;display:flex;min-width:0}
+#patchslot,#slippatch{flex:1 1 320px;display:flex;min-width:0}
 /* Fills the slot: full width, and height driven by the heading + dropdown column. */
 .patch{position:relative;display:flex;align-items:center;justify-content:center;
 width:100%;height:100%;flex:1 1 auto;min-height:126px}
@@ -492,10 +492,15 @@ function tab2(){
 function tab4(){
   const opts=[{name:'Full Team'},...D.people]
     .map((p,i)=>`<option value="${i}">${esc(p.name)}</option>`).join('');
-  return `<div class="card"><h2>Commission slip</h2>
-    <div class="hint">Reconciled commission for the cycle ending ${D.slip.cycle}.
-      Only deals with every Xero figure confirmed appear here.</div>
-    <select id="slipwho">${opts}</select></div><div id="slippane"></div>`;
+  return `<div class="card pickcard">
+    <div class="pickleft">
+      <h2>Commission slip</h2>
+      <div class="hint">Reconciled commission for the cycle ending ${D.slip.cycle}.
+        Only deals with every Xero figure confirmed appear here.</div>
+      <select id="slipwho">${opts}</select>
+    </div>
+    <div id="slippatch"></div>
+    </div><div id="slippane"></div>`;
 }
 function slip(p){
   const S=D.slip, conf=S.confirmed[p.name]||0, pend=S.pending[p.name]||0;
@@ -669,6 +674,10 @@ function render(){
   const drawSlip=()=>{
     const p=[{name:'Full Team'},...D.people][+ssel.value];
     document.getElementById('slippane').innerHTML=slip(p);
+    // same name badge as My Position, following the dropdown. Full Team gets none —
+    // there is no first name, and the device is about a person.
+    const sfirst=p.name==='Full Team'?null:p.name.split(' ')[0];
+    document.getElementById('slippatch').innerHTML=sfirst?patchHTML(sfirst):'';
     document.querySelectorAll('.sliptabs button').forEach(b=>b.onclick=()=>{
       document.querySelectorAll('.sliptabs button').forEach(x=>x.classList.remove('on'));
       document.querySelectorAll('.slippane').forEach(x=>x.classList.remove('on'));
@@ -700,6 +709,10 @@ function ctxNow(){
   const drawSlip=()=>{
     const p=[{name:'Full Team'},...D.people][+ssel.value];
     document.getElementById('slippane').innerHTML=slip(p);
+    // same name badge as My Position, following the dropdown. Full Team gets none —
+    // there is no first name, and the device is about a person.
+    const sfirst=p.name==='Full Team'?null:p.name.split(' ')[0];
+    document.getElementById('slippatch').innerHTML=sfirst?patchHTML(sfirst):'';
     document.querySelectorAll('.sliptabs button').forEach(b=>b.onclick=()=>{
       document.querySelectorAll('.sliptabs button').forEach(x=>x.classList.remove('on'));
       document.querySelectorAll('.slippane').forEach(x=>x.classList.remove('on'));

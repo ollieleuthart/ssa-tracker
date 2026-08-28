@@ -574,7 +574,7 @@ function tab3(){
         <div class="sub">${L.reconciled_deals} reconciled deals</div></div>
       <div class="kpi"><div class="lab">Commission pot${info('10% of confirmed net revenue, before it is split between people.')}</div>
         <div class="val amb">${fmt(L.pot)}</div>
-        <div class="sub">Sum of Commission Payable. ${fmt(L.suppressed_value)} suppressed on ${L.suppressed_deals} deals with nobody attributed${L.deviating_deals?', and '+L.deviating_deals+' deals carry a manual override ('+fmt(L.deviation)+')':''}</div></div>
+        <div class="sub">Sum of Commission Payable. ${fmt(L.suppressed_value)} suppressed on ${L.suppressed_deals} deals with nobody attributed${L.deviating_deals?', and '+L.deviating_deals+' carry an override approved by Joe ('+fmt(L.deviation)+')':''}</div></div>
     </div>
     <div class="foot" style="margin:0 0 22px">Sold and installed figures are cash plus rebate
       <strong>including GST</strong>; confirmed net revenue is GST-exclusive and after adjustments,

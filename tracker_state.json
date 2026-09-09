@@ -1,9 +1,9 @@
 {
  "schema_version": 1,
  "generated": "09/09/26",
- "generated_by": "ssa-tracker-update run 09/09/26. AMENDED 09/09/26 post-run from a local Windows desktop session (no git, no python, no node - build steps could not run there, so NO FIGURE WAS RECOMPUTED OR CHANGED by the amendment). The amendment corrected two stale statements about publication, recorded the confirmed publish, recorded a dashboard layout change, and noted the FX literal fix in the build. Every position, checksum, ledger row, retainer draw, override and count below is exactly as the 09/09/26 run wrote it.",
+ "generated_by": "ssa-tracker-update, SECOND run on 09/09/26 (afternoon), from a local Windows desktop session. The machine had no python, node or git; Python 3.12.10, Git 2.55.0.3 and openpyxl were installed with the user's explicit approval, so the full build DID run here - engine.py applied the rules, both deliverables were rebuilt and validated. Node was NOT installed, so Playwright and recalc.py could not run; see provenance for what replaced them.",
  "reset": "20/07/26",
- "provenance": "Cache from 04/09 loaded and PASSED every internal check (ad-spend checksums, per-person retainer sums, every position identity). The 'positions must match deployed D.people' check failed for the documented reason - the deployed build is still pull 28/08/26 because neither 04/09 run could publish - and D.pull was read directly from the live file to confirm that, so the cache was kept. This being the 4th run, the ad-spend ledger was ALSO rebuilt from source independently (full Gmail sweep from 20/07, 26 distinct receipts after discarding 15 duplicates) and reproduced the cached figures to the cent. All 105 deals re-pulled fresh from HubSpot; deal data is never cached. PUBLISHED - the 09/09/26 build IS live and this file matches it. Confirmed post-run by fetching https://ollieleuthart.github.io/ssa-tracker/ and raw main: both return HTTP 200 at D.pull 09/09/26, byte-identical at 184,621 bytes, and D.people matches positions below to the cent for all five people. The run itself could not push and wrote 'NOT PUBLISHED'; the files reached the repo afterwards by another route (manual upload is the documented Step 7 fallback). All four Step 0 integrity checks were re-run against this file post-amendment and PASS, including the positions vs D.people check that the run had to waive.",
+ "provenance": "Cache from the 09/09 morning run loaded and PASSED all four Step 0 integrity checks, INCLUDING positions vs deployed D.people, which that run had to waive - its files reached the repo afterwards (commits 76d4ea6, b30e980, 172b2fa, dda056c) so state and build now agree. All 107 deals re-pulled fresh from HubSpot; deal data is never cached. THE WHOLE-BUILD DIFF WAS RUN: the pipeline was recomputed from source through engine.py and reproduced all 24 deployed pending rows EXACTLY - every field, including per, allper, type, way, flags - with zero mismatches and zero dropped rows, before anything was changed. Earned reproduced 9/9. Only then were the two new deals added. Everything not recomputed (the 75-row Installed Deals Log, Reconciliation, slip deal rows) was carried over verbatim from the deployed build, because no gate flipped and no Commission Payable moved on any of the 105 pre-existing deals. VALIDATION: Playwright was unavailable (no node), so the built page was served over localhost and driven in a real browser instead - gate cleared with AMP2026, all five tabs opened, both dropdowns cycled through all six options each, zero console errors, and all five heroes plus Full Team read back to the cent. recalc.py was unavailable (no LibreOffice), so every workbook formula was evaluated by hand against the cells it references, all SUM ranges were proved to span exactly the data rows, and the workbook was cross-checked against the HTML to the cent. The Retainer CHECK cell evaluates to 0.00. NOTE the residual gap: no figure here has been through Excel's own calculation engine.",
  "adspend": {
   "through": "03/09/26",
   "au_account": "885732170587122",
@@ -150,12 +150,12 @@
   ],
   "total_aud": 3706.36,
   "fx_setting": {
-   "nzd_aud": 0.8116,
+   "nzd_aud": 0.8111,
    "checked": "09/09/26",
-   "sources": "VERIFIED this run, resolving a two-run gap. Xe 0.81093604 timestamped 08/09/26 17:01 UTC; Wise 0.8123 (no timestamp). Mid of the two.",
+   "sources": "Xe 0.81106482 timestamped 09/09/26 02:30 UTC; Wise 0.8111 (no timestamp). Mid of the two. Both sources have converged since the morning run, which recorded 0.8116 from Xe 0.81093604 and Wise 0.8123.",
    "applies_to": "new NZ spend only; there was none this run, so no figure depends on it"
   },
-  "note": "Rebuilt from source this run and matched the cache exactly: 25 AU receipts, gross $3,598.22, $143.89 recruitment excluded, $3,454.33 chargeable; 1 NZ receipt NZ$302.56. No new receipts since 03/09/26. SIX days with no AU receipt as at 09/09 against a ~2-day recent cadence - either spend paused or receipts stopped arriving. Next run searches after 03/09/26 only, but check that gap first.",
+  "note": "Unchanged from the morning run: 25 AU receipts, gross $3,598.22, $143.89 recruitment excluded, $3,454.33 chargeable; 1 NZ receipt NZ$302.56. Re-verified from source this run - a subject-filtered search after 03/09/26 and a BROADER control search on the whole sender since 01/09 both return only the 01/09 and 03/09 receipts, which are already ledgered. The AU gap therefore stands at SIX days against a ~2-day cadence, and it is now more suspicious, not less: an 'Your ad was approved' notice arrived 02/09, so campaigns were live. Next run still searches after 03/09/26, but ask Holly about the gap first.",
   "excluded_campaigns": [
    "Ampra Job (recruitment - not lead gen)",
    "Axis Social (not Meta)"
@@ -273,8 +273,8 @@
    "drawn": 10000.0,
    "earned": 765.53,
    "current": -14023.53,
-   "pending": 19521.24,
-   "projected": 5497.71,
+   "pending": 20428.19,
+   "projected": 6404.66,
    "to_cover": 14789.06
   },
   "Hugo": {
@@ -284,8 +284,8 @@
    "drawn": 3250.0,
    "earned": 3715.37,
    "current": -7265.04,
-   "pending": 9507.65,
-   "projected": 2242.61,
+   "pending": 10414.6,
+   "projected": 3149.56,
    "to_cover": 10980.41
   },
   "Joe": {
@@ -295,8 +295,8 @@
    "drawn": 0.0,
    "earned": 693.11,
    "current": 693.11,
-   "pending": 12949.77,
-   "projected": 13642.88,
+   "pending": 13848.18,
+   "projected": 14541.29,
    "to_cover": 0.0
   },
   "Holly": {
@@ -329,19 +329,19 @@
   "drawn": 19206.36,
   "earned": 6077.79,
   "current": -25648.04,
-  "pending": 50398.06,
-  "projected": 24750.02,
+  "pending": 53110.37,
+  "projected": 27462.33,
   "to_cover": 31725.83
  },
  "counts": {
   "historic": 75,
-  "pending": 24,
+  "pending": 26,
   "issues": 6,
   "onhold": 7,
   "earned_deals": 9,
   "suppressed": 2,
   "novalue": 1,
-  "deals_pulled": 105
+  "deals_pulled": 107
  },
  "checksums": {
   "adspend_rows_sum": 3706.36,
@@ -350,14 +350,16 @@
   "holly_retainer": 2250.0
  },
  "definition_changes_this_run": [
-  "lead_gen VALUE CORRUPTION was being missed. The API returns internal values, not labels: lead_gen 'Simon' is really FRAN and 'No comms' is really DERMOT ('Customer' is a genuine no-lead-gen marker and maps to blank). engine.NAME_MAP does not implement this - it maps 'No comms' to blank, which is right for specialist and wrong for lead_gen. A lead_gen_list() wrapper now applies the label fix before NAME_MAP. Verified two ways: the reference doc, and reverse-engineering every lead_gen list in the deployed build against the raw values (12 'Simon' and 8 'No comms' occurrences, all consistent). Unfixed it changed away-trip headcounts and moved Denzel by $80.86, Hugo by $80.87 and Joe by $69.32 on Earned alone.",
-  "Deals whose lead gen is recorded as 'Customer' now flag as 'Customer referral - no lead gen half' rather than 'Unfilled role'. It is a deliberate marker (the deal sheet tells staff to use it), not missing attribution, and it should not be chased. No figure changes.",
-  "Added Shared SON, possible-duplicate-record and rebate-implausibly-small checks to the data-quality pass.",
-  "Shell edits, all minimal and deliberate: (1) slip renders Adjustment rows and excludes them from the confirmed-deal count; (2) the Commission Pot copy no longer says suppressed deals have 'nobody attributed' (the cause is a blank Commission Payable) nor that every deviation 'carries an override approved by Joe'; (3) the pipeline no-value KPI now reads from lifetime.novalue so it stops contradicting the footnote below it; (4) 'Flagged rows' sub-label no longer says 'Missing value or attribution'.",
-  "AMENDED 09/09/26 POST-RUN, at Ollie's request - MY POSITION HERO IS NOW PROJECTED, NOT CURRENT. In pane(), the big figure and its sign colour changed from p.current to p.projected; a .herolab label ('Projected') and a .herostat line carrying the AMPRA OWES / TO EARN BACK dot were added above and below it; and the now-redundant fourth 'Projected' KPI card was removed, leaving exactly three below the hero in this order: Total to cover, Earned since, Pending. Two CSS rules (.herolab, .herostat) were added beside .herosub. Applies to all five people AND Full Team, since one pane() drives them all. NO FIGURE CHANGED - only which existing figure is displayed largest. Current position is NOT lost: it remains a full column on the Team List tab, and the hero tooltip now points there. NOTE FOR WHOEVER RENDERS NEXT: re-inject into the DEPLOYED shell as always and this carries forward automatically; do not reinstate the fourth KPI. Also be aware the tab now reads far more positively - four of five people show green on Projected where three showed red on Current, because Projected counts commission on deals that have not installed yet.",
-  "AMENDED 09/09/26 POST-RUN - FX literal in the build corrected from 0.8171 to 0.8116, so the deployed D.nzd_aud and this file's adspend.fx_setting.nzd_aud now agree. 0.8116 is the correct mid of the two recorded sources (Xe 0.81093604 timestamped 08/09/26 17:01 UTC, Wise 0.8123); 0.8171 followed from neither and looks like transposed digits. It applies to NEW NZ spend only and there has been none since 17/08/26, so NO figure moved - verified by re-rendering and diffing every person's hero and all three KPIs before and after. The locked 17/08/26 NZ row (NZ$302.56 at 0.8330 = A$252.03) was NOT re-converted, per the standing rule, and Holly's ad spend stands at $3,706.36."
+  "NONE. No rule changed this run. The lead_gen value-corruption wrapper, the finance gates, the away/home split, the flat-deal override and the -$2,500 Denzel adjustment were all carried forward exactly as the morning run left them, and the pipeline recompute reproducing all 24 deployed rows field-for-field is the evidence that nothing drifted.",
+  "The shell was NOT edited. index.html was rebuilt by re-injecting fresh JSON into the deployed shell; the Projected-hero amendment, the two CSS rules and the AMP2026 gate hash were all verified present in the output."
  ],
  "open_items": [
+  "NEW DEAL, ATTRIBUTION MISSING - Malcolm Nicholson 040929.JS02 ($19,765, created 09/09/26) has a specialist (Joe) and NO lead gen, so $898.41 of a $1,796.82 pot is unallocated. Chase before it installs.",
+  "MALFORMED SON - 040929.JS02. The convention is ddmmyy; '040929' is not a valid date and is most likely meant to be 040926.JS02. Fix at source.",
+  "POSSIBLE NZ DEAL CODED AUD - Malcolm Nicholson is at Te Awamutu, Waikato (New Zealand) but deal_currency_code is AUD, as it is on all 107 deals. If this is genuinely a NZ sale the pot may need converting. Confirm before it installs.",
+  "SON FORMAT INCONSISTENCY - Linda Miller is 080926.DWB003, three digits where the convention is DWB01/DWB02.",
+  "Linda Miller 080926.DWB003 was created 03/09/26 but did not appear in the morning run's 105-deal pull; she was modified 09/09 01:57. The likely cause is installation_status only being set to Upcoming today. INFERRED, not verified - field history was not available from this session.",
+  "Brett Watson's DEAL NAME carries a trailing space (the SON whitespace issue already tracked, but on the name field).",
   "DECISION NEEDED - finance halved Commission Payable to exactly 5% of net revenue on the three installed deals whose lead gen is 'Customer' (Brenda Walker 1815.75->907.88, John Tooler 2793.16->1396.58, Allan Marks 2141.89->1070.95). This build still splits that restated pot in half by role, leaving a half unallocated. If finance instead meant the specialist to take the whole restated amount: Denzel's EARNED +$453.94 (Brenda Walker, the only post-reset one), and on Ian Potter 100826.JS01 Hugo and Denzel each +$698.57 of PENDING. Allan Marks (+$535.48 Joe) and John Tooler (+$698.29 Joe) are pre-reset, log only. SHIPPED AS THE RULE STANDS. Do not change without Ollie's answer.",
   "PUBLISHING - not an open blocker any more, RETAINED AS DURABLE GUIDANCE because the cause is unchanged and will recur on any unattached cloud/Cowork run. The 09/09/26 build did reach the repo and is live (see provenance). What follows is the diagnosis of why the RUN ITSELF could not push, established 09/09/26, and it is NOT what the 04/09 state said. A credential-injecting GIT PROXY sits in front of both github.com (git) and api.github.com (API), inside the CONNECT tunnel (TLS is re-terminated at the agent proxy, whose CA the session trusts). It DISCARDS any credential you supply and injects its own: a Claude Code GitHub App user-to-server token authenticated AS ollieleuthart (proved - api.github.com/user returns his account id 295091854, X-Oauth-Client-Id Iv23liqTIFEtdIu6Vn1r, 15000/hr). It then serves that credential ONLY for repos in 'this session's authorized repository set'. THAT SET IS EMPTY - anthropics/claude-code, octocat/Hello-World and torvalds/linux all 403 with the identical message, so ssa-tracker is not specifically excluded; NOTHING is attached. The git path says it outright: 'access denied by the git proxy: ollieleuthart/ssa-tracker is not in this session's authorized repository set, so the proxy will not inject a credential for it. To fix, add the repository to the session's sources.' CONSEQUENCES FOR FUTURE RUNS: (1) NEVER ask Ollie for a PAT - the proxy discards it, it cannot even be tested here, and the injected identity is already his. (2) 'Retry in a fresh session' only helps if that session has the repo ATTACHED AS A SOURCE at creation; a fresh session with nothing attached fails identically. (3) It is not an egress-policy block - the agent proxy's recentRelayFailures shows ZERO github entries (only google hosts from the Playwright run), the CONNECT succeeds, and the 403 body carries no Server or X-GitHub-Request-Id header, unlike the genuine 200 from /user. WHY IT STARTED: pushing worked continuously from 19/06/26 to 01/09/26 13:33 AEST (commit 3cec7b2, the current HEAD, which is byte-identical to the deployed index.html). Every commit in the repo's history is authored AND committed as 'ssa <ollie@smart-switchappliances.com>' in near-simultaneous pairs one second apart - the signature of the Contents API method with an explicit committer, using Ollie's own PAT. That is NOT the GitHub App identity, so before 01/09 api.github.com was an ordinary host and his PAT reached GitHub. The proxy interception appeared between 01/09 and 04/09. Nothing about the repo, the token or the tracker changed - the session type did. TWO CORRECTIONS ADDED 09/09/26 POST-RUN: (a) the line above calling commit 3cec7b2 'the current HEAD, byte-identical to the deployed index.html' was true at pull 28/08 and is now STALE - HEAD has moved and the deployed build is pull 09/09/26. (b) A SECOND, DIFFERENT failure mode exists and must not be confused with this one: a LOCAL DESKTOP session (Windows, this machine) has no git, no python and no node installed at all, so it cannot clone, compute, build the xlsx or push, and the proxy diagnosis above is untested and irrelevant there. Distinguish them by the symptom - proxy = a 403 with an 'authorized repository set' message; local desktop = 'git' is not recognised as a command. In the local case the fix is not attaching a repo, it is running from a repo-scoped cloud session, or hand-delivering the built files for manual upload.",
   "Terry Moore 070426.DWB01 Commission Payable moved 240.29 -> 1370.15 between 04/09 and 09/09, landing on exactly 5% of net revenue. Pre-reset, so Earned is untouched and the -$2,500 adjustment still stands without double counting - but nobody has explained the movement.",
@@ -375,18 +377,19 @@
   "The deal-sheet worklist is still stamped 'HubSpot pull 26/08/26' and several of its rows are now stale (Ken Anderson SON, John Haig SON, McKechnie 3 value, Mick Dunn rebate all fixed). Worth regenerating."
  ],
  "closed_this_run": [
-  "FX rate verified after two failed runs: Xe 0.81093604 (timestamped 08/09/26 17:01 UTC) and Wise 0.8123, mid 0.8116 recorded in Settings.",
-  "Ken Anderson SON reformatted 14082026.DWB01 -> 140826.DWB02 (deal sheet item K, 'Hannah fixed').",
-  "John Haig SON reassigned to 060526.JS01, clearing the shared-SON clash with Craig Robinson (item A).",
-  "Charmaine Potter / Rosemary Arnold 2 shared SON 130826.JS01 resolved - Rosemary Arnold 2 is now 130826.JS02 (item A).",
-  "Mick Dunn rebate corrected from $17.00 to $17,507.00 - item G no longer fires.",
-  "Nicole McKechnie 3 - POLE now carries $40,000, so no-value is down to one deal (Brett Watson).",
-  "Jenny Real 140526.DWB01 and Brenda Walker 250626.DWB01 are now gated and in the Installed Deals Log (item L, 'on next refresh' - delivered).",
-  "The two dashboard copy defects left open on 04/09 are fixed.",
-  "Ad-spend ledger independently rebuilt from source and reproduced to the cent - no drift after 4 runs of caching.",
-  "CLOSED 09/09/26 POST-RUN - 'NOT PUBLISHED' is resolved. GitHub Pages and raw main both return HTTP 200 at D.pull 09/09/26, byte-identical at 184,621 bytes, and D.people matches positions here to the cent for all five. The Step 0 'positions must match deployed D.people' check, which the run had to waive, now passes outright.",
-  "CLOSED 09/09/26 POST-RUN - the build-vs-state FX disagreement (deployed 0.8171 against state 0.8116) is fixed in the build. No figure depended on it.",
-  "RE-VERIFIED 09/09/26 POST-RUN - no new Meta spend. No AU receipt after 03/09/26 (the 03/09 receipt, transaction 28435433049480538-28678106231879888, AU$149.00, is already in the ledger) and no NZ receipt after 17/08/26. The six-day AU gap against a ~2-day cadence therefore STANDS and is still unexplained - it is a live question for Holly, not a closed item. Next run still searches after 03/09/26.",
-  "CONFIRMED 09/09/26 POST-RUN - no retainer draw was due. Denzel 17/09 and Holly 18/09 both fall the following week, so nothing was added and nothing needed asking. BOTH still fall due next run."
- ]
+  "FX refreshed and the two sources have converged: Xe 0.81106482 (timestamped 09/09/26 02:30 UTC) and Wise 0.8111, mid 0.8111, replacing 0.8116. No figure depends on it - there has been no NZ spend since 17/08/26 and the locked row was not re-converted.",
+  "The morning run's 'positions must match deployed D.people' waiver is fully closed - the check passed outright at the start of this run.",
+  "The stale byte count in the previous provenance (184,621) is corrected. That figure was taken before the 12:10 amendment commit dda056c; the pre-refresh deployed file was 184,884 bytes (LF). Benign, but it read as tampering."
+ ],
+ "durable_notes": {
+  "note": "Guidance from earlier runs that must survive. Runs REPLACE definition_changes_this_run, so anything aimed at future runs is moved here instead of being lost. Carried forward 09/09/26 (pm) from the 09/09/26 (am) run, which had recorded it under definition_changes_this_run.",
+  "from_09Sep26_am": [
+   "lead_gen VALUE CORRUPTION was being missed. The API returns internal values, not labels: lead_gen 'Simon' is really FRAN and 'No comms' is really DERMOT ('Customer' is a genuine no-lead-gen marker and maps to blank). engine.NAME_MAP does not implement this - it maps 'No comms' to blank, which is right for specialist and wrong for lead_gen. A lead_gen_list() wrapper now applies the label fix before NAME_MAP. Verified two ways: the reference doc, and reverse-engineering every lead_gen list in the deployed build against the raw values (12 'Simon' and 8 'No comms' occurrences, all consistent). Unfixed it changed away-trip headcounts and moved Denzel by $80.86, Hugo by $80.87 and Joe by $69.32 on Earned alone.",
+   "Deals whose lead gen is recorded as 'Customer' now flag as 'Customer referral - no lead gen half' rather than 'Unfilled role'. It is a deliberate marker (the deal sheet tells staff to use it), not missing attribution, and it should not be chased. No figure changes.",
+   "Added Shared SON, possible-duplicate-record and rebate-implausibly-small checks to the data-quality pass.",
+   "Shell edits, all minimal and deliberate: (1) slip renders Adjustment rows and excludes them from the confirmed-deal count; (2) the Commission Pot copy no longer says suppressed deals have 'nobody attributed' (the cause is a blank Commission Payable) nor that every deviation 'carries an override approved by Joe'; (3) the pipeline no-value KPI now reads from lifetime.novalue so it stops contradicting the footnote below it; (4) 'Flagged rows' sub-label no longer says 'Missing value or attribution'.",
+   "AMENDED 09/09/26 POST-RUN, at Ollie's request - MY POSITION HERO IS NOW PROJECTED, NOT CURRENT. In pane(), the big figure and its sign colour changed from p.current to p.projected; a .herolab label ('Projected') and a .herostat line carrying the AMPRA OWES / TO EARN BACK dot were added above and below it; and the now-redundant fourth 'Projected' KPI card was removed, leaving exactly three below the hero in this order: Total to cover, Earned since, Pending. Two CSS rules (.herolab, .herostat) were added beside .herosub. Applies to all five people AND Full Team, since one pane() drives them all. NO FIGURE CHANGED - only which existing figure is displayed largest. Current position is NOT lost: it remains a full column on the Team List tab, and the hero tooltip now points there. NOTE FOR WHOEVER RENDERS NEXT: re-inject into the DEPLOYED shell as always and this carries forward automatically; do not reinstate the fourth KPI. Also be aware the tab now reads far more positively - four of five people show green on Projected where three showed red on Current, because Projected counts commission on deals that have not installed yet.",
+   "AMENDED 09/09/26 POST-RUN - FX literal in the build corrected from 0.8171 to 0.8116, so the deployed D.nzd_aud and this file's adspend.fx_setting.nzd_aud now agree. 0.8116 is the correct mid of the two recorded sources (Xe 0.81093604 timestamped 08/09/26 17:01 UTC, Wise 0.8123); 0.8171 followed from neither and looks like transposed digits. It applies to NEW NZ spend only and there has been none since 17/08/26, so NO figure moved - verified by re-rendering and diffing every person's hero and all three KPIs before and after. The locked 17/08/26 NZ row (NZ$302.56 at 0.8330 = A$252.03) was NOT re-converted, per the standing rule, and Holly's ad spend stands at $3,706.36."
+  ]
+ }
 }

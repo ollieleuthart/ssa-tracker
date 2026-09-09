@@ -106,3 +106,51 @@ The customer-referral decision (worth $453.94 of Denzel's Earned and $698.57
 each to Hugo and Denzel in Pending) is untouched and still needs Ollie's call.
 Both suppressed deals, the seven gate-held installs, and the McKechnie
 rebate-equals-cash pair all stand as recorded.
+
+---
+
+## Amendment, same session — two Meta receipts recovered
+
+Ollie reported more receipts in his inbox. A full sweep using `in:anywhere`
+(which the previous queries did **not** use) found **two AU receipts that no
+earlier run had seen**:
+
+| Receipt | Gross | Ampra Job (recruitment) | Chargeable |
+|---|---:|---:|---:|
+| 21/08/26 | $149.00 | −$21.06 | **$127.94** |
+| 23/08/26 | $149.00 | −$32.41 | **$116.59** |
+
+Campaign lines sum to exactly $149.00 on both. They fall precisely in the
+ledger's unexplained 20/08 → 25/08 cadence gap — that gap was the fingerprint
+of the miss.
+
+**This is not a dedupe judgement call.** The sweep finds 43 messages / 28
+distinct transactions = 15 duplicates. The morning run recorded 26 distinct
+after discarding 15 duplicates. Identical duplicate count, exactly two more
+distinct: the two messages were invisible to the earlier query. Gmail excludes
+spam and trash unless `in:anywhere` is used.
+
+### Effect — Holly only
+
+| | was | now |
+|---|---:|---:|
+| Ad spend | 3,706.36 | **3,950.89** |
+| Retainer + ad spend | 5,956.36 | **6,200.89** |
+| Current | −5,052.58 | **−5,297.11** |
+| Projected | −2,509.12 | **−2,753.65** |
+
+Full Team current −25,648.04 → **−25,892.57**; projected 27,462.33 →
+**27,217.80**. Earned, Pending and every other person are untouched. Ad spend
+reduces Holly once, in the Retainer Log, and her commission line stays gross.
+
+Revalidated end to end: workbook CHECK cell = 0.00, TOTAL DRAWN $19,450.89 =
+Dashboard D10, all tabs driven in a browser with zero console errors.
+
+### The lesson for the skill
+
+The morning run's independent rebuild "reproduced the cache to the cent" and
+that was **false confidence** — cache and rebuild shared one blind spot,
+because a reproduction is only ever as good as its source query. Every future
+Gmail sweep must use `in:anywhere`. Worth also asking why those two receipts
+were filed differently; if a filter or spam rule is catching Meta receipts,
+more will go missing.

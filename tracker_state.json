@@ -1,16 +1,16 @@
 {
  "schema_version": 1,
  "generated": "09/09/26",
- "generated_by": "ssa-tracker-update, SECOND run on 09/09/26 (afternoon), from a local Windows desktop session. The machine had no python, node or git; Python 3.12.10, Git 2.55.0.3 and openpyxl were installed with the user's explicit approval, so the full build DID run here - engine.py applied the rules, both deliverables were rebuilt and validated. Node was NOT installed, so Playwright and recalc.py could not run; see provenance for what replaced them.",
+ "generated_by": "ssa-tracker-update, SECOND run on 09/09/26 (afternoon), from a local Windows desktop session. The machine had no python, node or git; Python 3.12.10, Git 2.55.0.3 and openpyxl were installed with the user's explicit approval, so the full build DID run here - engine.py applied the rules, both deliverables were rebuilt and validated. Node was NOT installed, so Playwright and recalc.py could not run; see provenance for what replaced them. AMENDED same session after Ollie reported more Meta receipts in his inbox: TWO AU receipts (21/08 and 23/08) were recovered that no previous sweep had seen. Holly's position moved; nobody else's did.",
  "reset": "20/07/26",
- "provenance": "Cache from the 09/09 morning run loaded and PASSED all four Step 0 integrity checks, INCLUDING positions vs deployed D.people, which that run had to waive - its files reached the repo afterwards (commits 76d4ea6, b30e980, 172b2fa, dda056c) so state and build now agree. All 107 deals re-pulled fresh from HubSpot; deal data is never cached. THE WHOLE-BUILD DIFF WAS RUN: the pipeline was recomputed from source through engine.py and reproduced all 24 deployed pending rows EXACTLY - every field, including per, allper, type, way, flags - with zero mismatches and zero dropped rows, before anything was changed. Earned reproduced 9/9. Only then were the two new deals added. Everything not recomputed (the 75-row Installed Deals Log, Reconciliation, slip deal rows) was carried over verbatim from the deployed build, because no gate flipped and no Commission Payable moved on any of the 105 pre-existing deals. VALIDATION: Playwright was unavailable (no node), so the built page was served over localhost and driven in a real browser instead - gate cleared with AMP2026, all five tabs opened, both dropdowns cycled through all six options each, zero console errors, and all five heroes plus Full Team read back to the cent. recalc.py was unavailable (no LibreOffice), so every workbook formula was evaluated by hand against the cells it references, all SUM ranges were proved to span exactly the data rows, and the workbook was cross-checked against the HTML to the cent. The Retainer CHECK cell evaluates to 0.00. NOTE the residual gap: no figure here has been through Excel's own calculation engine.",
+ "provenance": "Cache from the 09/09 morning run loaded and PASSED all four Step 0 integrity checks, INCLUDING positions vs deployed D.people, which that run had to waive - its files reached the repo afterwards (commits 76d4ea6, b30e980, 172b2fa, dda056c) so state and build now agree. All 107 deals re-pulled fresh from HubSpot; deal data is never cached. THE WHOLE-BUILD DIFF WAS RUN: the pipeline was recomputed from source through engine.py and reproduced all 24 deployed pending rows EXACTLY - every field, including per, allper, type, way, flags - with zero mismatches and zero dropped rows, before anything was changed. Earned reproduced 9/9. Only then were the two new deals added. Everything not recomputed (the 75-row Installed Deals Log, Reconciliation, slip deal rows) was carried over verbatim from the deployed build, because no gate flipped and no Commission Payable moved on any of the 105 pre-existing deals. VALIDATION: Playwright was unavailable (no node), so the built page was served over localhost and driven in a real browser instead - gate cleared with AMP2026, all five tabs opened, both dropdowns cycled through all six options each, zero console errors, and all five heroes plus Full Team read back to the cent. recalc.py was unavailable (no LibreOffice), so every workbook formula was evaluated by hand against the cells it references, all SUM ranges were proved to span exactly the data rows, and the workbook was cross-checked against the HTML to the cent. The Retainer CHECK cell evaluates to 0.00. NOTE the residual gap: no figure here has been through Excel's own calculation engine. AD-SPEND RECOVERY: a full sweep with in:anywhere from 20/07 found 43 receipt messages / 28 distinct transactions (27 AU + 1 NZ). The morning run recorded 26 distinct after discarding 15 duplicates; this sweep also finds exactly 15 duplicates but two more distinct transactions, which PROVES the two extra messages were invisible to the earlier query rather than dropped by a dedupe judgement. Gmail excludes spam and trash unless in:anywhere is used, which is the most likely cause. Both bodies were read; campaign lines sum to $149.00 exactly on each.",
  "adspend": {
   "through": "03/09/26",
   "au_account": "885732170587122",
-  "au_receipts_counted": 25,
-  "au_gross": 3598.22,
-  "au_recruitment_excluded": 143.89,
-  "au_chargeable": 3454.33,
+  "au_receipts_counted": 27,
+  "au_gross": 3896.22,
+  "au_recruitment_excluded": 197.36,
+  "au_chargeable": 3698.86,
   "au_rows": [
    {
     "date": "03/09/26",
@@ -46,6 +46,16 @@
     "date": "25/08/26",
     "chargeable": 106.44,
     "note": "gross $149.00 less $42.56 Ampra Job"
+   },
+   {
+    "date": "23/08/26",
+    "chargeable": 116.59,
+    "note": "gross $149.00 less $32.41 Ampra Job; RECOVERED 09/09/26 pm - not visible to earlier Gmail sweeps (txn 28862122156811622-28430121370011713)"
+   },
+   {
+    "date": "21/08/26",
+    "chargeable": 127.94,
+    "note": "gross $149.00 less $21.06 Ampra Job; RECOVERED 09/09/26 pm - not visible to earlier Gmail sweeps (txn 28334803976210116-28408777768812740)"
    },
    {
     "date": "20/08/26",
@@ -148,14 +158,14 @@
     "locked": true
    }
   ],
-  "total_aud": 3706.36,
+  "total_aud": 3950.89,
   "fx_setting": {
    "nzd_aud": 0.8111,
    "checked": "09/09/26",
    "sources": "Xe 0.81106482 timestamped 09/09/26 02:30 UTC; Wise 0.8111 (no timestamp). Mid of the two. Both sources have converged since the morning run, which recorded 0.8116 from Xe 0.81093604 and Wise 0.8123.",
    "applies_to": "new NZ spend only; there was none this run, so no figure depends on it"
   },
-  "note": "Unchanged from the morning run: 25 AU receipts, gross $3,598.22, $143.89 recruitment excluded, $3,454.33 chargeable; 1 NZ receipt NZ$302.56. Re-verified from source this run - a subject-filtered search after 03/09/26 and a BROADER control search on the whole sender since 01/09 both return only the 01/09 and 03/09 receipts, which are already ledgered. The AU gap therefore stands at SIX days against a ~2-day cadence, and it is now more suspicious, not less: an 'Your ad was approved' notice arrived 02/09, so campaigns were live. Next run still searches after 03/09/26, but ask Holly about the gap first.",
+  "note": "REBUILT 09/09/26 pm after two receipts were recovered. 27 AU receipts, gross $3,896.22, $197.36 recruitment excluded, $3,698.86 chargeable; 1 NZ receipt NZ$302.56 = A$252.03 locked at 0.8330. Total A$3,950.89. The ledger's unexplained 20/08 -> 25/08 cadence gap is now filled by the recovered 21/08 and 23/08 rows - that gap was the fingerprint of the miss. Still no AU receipt after 03/09/26 (six days, verified twice with a broad sender-wide control search), and 'Your ad was approved' notices on 03/09, 04/09 and 06/09 confirm campaigns were live through the gap. ALWAYS use in:anywhere from now on.",
   "excluded_campaigns": [
    "Ampra Job (recruitment - not lead gen)",
    "Axis Social (not Meta)"
@@ -166,7 +176,8 @@
    "Residential Lead Gen Sept | Ampra - Copy",
    "SmartSwitch_Leads_NSW_Commercial_Sep2026",
    "Lead Gen NZ ad (billed in AUD on the AU account, on 21 of 25 receipts)",
-   "Lead Gen AU ad (NZ formula)"
+   "Lead Gen AU ad (NZ formula)",
+   "Australia Leads Campaign (unambiguous lead gen; new name, first seen on the recovered 21/08 and 23/08 receipts)"
   ],
   "corrections_this_run": []
  },
@@ -302,13 +313,13 @@
   "Holly": {
    "start": 0.0,
    "retainer": 2250.0,
-   "adspend": 3706.36,
-   "drawn": 5956.36,
+   "adspend": 3950.89,
+   "drawn": 6200.89,
    "earned": 903.78,
-   "current": -5052.58,
+   "current": -5297.11,
    "pending": 2543.46,
-   "projected": -2509.12,
-   "to_cover": 5956.36
+   "projected": -2753.65,
+   "to_cover": 6200.89
   },
   "Ollie": {
    "start": 0.0,
@@ -325,13 +336,16 @@
  "full": {
   "start": -12519.47,
   "retainer": 15500.0,
-  "adspend": 3706.36,
-  "drawn": 19206.36,
+  "adspend": 3950.89,
+  "drawn": 19450.89,
   "earned": 6077.79,
-  "current": -25648.04,
+  "current": -25892.57,
   "pending": 53110.37,
-  "projected": 27462.33,
-  "to_cover": 31725.83
+  "projected": 27217.8,
+  "to_cover": 31970.36,
+  "name": "Full Team",
+  "type": "—",
+  "note": "All five tracked people combined"
  },
  "counts": {
   "historic": 75,
@@ -344,9 +358,9 @@
   "deals_pulled": 107
  },
  "checksums": {
-  "adspend_rows_sum": 3706.36,
-  "adspend_declared": 3706.36,
-  "holly_drawn": 5956.36,
+  "adspend_rows_sum": 3950.89,
+  "adspend_declared": 3950.89,
+  "holly_drawn": 6200.89,
   "holly_retainer": 2250.0
  },
  "definition_changes_this_run": [
@@ -354,6 +368,8 @@
   "The shell was NOT edited. index.html was rebuilt by re-injecting fresh JSON into the deployed shell; the Projected-hero amendment, the two CSS rules and the AMP2026 gate hash were all verified present in the output."
  ],
  "open_items": [
+  "PROCESS - EVERY Gmail sweep must use in:anywhere. The morning run's independent rebuild 'reproduced the cache to the cent' and that was FALSE CONFIDENCE: cache and rebuild shared the same blind spot, because a reproduction is only as good as the source query. Two receipts worth $244.53 sat outside it. Also worth asking why those two were filed differently - if a Gmail filter or spam rule is catching Meta receipts, more will go missing.",
+  "Ad-spend receipts arrive under a Gmail label (Label_1930838179946678120) rather than staying in the inbox on many dates, and the two recovered ones were not reachable at all before Ollie moved them. Worth fixing the filter at source.",
   "NEW DEAL, ATTRIBUTION MISSING - Malcolm Nicholson 040929.JS02 ($19,765, created 09/09/26) has a specialist (Joe) and NO lead gen, so $898.41 of a $1,796.82 pot is unallocated. Chase before it installs.",
   "MALFORMED SON - 040929.JS02. The convention is ddmmyy; '040929' is not a valid date and is most likely meant to be 040926.JS02. Fix at source.",
   "POSSIBLE NZ DEAL CODED AUD - Malcolm Nicholson is at Te Awamutu, Waikato (New Zealand) but deal_currency_code is AUD, as it is on all 107 deals. If this is genuinely a NZ sale the pot may need converting. Confirm before it installs.",
@@ -377,6 +393,7 @@
   "The deal-sheet worklist is still stamped 'HubSpot pull 26/08/26' and several of its rows are now stale (Ken Anderson SON, John Haig SON, McKechnie 3 value, Mick Dunn rebate all fixed). Worth regenerating."
  ],
  "closed_this_run": [
+  "RECOVERED $244.53 of unledgered Meta ad spend - AU receipts 21/08/26 ($127.94 chargeable) and 23/08/26 ($116.59), each $149.00 gross less Ampra Job recruitment. Holly's drawn 5,956.36 -> 6,200.89, current -5,052.58 -> -5,297.11, projected -2,509.12 -> -2,753.65. No other person moved.",
   "FX refreshed and the two sources have converged: Xe 0.81106482 (timestamped 09/09/26 02:30 UTC) and Wise 0.8111, mid 0.8111, replacing 0.8116. No figure depends on it - there has been no NZ spend since 17/08/26 and the locked row was not re-converted.",
   "The morning run's 'positions must match deployed D.people' waiver is fully closed - the check passed outright at the start of this run.",
   "The stale byte count in the previous provenance (184,621) is corrected. That figure was taken before the 12:10 amendment commit dda056c; the pre-refresh deployed file was 184,884 bytes (LF). Benign, but it read as tampering."

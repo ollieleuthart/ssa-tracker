@@ -1,0 +1,386 @@
+{
+ "schema_version": 1,
+ "generated": "09/09/26",
+ "generated_by": "ssa-tracker-update run 09/09/26 (publish root cause corrected after the run, on Ollie's challenge)",
+ "reset": "20/07/26",
+ "provenance": "Cache from 04/09 loaded and PASSED every internal check (ad-spend checksums, per-person retainer sums, every position identity). The 'positions must match deployed D.people' check failed for the documented reason - the deployed build is still pull 28/08/26 because neither 04/09 run could publish - and D.pull was read directly from the live file to confirm that, so the cache was kept. This being the 4th run, the ad-spend ledger was ALSO rebuilt from source independently (full Gmail sweep from 20/07, 26 distinct receipts after discarding 15 duplicates) and reproduced the cached figures to the cent. All 105 deals re-pulled fresh from HubSpot; deal data is never cached. NOT PUBLISHED - see open_items.",
+ "adspend": {
+  "through": "03/09/26",
+  "au_account": "885732170587122",
+  "au_receipts_counted": 25,
+  "au_gross": 3598.22,
+  "au_recruitment_excluded": 143.89,
+  "au_chargeable": 3454.33,
+  "au_rows": [
+   {
+    "date": "03/09/26",
+    "chargeable": 149.0,
+    "note": ""
+   },
+   {
+    "date": "01/09/26",
+    "chargeable": 149.0,
+    "note": ""
+   },
+   {
+    "date": "31/08/26",
+    "chargeable": 135.85,
+    "note": "gross $149.00 less $13.15 Ampra Job"
+   },
+   {
+    "date": "29/08/26",
+    "chargeable": 123.78,
+    "note": "gross $149.00 less $25.22 Ampra Job"
+   },
+   {
+    "date": "28/08/26",
+    "chargeable": 126.11,
+    "note": "gross $149.00 less $22.89 Ampra Job"
+   },
+   {
+    "date": "27/08/26",
+    "chargeable": 112.98,
+    "note": "gross $149.00 less $36.02 Ampra Job"
+   },
+   {
+    "date": "25/08/26",
+    "chargeable": 106.44,
+    "note": "gross $149.00 less $42.56 Ampra Job"
+   },
+   {
+    "date": "20/08/26",
+    "chargeable": 37.53,
+    "note": "gross $41.58 less $4.05 Ampra Job"
+   },
+   {
+    "date": "20/08/26",
+    "chargeable": 129.64,
+    "note": "sub-threshold; billed 19/08 UTC = 20/08 AEST"
+   },
+   {
+    "date": "18/08/26",
+    "chargeable": 149.0,
+    "note": ""
+   },
+   {
+    "date": "16/08/26",
+    "chargeable": 149.0,
+    "note": ""
+   },
+   {
+    "date": "14/08/26",
+    "chargeable": 149.0,
+    "note": ""
+   },
+   {
+    "date": "12/08/26",
+    "chargeable": 149.0,
+    "note": ""
+   },
+   {
+    "date": "10/08/26",
+    "chargeable": 149.0,
+    "note": ""
+   },
+   {
+    "date": "09/08/26",
+    "chargeable": 149.0,
+    "note": ""
+   },
+   {
+    "date": "07/08/26",
+    "chargeable": 149.0,
+    "note": ""
+   },
+   {
+    "date": "05/08/26",
+    "chargeable": 149.0,
+    "note": ""
+   },
+   {
+    "date": "03/08/26",
+    "chargeable": 149.0,
+    "note": ""
+   },
+   {
+    "date": "02/08/26",
+    "chargeable": 149.0,
+    "note": ""
+   },
+   {
+    "date": "01/08/26",
+    "chargeable": 149.0,
+    "note": ""
+   },
+   {
+    "date": "30/07/26",
+    "chargeable": 149.0,
+    "note": ""
+   },
+   {
+    "date": "29/07/26",
+    "chargeable": 149.0,
+    "note": ""
+   },
+   {
+    "date": "26/07/26",
+    "chargeable": 149.0,
+    "note": ""
+   },
+   {
+    "date": "24/07/26",
+    "chargeable": 149.0,
+    "note": ""
+   },
+   {
+    "date": "22/07/26",
+    "chargeable": 149.0,
+    "note": "billing period 19/07-22/07 straddles the 20/07 baseline - included in full"
+   }
+  ],
+  "nz_account": "199976947",
+  "nz_rows": [
+   {
+    "billed": "17/08/26",
+    "nzd": 302.56,
+    "rate": 0.833,
+    "aud": 252.03,
+    "locked": true
+   }
+  ],
+  "total_aud": 3706.36,
+  "fx_setting": {
+   "nzd_aud": 0.8116,
+   "checked": "09/09/26",
+   "sources": "VERIFIED this run, resolving a two-run gap. Xe 0.81093604 timestamped 08/09/26 17:01 UTC; Wise 0.8123 (no timestamp). Mid of the two.",
+   "applies_to": "new NZ spend only; there was none this run, so no figure depends on it"
+  },
+  "note": "Rebuilt from source this run and matched the cache exactly: 25 AU receipts, gross $3,598.22, $143.89 recruitment excluded, $3,454.33 chargeable; 1 NZ receipt NZ$302.56. No new receipts since 03/09/26. SIX days with no AU receipt as at 09/09 against a ~2-day recent cadence - either spend paused or receipts stopped arriving. Next run searches after 03/09/26 only, but check that gap first.",
+  "excluded_campaigns": [
+   "Ampra Job (recruitment - not lead gen)",
+   "Axis Social (not Meta)"
+  ],
+  "ambiguous_treated_as_leadgen": [
+   "Commercial Sept",
+   "Residential Lead Gen Sept | Ampra",
+   "Residential Lead Gen Sept | Ampra - Copy",
+   "SmartSwitch_Leads_NSW_Commercial_Sep2026",
+   "Lead Gen NZ ad (billed in AUD on the AU account, on 21 of 25 receipts)",
+   "Lead Gen AU ad (NZ formula)"
+  ],
+  "corrections_this_run": []
+ },
+ "retainers": {
+  "note": "Scott-reconciled against payroll. Not a clean cadence - never regenerate from a formula.",
+  "draws": {
+   "Denzel Winterbeard": [
+    {
+     "date": "26/07/26",
+     "amount": 2500.0
+    },
+    {
+     "date": "09/08/26",
+     "amount": 2500.0
+    },
+    {
+     "date": "23/08/26",
+     "amount": 2500.0
+    },
+    {
+     "date": "03/09/26",
+     "amount": 2500.0,
+     "note": "confirmed by Ollie 04/09/26; cadence re-anchored to Thursdays"
+    }
+   ],
+   "Hugo": [
+    {
+     "date": "26/07/26",
+     "amount": 2000.0,
+     "note": "two days unpaid leave"
+    },
+    {
+     "date": "09/08/26",
+     "amount": 1250.0,
+     "note": "final - ceased on moving to Sales Ops Manager"
+    }
+   ],
+   "Holly": [
+    {
+     "date": "24/07/26",
+     "amount": 750.0
+    },
+    {
+     "date": "07/08/26",
+     "amount": 500.0
+    },
+    {
+     "date": "21/08/26",
+     "amount": 500.0
+    },
+    {
+     "date": "04/09/26",
+     "amount": 500.0
+    }
+   ],
+   "Joe": [],
+   "Ollie": []
+  },
+  "next_due": {
+   "Denzel Winterbeard": "17/09/26",
+   "Holly": "18/09/26"
+  },
+  "note_cadence": "Nothing was due in the week of 09/09 (Denzel 03/09 -> 17/09 Thursdays; Holly 04/09 -> 18/09), so no draw was added and Ollie was not asked. BOTH fall due next run - confirm them."
+ },
+ "overrides": {
+  "flat_deals": [
+   {
+    "son": "050826.DWB01",
+    "deal": "Jocellin & John Manchee - Christmas Creek WA (renamed from 912 Maules Creek Road Narrabri this run; same SON, same $224,568)",
+    "type": "Flat",
+    "per": {
+     "Denzel Winterbeard": 5000.0
+    },
+    "flag": "Flat commission confirmed by Joe - not a percentage split"
+   }
+  ],
+  "adjustments": [
+   {
+    "person": "Denzel Winterbeard",
+    "amount": -2500.0,
+    "son": "070426.DWB01",
+    "deal": "Pricing error - Terry Moore, 6 Bank Street Woodburn",
+    "date": "2026-08-27",
+    "note": "Its own slip row (type 'Adjustment', negative share), excluded from the confirmed-deal count. The shell was patched this run to render it and to stop counting it as a deal. Terry Moore's HubSpot Commission Payable MOVED this run, 240.29 -> 1370.15 (now exactly 5% of net revenue). The row is pre-reset and never feeds Earned, so there is still no double count, but the movement is unexplained."
+   }
+  ],
+  "hand_entered_payable": {
+   "sons": [
+    "SSA002",
+    "SSA007",
+    "SSA016",
+    "SSA020",
+    "SSA032",
+    "SSA033"
+   ],
+   "note": "Actual amount paid to Beau, override approved by Joe (deal sheet column H). Do not re-raise. NOTE: only FIVE of these appear in the log as deviations (SSA020 is in issues, never signed off). deviating_deals is 9 this run = those 5 + Terry Moore + the 3 newly-halved customer-referral deals. The dashboard copy that called all deviations 'an override approved by Joe' was corrected this run."
+  }
+ },
+ "positions": {
+  "Denzel Winterbeard": {
+   "start": -4789.06,
+   "retainer": 10000.0,
+   "adspend": 0.0,
+   "drawn": 10000.0,
+   "earned": 765.53,
+   "current": -14023.53,
+   "pending": 19521.24,
+   "projected": 5497.71,
+   "to_cover": 14789.06
+  },
+  "Hugo": {
+   "start": -7730.41,
+   "retainer": 3250.0,
+   "adspend": 0.0,
+   "drawn": 3250.0,
+   "earned": 3715.37,
+   "current": -7265.04,
+   "pending": 9507.65,
+   "projected": 2242.61,
+   "to_cover": 10980.41
+  },
+  "Joe": {
+   "start": 0.0,
+   "retainer": 0.0,
+   "adspend": 0.0,
+   "drawn": 0.0,
+   "earned": 693.11,
+   "current": 693.11,
+   "pending": 12949.77,
+   "projected": 13642.88,
+   "to_cover": 0.0
+  },
+  "Holly": {
+   "start": 0.0,
+   "retainer": 2250.0,
+   "adspend": 3706.36,
+   "drawn": 5956.36,
+   "earned": 903.78,
+   "current": -5052.58,
+   "pending": 2543.46,
+   "projected": -2509.12,
+   "to_cover": 5956.36
+  },
+  "Ollie": {
+   "start": 0.0,
+   "retainer": 0.0,
+   "adspend": 0.0,
+   "drawn": 0.0,
+   "earned": 0.0,
+   "current": 0.0,
+   "pending": 5875.94,
+   "projected": 5875.94,
+   "to_cover": 0.0
+  }
+ },
+ "full": {
+  "start": -12519.47,
+  "retainer": 15500.0,
+  "adspend": 3706.36,
+  "drawn": 19206.36,
+  "earned": 6077.79,
+  "current": -25648.04,
+  "pending": 50398.06,
+  "projected": 24750.02,
+  "to_cover": 31725.83
+ },
+ "counts": {
+  "historic": 75,
+  "pending": 24,
+  "issues": 6,
+  "onhold": 7,
+  "earned_deals": 9,
+  "suppressed": 2,
+  "novalue": 1,
+  "deals_pulled": 105
+ },
+ "checksums": {
+  "adspend_rows_sum": 3706.36,
+  "adspend_declared": 3706.36,
+  "holly_drawn": 5956.36,
+  "holly_retainer": 2250.0
+ },
+ "definition_changes_this_run": [
+  "lead_gen VALUE CORRUPTION was being missed. The API returns internal values, not labels: lead_gen 'Simon' is really FRAN and 'No comms' is really DERMOT ('Customer' is a genuine no-lead-gen marker and maps to blank). engine.NAME_MAP does not implement this - it maps 'No comms' to blank, which is right for specialist and wrong for lead_gen. A lead_gen_list() wrapper now applies the label fix before NAME_MAP. Verified two ways: the reference doc, and reverse-engineering every lead_gen list in the deployed build against the raw values (12 'Simon' and 8 'No comms' occurrences, all consistent). Unfixed it changed away-trip headcounts and moved Denzel by $80.86, Hugo by $80.87 and Joe by $69.32 on Earned alone.",
+  "Deals whose lead gen is recorded as 'Customer' now flag as 'Customer referral - no lead gen half' rather than 'Unfilled role'. It is a deliberate marker (the deal sheet tells staff to use it), not missing attribution, and it should not be chased. No figure changes.",
+  "Added Shared SON, possible-duplicate-record and rebate-implausibly-small checks to the data-quality pass.",
+  "Shell edits, all minimal and deliberate: (1) slip renders Adjustment rows and excludes them from the confirmed-deal count; (2) the Commission Pot copy no longer says suppressed deals have 'nobody attributed' (the cause is a blank Commission Payable) nor that every deviation 'carries an override approved by Joe'; (3) the pipeline no-value KPI now reads from lifetime.novalue so it stops contradicting the footnote below it; (4) 'Flagged rows' sub-label no longer says 'Missing value or attribution'."
+ ],
+ "open_items": [
+  "DECISION NEEDED - finance halved Commission Payable to exactly 5% of net revenue on the three installed deals whose lead gen is 'Customer' (Brenda Walker 1815.75->907.88, John Tooler 2793.16->1396.58, Allan Marks 2141.89->1070.95). This build still splits that restated pot in half by role, leaving a half unallocated. If finance instead meant the specialist to take the whole restated amount: Denzel's EARNED +$453.94 (Brenda Walker, the only post-reset one), and on Ian Potter 100826.JS01 Hugo and Denzel each +$698.57 of PENDING. Allan Marks (+$535.48 Joe) and John Tooler (+$698.29 Joe) are pre-reset, log only. SHIPPED AS THE RULE STANDS. Do not change without Ollie's answer.",
+  "NOT PUBLISHED - ROOT CAUSE ESTABLISHED 09/09/26, and it is NOT what the 04/09 state said. A credential-injecting GIT PROXY sits in front of both github.com (git) and api.github.com (API), inside the CONNECT tunnel (TLS is re-terminated at the agent proxy, whose CA the session trusts). It DISCARDS any credential you supply and injects its own: a Claude Code GitHub App user-to-server token authenticated AS ollieleuthart (proved - api.github.com/user returns his account id 295091854, X-Oauth-Client-Id Iv23liqTIFEtdIu6Vn1r, 15000/hr). It then serves that credential ONLY for repos in 'this session's authorized repository set'. THAT SET IS EMPTY - anthropics/claude-code, octocat/Hello-World and torvalds/linux all 403 with the identical message, so ssa-tracker is not specifically excluded; NOTHING is attached. The git path says it outright: 'access denied by the git proxy: ollieleuthart/ssa-tracker is not in this session's authorized repository set, so the proxy will not inject a credential for it. To fix, add the repository to the session's sources.' CONSEQUENCES FOR FUTURE RUNS: (1) NEVER ask Ollie for a PAT - the proxy discards it, it cannot even be tested here, and the injected identity is already his. (2) 'Retry in a fresh session' only helps if that session has the repo ATTACHED AS A SOURCE at creation; a fresh session with nothing attached fails identically. (3) It is not an egress-policy block - the agent proxy's recentRelayFailures shows ZERO github entries (only google hosts from the Playwright run), the CONNECT succeeds, and the 403 body carries no Server or X-GitHub-Request-Id header, unlike the genuine 200 from /user. WHY IT STARTED: pushing worked continuously from 19/06/26 to 01/09/26 13:33 AEST (commit 3cec7b2, the current HEAD, which is byte-identical to the deployed index.html). Every commit in the repo's history is authored AND committed as 'ssa <ollie@smart-switchappliances.com>' in near-simultaneous pairs one second apart - the signature of the Contents API method with an explicit committer, using Ollie's own PAT. That is NOT the GitHub App identity, so before 01/09 api.github.com was an ordinary host and his PAT reached GitHub. The proxy interception appeared between 01/09 and 04/09. Nothing about the repo, the token or the tracker changed - the session type did.",
+  "Terry Moore 070426.DWB01 Commission Payable moved 240.29 -> 1370.15 between 04/09 and 09/09, landing on exactly 5% of net revenue. Pre-reset, so Earned is untouched and the -$2,500 adjustment still stands without double counting - but nobody has explained the movement.",
+  "'Hannah' is now taking money, not just diluting headcount: she is the lead gen on new deal 020926.JS02 Katie Young 2 and holds $293.09 of pending with no line of her own. Also on 140526.DWB01 and 240526.JS01. Decide: add her to the tracker, or clear the field.",
+  "SSA057 Tom Jolly and SSA029 Danielle Campbell still gated with a blank Commission Payable - suppressed to zero, $40,637.10 of net revenue paying nobody. Unchanged since 28/08.",
+  "7 installed deals still held by the finance gates: $171,624 of value and $14,678.69 of commission sitting in Pending. Peters 130726.JS01 moved forward (STC now paid, finance outstanding); Mark Wilson 150626.DWB01 is still awaiting both despite the 'on next refresh' column-H comment. Bowd, Ken Anderson, Margaret Galagher, Courtney Farrel and Sophia Muino joined them.",
+  "Rebate exactly equals cash on 190826.JS02 Nicole McKechnie ($17,600) and 190826.JS03 Nicole McKechnie 2 ($32,400) - inflates the pot by $4,545.45 combined. No SM comment. Unresolved since 28/08. NOTE both SONs shifted up one AGAIN this run (JS01->JS02, JS02->JS03, JS03->JS04).",
+  "Summer Stewart appears twice under one SON 250426.DWB01 ('1 Gleno Street' and '3-5 Gleno Street'), both Installed, both cash $31,267.25, carrying $2,996.31 and $2,904.07 of Commission Payable respectively. Column H answers it ('Comms were calculated on other address - OK') so it is tracked, not new, but BOTH records still sit in the log with a payable each and both inflate lifetime totals. Pre-reset, nothing payable.",
+  "Rosemary Arnold 2 130826.JS02 has had BOTH lead gen and specialist cleared - the whole $545.45 pot is now unallocated. It was one filled role on 04/09.",
+  "SSA037 Dieter Steinman ($28,085) and '2 Scott Mooney' installed with no install date - in neither bucket. Scott Mooney is answered in column H; Dieter still has no comment.",
+  "Brett Watson - OFFGRID sold with no cash or rebate and no SON - held out of the pipeline entirely.",
+  "Unallocated total $10,509.30: $8,821.59 across 5 pending deals (McKechnie 3 POLE $3,636.36, Mick Dunn $1,500.32, Ian Potter $1,397.14, Margaret Galagher $923.50, Bobson Davis $818.82, Rosemary Arnold 2 $545.45) plus $1,687.71 in the installed log (the three customer-referral deals, now halved).",
+  "Trailing whitespace still on three SONs (140526.DWB01, 240526.JS01, 060526.JS01) - stripped in processing, worth fixing at source.",
+  "No Cesca ad-spend report since the 15-21 August one received 21/08/26 - a 19-day gap. Receipts still cover the period; the PDFs remain unreadable through the Gmail connector.",
+  "The deal-sheet worklist is still stamped 'HubSpot pull 26/08/26' and several of its rows are now stale (Ken Anderson SON, John Haig SON, McKechnie 3 value, Mick Dunn rebate all fixed). Worth regenerating."
+ ],
+ "closed_this_run": [
+  "FX rate verified after two failed runs: Xe 0.81093604 (timestamped 08/09/26 17:01 UTC) and Wise 0.8123, mid 0.8116 recorded in Settings.",
+  "Ken Anderson SON reformatted 14082026.DWB01 -> 140826.DWB02 (deal sheet item K, 'Hannah fixed').",
+  "John Haig SON reassigned to 060526.JS01, clearing the shared-SON clash with Craig Robinson (item A).",
+  "Charmaine Potter / Rosemary Arnold 2 shared SON 130826.JS01 resolved - Rosemary Arnold 2 is now 130826.JS02 (item A).",
+  "Mick Dunn rebate corrected from $17.00 to $17,507.00 - item G no longer fires.",
+  "Nicole McKechnie 3 - POLE now carries $40,000, so no-value is down to one deal (Brett Watson).",
+  "Jenny Real 140526.DWB01 and Brenda Walker 250626.DWB01 are now gated and in the Installed Deals Log (item L, 'on next refresh' - delivered).",
+  "The two dashboard copy defects left open on 04/09 are fixed.",
+  "Ad-spend ledger independently rebuilt from source and reproduced to the cent - no drift after 4 runs of caching."
+ ]
+}
